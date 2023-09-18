@@ -33,3 +33,10 @@ ACIT4040-AI-Project
 │   ├───__init__.py
 │   ├───Code to tie it all together
 ├───README.md
+
+# Contributors
+- [Vedbjørn Berstad]
+- [Pratima Kumari]
+- [Jackson Herbert Sinamenye]
+- [Majdi Omar Alali]
+- [Alexander Theo Strand]

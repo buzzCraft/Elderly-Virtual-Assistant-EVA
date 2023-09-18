@@ -1,0 +1,15 @@
+FROM python:3.10
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install poetry and dependencies
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install --no-dev
+
+COPY . .
