@@ -34,7 +34,10 @@ ACIT4040-AI-Project
 │   ├───Code to tie it all together
 ├───README.md
 
-# Contributors
+```
+
+
+## Contributors
 - [Vedbjørn Berstad]
 - [Pratima Kumari]
 - [Jackson Herbert Sinamenye]
