@@ -5,7 +5,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install poetry and dependencies
-RUN pip install poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
 RUN poetry config virtualenvs.create false
 
 COPY pyproject.toml poetry.lock ./
