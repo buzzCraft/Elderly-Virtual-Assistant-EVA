@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.10"
 torch = "^2.0.1"
+pytest = "^7.4.2"
 
 [tool.poetry.dev-dependencies]
 
