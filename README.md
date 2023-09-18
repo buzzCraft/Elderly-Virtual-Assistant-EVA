@@ -38,7 +38,7 @@ ACIT4040-AI-Project
 
 
 ## Contributors
-- [Vedbjørn Berstad]
+- [Vebjørn Berstad]
 - [Pratima Kumari]
 - [Jackson Herbert Sinamenye]
 - [Majdi Omar Alali]
