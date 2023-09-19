@@ -1,0 +1,24 @@
+-Open VS code
+-open SeamlessM4T folder from desktop
+- open terminal and run the command "cd seamless_communication-main"
+- For speech to speech we will need to use s2st , it converted english audio file to hindi audio file.
+m4t_predict <path_to_input_audio> s2st <tgt_lang> --output_path <path_to_save_audio>
+
+m4t_predict test_1.wav s2st hin --output_path output_2.wav
+
+
+
+- For text to text we will need to use t2tt , sample below:
+m4t_predict <input_text> t2tt <tgt_lang> --src_lang <src_lang>
+m4t_predict "Hello, how are you?" t2tt hin --src_lang eng
+
+
+
+
+
+-
+Speech-to-speech translation (S2ST)
+Speech-to-text translation (S2TT)
+Text-to-speech translation (T2ST)
+Text-to-text translation (T2TT)
+Automatic speech recognition (ASR)
