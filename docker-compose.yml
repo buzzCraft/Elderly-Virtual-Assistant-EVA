@@ -1,12 +1,38 @@
 version: '3.8'
 
+
 services:
-  web:
+  transcribe: # This is the name of the service, image: docker-compose build transcribe container: docker-compose up transcribe
     build:
-        context: .
-        dockerfile: docker/Dockerfile
+      context: .
+      dockerfile: docker/Dockerfile_VoiceToText
     volumes:
       - .:/app
-    # No command yet, we'll add that in a minute
+    command:
+      - python
+      - app/VoiceToText/transcribeMain.py
 
 
+# This will be updated to run the LLM
+#  llm:
+#    depends_on:
+#      - transcribe
+#    build:
+#        context: .
+#        dockerfile: docker/Dockerfile_Llm
+#    volumes:
+#      - .:/app
+#    # No command yet, we'll add that in a minute
+#
+
+# This will be updated to run the text to voice
+#  textToVoice:
+#    depends_on:
+#      - llm
+#    build:
+#        context: .
+#        dockerfile: docker/Dockerfile_TextToVoice
+#    volumes:
+#      - .:/app
+#    # No command yet, we'll add that in a minute
+#
