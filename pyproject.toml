@@ -17,6 +17,8 @@ tiktoken = "0.3.3"
 openai-whisper = "^20230918"
 ffmpeg = "^1.4"
 pytest-mock = "^3.11.1"
+triton = "2.0.0"
+setuptools-rust = "^1.7.0"
 
 [tool.poetry.dev-dependencies]
 

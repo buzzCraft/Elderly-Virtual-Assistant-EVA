@@ -1,16 +1,22 @@
+# Use the Python 3.10 image
 FROM python:3.10
 
-ENV PYTHONUNBUFFERED=1
+# Install the latest version of poetry
+RUN pip install --upgrade pip && \
+    pip install poetry
 
+# Set the working directory
 WORKDIR /app
 
-# Install poetry and dependencies
-RUN pip install poetry
-
-RUN poetry config virtualenvs.create false
-
+# Copy the pyproject.toml and poetry.lock files
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --only main
+# Copy project directory
+COPY app ./app
 
-COPY . /app
+# Create an empty README.md file
+#RUN touch README.md
+
+# Configure poetry to not create a virtual environment and install dependencies
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev
