@@ -1,5 +1,5 @@
 # Use the Python 3.10 image
-FROM python:3.10
+FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-devel
 
 # Install the latest version of poetry
 RUN pip install --upgrade pip && \
@@ -12,7 +12,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 
 # Copy project directory
-COPY app ./app
+COPY app/VoiceToText /app
 
 # Create an empty README.md file
 #RUN touch README.md
@@ -20,3 +20,4 @@ COPY app ./app
 # Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
+

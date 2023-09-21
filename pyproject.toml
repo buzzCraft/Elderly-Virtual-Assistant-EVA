@@ -7,7 +7,6 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-torch = "^2.0.1"
 pytest = "^7.4.2"
 numpy = "^1.24.0"
 numba = "^0.57.1"
@@ -17,8 +16,9 @@ tiktoken = "0.3.3"
 openai-whisper = "^20230918"
 ffmpeg = "^1.4"
 pytest-mock = "^3.11.1"
-triton = "2.0.0"
+triton = "^2.0.0"
 setuptools-rust = "^1.7.0"
+torch="^2.0.1"
 
 [tool.poetry.dev-dependencies]
 
