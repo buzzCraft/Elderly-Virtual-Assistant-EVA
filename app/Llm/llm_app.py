@@ -88,3 +88,5 @@ memory = ConversationBufferWindowMemory(
 
 # Define the chain
 chain = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
+
+# Generate a response
