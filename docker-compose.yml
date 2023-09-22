@@ -6,8 +6,11 @@ services:
       context: .
       dockerfile: docker/Dockerfile_VoiceToText
     volumes:
-      - .:/app  # Mounts the current directory to /app in the container
-    command: ["python", "/app/app/VoiceToText/transcribeMain.py"]
+
+      - .:/app/VoiceToText
+    command:
+      - python
+      - /app/transcribeMain.py
 
 
 
