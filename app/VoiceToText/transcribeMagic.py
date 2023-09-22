@@ -1,3 +1,4 @@
+import os
 import whisper
 from helpers import InvalidAudioFormatError, TranscriptionError
 
@@ -5,7 +6,8 @@ from helpers import InvalidAudioFormatError, TranscriptionError
 # Function to hold the magic
 def transcribe_magic():
     # The user recording will be saved as a .wav file with name audio.wav in the audio_asset folder
-    audio_file = "audio_asset/audio.wav"
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    audio_file = os.path.join(script_dir, "audio_asset", "audio.wav")
 
     if not audio_file.lower().endswith(".wav"):
         raise InvalidAudioFormatError("Audio file must be a .wav file")

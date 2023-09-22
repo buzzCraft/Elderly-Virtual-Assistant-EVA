@@ -11,12 +11,9 @@ WORKDIR /app
 # Copy the pyproject.toml and poetry.lock files
 COPY pyproject.toml poetry.lock ./
 
-# Copy project directory
-COPY app/VoiceToText /app
-
-# Copy audio file into the container
-COPY app/VoiceToText/audio_asset/audio.wav /app/VoiceToText/audio_asset/audio.wav
 
 # Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
+
+COPY app ./app
