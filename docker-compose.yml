@@ -1,17 +1,16 @@
 #version: '3.8'
 version: '2.2'
 
-
 services:
-  transcribe: # This is the name of the service, image: docker-compose build transcribe container: docker-compose up transcribe
+  transcribe:
     build:
       context: .
       dockerfile: docker/Dockerfile_VoiceToText
     volumes:
-      - .:/app
+      - .:/app/VoiceToText
     command:
       - python
-      - app/VoiceToText/transcribeMain.py
+      - /app/transcribeMain.py
 
 
 # This will be updated to run the LLM
