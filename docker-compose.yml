@@ -1,12 +1,37 @@
 version: '3.8'
 
 services:
-  web:
+  transcribe:
     build:
-        context: .
-        dockerfile: docker/Dockerfile
-    volumes:
-      - .:/app
-    # No command yet, we'll add that in a minute
+      context: ./app/VoiceToText
+      dockerfile: Dockerfile
+    command:
+      - python
+      - /app/transcribeMain.py
 
-
+#  llm:
+#    build:
+#      context: ./app/Llm
+#      dockerfile: Dockerfile
+#    command:
+#      - python
+##      Endpoint
+#      - /app/main.py
+#
+#  TextToVoice:
+#    build:
+#      context: ./app/TextToVoice
+#      dockerfile: Dockerfile
+#    command:
+#      - python
+#      #      Endpoint
+#      - /app/main.py
+#      -
+#  VoiceToVideo:
+#    build:
+#      context: ./app/VoiceToVideo
+#      dockerfile: Dockerfile
+#    command:
+#      - python
+#      #      Endpoint
+#      - /app/main.py
