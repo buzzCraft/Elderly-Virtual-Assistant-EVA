@@ -3,11 +3,8 @@ version: '2.2'
 services:
   transcribe:
     build:
-      context: .
-      dockerfile: docker/Dockerfile_VoiceToText
-    volumes:
-
-      - .:/app/VoiceToText
+      context: ./app/VoiceToText
+      dockerfile: Dockerfile
     command:
       - python
       - /app/transcribeMain.py
