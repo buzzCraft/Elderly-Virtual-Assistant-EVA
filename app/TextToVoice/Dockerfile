@@ -18,4 +18,3 @@ COPY app/ ./
 # Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
-
