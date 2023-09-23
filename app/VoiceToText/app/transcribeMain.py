@@ -9,3 +9,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     transcribe_magic(args.audio)
+    print(
+        "Transcription complete and saved to transcription.json in the current directory"
+    )

@@ -1,40 +1,37 @@
-from transcribeMagic import transcribe_magic
-from flask import Flask, request, jsonify, abort
+from flask import Flask, jsonify
 import sounddevice as sd
 import soundfile as sf
 import subprocess
-import json
 import os
 
 app = Flask(__name__)
 
 
-@app.route("/record", methods=["POST"])
-def record():
+@app.route("/record_and_transcribe", methods=["POST"])
+def record_and_transcribe():
     try:
-        fs = 44100
-        seconds = 5
-        print("Please talk ...")
-        sd.default.device = 1
+        fs = 44100  # Sample rate
+        seconds = 5  # Duration of recording
+
+        print("Recording...")
+
+        # Record audio
         my_recording = sd.rec(int(seconds * fs), samplerate=fs, channels=2)
-        sd.wait()
-        print("Thank you ...")
+        sd.wait()  # Wait until recording is finished
 
-        record_path = "audio.wav"
-        sf.write(record_path, my_recording, fs)
+        print("Recording complete, transcribing...")
 
-        # Run the command container for the whisper AI model
-        command = f"docker run --rm -v {os.getcwd()}:/app transcribe python transcribeMain.py --audio {record_path}"
+        # Save as WAV file
+        audio_path = "audio_asset/recorded_audio.wav"
+        sf.write(audio_path, my_recording, fs)
+
+        # Run Docker container for transcription
+        command = f"docker run --rm -v {os.getcwd()}:/app transcribe python transcribeMain.py --audio {audio_path}"
         subprocess.call(command, shell=True)
 
-        # Read the generated JSON file
-        with open("transcription.json", "r") as json_file:
-            result = json.load(json_file)
-
-        return jsonify(result)
+        return jsonify({"status": "Transcription complete"})
 
     except Exception as e:
-        print(f"An error occurred: {e}")
         return jsonify({"error": str(e)}), 500
 
 
