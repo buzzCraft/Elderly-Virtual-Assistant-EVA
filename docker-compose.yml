@@ -7,7 +7,9 @@ services:
       dockerfile: Dockerfile
     command:
       - python
-      - /app/transcribeMain.py
+      - /app/flaskRecord.py
+
+
 
 
 
