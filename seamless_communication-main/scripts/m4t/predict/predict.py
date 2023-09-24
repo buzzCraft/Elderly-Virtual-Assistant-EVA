@@ -69,6 +69,7 @@ def main():
         logger.info(f"Running inference on the CPU in {dtype}.")
 
     translator = Translator(args.model_name, args.vocoder_name, device, dtype)
+    logger.info(f"Loaded model: {translator.model_name}")
     translated_text, wav, sr = translator.predict(
         args.input,
         args.task,
@@ -88,4 +89,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logger.info("Starting M4T inference.")
     main()
