@@ -111,7 +111,7 @@ def define_chain(llm, prompt, memory, max_tokens=50, memory_key="chat_history"):
 
 
 # Define the chatbot
-def initialize_chatbot(model_name, hf_auth, save_directory):
+def initialize_model(model_name, hf_auth, save_directory):
     tokenizer, model = load_model(model_name, hf_auth, save_directory)
     llm = initialize_pipeline(model, tokenizer)
     prompt = define_prompt()
