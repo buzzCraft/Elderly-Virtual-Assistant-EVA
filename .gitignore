@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+llama_models/
 
 # C extensions
 *.so
