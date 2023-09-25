@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-load_dotenv('.env')
+load_dotenv(".env")
 
 # CONSTANTS
 MODEL_NAME = "meta-llama/Llama-2-7b-chat-hf"
@@ -19,6 +19,7 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 # Initialize the Flask app
 app = Flask(__name__)
 
+
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
     try:
@@ -28,16 +29,16 @@ def generate_response():
         # Check if the user input is empty
         if not user_input:
             return jsonify({"error": "Empty user input"})
-        
+
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
-
 
         # Return the response
         return jsonify({"response": chatbot_response})
     except Exception as e:
         return jsonify({"error": str(e)})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

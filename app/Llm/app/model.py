@@ -16,6 +16,7 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
+
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
         model_name, use_auth_token=hf_auth, legacy=False, return_tensors="pt"
@@ -41,7 +42,6 @@ def load_from_local(save_dir):
 
 # Load the model
 def load_model(model_name, hf_auth, save_directory):
-    
     if not os.path.exists(save_directory):
         # Load model and tokenizer from Hugging Face and then save locally
         print("Downloading model from Hugging Face")
@@ -94,7 +94,7 @@ def define_chain(llm, prompt, memory):
         llm=llm,
         prompt=prompt,
         memory=memory,
-        )
+    )
     return chain
 
 
