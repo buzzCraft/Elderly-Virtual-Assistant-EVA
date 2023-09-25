@@ -16,17 +16,6 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
-# Initialize cuda
-device = torch.device("cuda" if cuda.is_available() else "cpu")
-
-# Authorization token
-hf_auth = "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"
-
-# Model name
-model_name = "meta-llama/Llama-2-7b-chat-hf"
-save_directory = "./llama_models"
-
-
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
         model_name, use_auth_token=hf_auth, legacy=False, return_tensors="pt"
@@ -52,6 +41,7 @@ def load_from_local(save_dir):
 
 # Load the model
 def load_model(model_name, hf_auth, save_directory):
+    
     if not os.path.exists(save_directory):
         # Load model and tokenizer from Hugging Face and then save locally
         print("Downloading model from Hugging Face")
@@ -70,7 +60,7 @@ def initialize_pipeline(model, tokenizer):
         model=model,
         tokenizer=tokenizer,
         return_full_text=True,
-        max_new_tokens=10,
+        max_new_tokens=100,
         repetition_penalty=1.2,
     )
     return HuggingFacePipeline(pipeline=llm_pipeline)
@@ -99,14 +89,12 @@ def define_memory():
 
 
 # Define the chain
-def define_chain(llm, prompt, memory, max_tokens=50, memory_key="chat_history"):
+def define_chain(llm, prompt, memory):
     chain = LLMChain(
         llm=llm,
         prompt=prompt,
         memory=memory,
-        max_tokens=max_tokens,
-        memory_key=memory_key,
-    )
+        )
     return chain
 
 
