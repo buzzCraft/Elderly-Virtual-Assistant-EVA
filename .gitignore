@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+app/VoiceToText/app/.env
 .venv
 env/
 venv/

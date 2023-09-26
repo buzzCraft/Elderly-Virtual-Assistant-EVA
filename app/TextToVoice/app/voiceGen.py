@@ -1,5 +1,13 @@
+import json
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
+
+
+with open("transcription.json", "r") as json_file:
+    transcription = json.load(json_file)
+
+# Extract text from transcription json file
+text = transcription["transcription"]
 
 processor = AutoProcessor.from_pretrained("suno/bark-small")
 model = BarkModel.from_pretrained("suno/bark-small")
@@ -7,7 +15,7 @@ model = BarkModel.from_pretrained("suno/bark-small")
 voice_preset = "v2/en_speaker_6"
 
 inputs = processor(
-    "[music] Hello, are you ready for a standup today [laugh] [woman]",
+    text,
     voice_preset=voice_preset,
 )
 
