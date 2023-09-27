@@ -22,7 +22,7 @@ COPY app/ ./
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
 
-EXPOSE 6000
+EXPOSE 5000
 #CMD ["python", "/app/transcribemagic.py"]
 
-CMD ["python", "/app/flaskRecord.py"]
+CMD ["python", "/app/transcribeApp.py"]
