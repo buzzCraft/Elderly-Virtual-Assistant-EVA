@@ -13,12 +13,18 @@ def wait_for_transcription(file_path, timeout=300):
                 f"Waited for {timeout} seconds, but {file_path} was not found."
             )
 
-    print(f"{file_path} is ready. Starting texttovoice processing...")
+    # print(f"{file_path} is ready. Starting texttovoice processing...")
+    return os.path.getmtime(file_path)
 
 
 if __name__ == "__main__":
     transcription_path = "/text-to-voice-app/transcription.json"
-    wait_for_transcription(transcription_path)
+    while True:
+        current_timestamp = wait_for_transcription(transcription_path)
+        print(f"New {transcription_path} detected. Starting texttovoice processing...")
+        os.system("python /text-to-voice-app/voiceGen.py")
 
-    # Once the transcription file is ready, start the main processing script
-    os.system("python /text-to-voice-app/voiceGen.py")
+        renamed_file = f"/text-to-voice-app/transcription_{int(current_timestamp)}.json"
+        os.rename(transcription_path, renamed_file)
+
+        time.sleep(10)

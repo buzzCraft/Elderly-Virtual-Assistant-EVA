@@ -3,7 +3,8 @@ from tempfile import NamedTemporaryFile
 import whisper
 import torch
 import json
-import tqdm
+import os
+import time
 
 # Check if NVIDIA GPU is available
 torch.cuda.is_available()
@@ -41,10 +42,17 @@ def transcribe_magic():
                 "transcript": result["text"],
             }
         )
+        # Rename the old transcription.json file if it exists
+    if os.path.exists(f"{save_path}transcription.json"):
+        current_timestamp = int(time.time())
+        renamed_file = f"{save_path}transcription_{current_timestamp}.json"
+        os.rename(f"{save_path}transcription.json", renamed_file)
     # Save to transcription.json
     try:
         with open(f"{save_path}transcription.json", "w") as outfile:
             json.dump({"results": results}, outfile, indent=4)
+        #
+
     except Exception as e:
         print("Error saving file:", e)
     # This will be automatically converted to JSON.
