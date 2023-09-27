@@ -1,4 +1,8 @@
-FROM python:3.10-slim
+FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y portaudio19-dev libsndfile1 apt-utils
+
 
 RUN pip install --upgrade pip && \
     pip install poetry

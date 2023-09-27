@@ -4,25 +4,11 @@ services:
   transcribe:
     build:
       context: ./app/VoiceToText
-      dockerfile: Dockerfile-magic
+      dockerfile: Dockerfile
     volumes:
-      - ./app/VoiceToText/app:/voice-to-text-app
       - ./app/TextToVoice/app:/text-to-voice-app
-      #- ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
       - "5000:5000"
-    environment:
-        - FLASK_ENV=development
-        - FLASK_DEBUG=1
-
-  recorded_file:
-    depends_on:
-      - transcribe
-    build:
-      context: ./app/VoiceToText
-      dockerfile: Dockerfile-flask
-    ports:
-        - "6000:6000"
 
   texttovoice:
     depends_on:

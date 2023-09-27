@@ -1,26 +1,30 @@
 import json
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
-
+import os
+import tqdm
 
 with open("transcription.json", "r") as json_file:
     transcription = json.load(json_file)
 
 # Extract text from transcription json file
-text = transcription["transcription"]
+text = transcription["results"][0]["transcript"]
 
 processor = AutoProcessor.from_pretrained("suno/bark-small")
 model = BarkModel.from_pretrained("suno/bark-small")
 
-voice_preset = "v2/en_speaker_6"
+voice_preset = "v2/en_speaker_1"
 
 inputs = processor(
     text,
     voice_preset=voice_preset,
+
 )
 
 audio_array = model.generate(**inputs)
 audio_array = audio_array.cpu().numpy().squeeze()
+#sample_rate = model.generation_config.sample_rate
 
-
-sf.write("test.wav", audio_array, 22050, "PCM_24")
+save_dr = "/text-to-voice-app/"
+output_path = os.path.join(save_dr, "outaudio.wav")
+sf.write(output_path, audio_array, 22050, "PCM_24")
