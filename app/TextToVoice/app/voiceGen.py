@@ -19,7 +19,6 @@ voice_preset = "v2/en_speaker_1"
 inputs = processor(
     text,
     voice_preset=voice_preset,
-
 )
 
 audio_array = model.generate(**inputs)
