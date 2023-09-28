@@ -11,11 +11,13 @@ WORKDIR /app
 # Copy the pyproject.toml and poetry.lock files
 COPY pyproject.toml poetry.lock ./
 
-# Copy only the contents of the app directory
-COPY app/ ./
-
 # Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
 
-EXPOSE 5002
+# Copy only the contents of the app directory
+COPY app/ ./
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
