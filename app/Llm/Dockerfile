@@ -18,4 +18,4 @@ COPY app/ ./
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
 
-EXPOSE 5000
+EXPOSE 5002

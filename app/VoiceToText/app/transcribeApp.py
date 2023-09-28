@@ -1,16 +1,27 @@
 from flask import Flask, abort, request
 from tempfile import NamedTemporaryFile
 import whisper
+from whisper import _download, _MODELS
 import torch
 import json
 import os
 import time
 
-# Check if NVIDIA GPU is available
 torch.cuda.is_available()
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Load the Whisper model:
+
+# Download the base model
+def model_exists(model_path, filename):
+    """Check if the model file exists at the specified path."""
+    return os.path.exists(os.path.join(model_path, filename))
+
+
+model_path = "models/"
+if not model_exists(model_path, "base.pt"):
+    _download(_MODELS["base"], model_path, False)
+
+# Load the model:
 model = whisper.load_model("base", device=DEVICE)
 save_path = "/text-to-voice-app/"
 

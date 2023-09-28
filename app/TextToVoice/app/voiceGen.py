@@ -11,13 +11,25 @@ with open("/text-to-voice-app/transcription.json", "r") as json_file:
 text = transcription["results"][0]["transcript"]
 print(f"Processing text: {text}")
 
-processor = AutoProcessor.from_pretrained("suno/bark-small")
-model = BarkModel.from_pretrained("suno/bark-small")
+model_path = ".models/"
+model_name = "suno/bark-small"
+
+# Check if the model exists locally
+if not os.path.exists(os.path.join(model_path, "config.json")):
+    # If not, download and save
+    processor = AutoProcessor.from_pretrained(model_name)
+    model = BarkModel.from_pretrained(model_name)
+    processor.save_pretrained(model_path)
+    model.save_pretrained(model_path)
+else:
+    # If yes, load from the local directory
+    processor = AutoProcessor.from_pretrained(model_path)
+    model = BarkModel.from_pretrained(model_path)
 
 voice_preset = "v2/en_speaker_1"
 
 inputs = processor(
-    text,
+    "text",
     voice_preset=voice_preset,
 )
 
