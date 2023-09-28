@@ -1,6 +1,6 @@
 # LLM
 
-Setting up docker image, and running llm docker container.
+Setting up LLM docker image, and running corresponding docker container.
 
 ## Table of Contents
 
@@ -48,9 +48,5 @@ To run your Docker container with published ports and utilizing the GPU, use the
 ```bash
 docker run --rm --gpus all -p 5000:5000 LLM:latest
 ```
-
----
-
-End of README example.
 
 ---
