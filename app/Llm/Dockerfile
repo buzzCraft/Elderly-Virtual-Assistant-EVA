@@ -18,4 +18,8 @@ COPY app/ ./
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
 
+RUN pip install -U bitsandbytes
+
 EXPOSE 5000
+
+CMD ["python", "app.py"]
