@@ -1,6 +1,6 @@
-# Project Title
+# LLM
 
-Your project description here.
+Setting up docker image, and running llm docker container.
 
 ## Table of Contents
 
