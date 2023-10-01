@@ -16,6 +16,8 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
@@ -23,7 +25,7 @@ def load_from_hf(model_name, hf_auth):
     )
     model = LlamaForCausalLM.from_pretrained(
         model_name, use_auth_token=hf_auth, load_in_8bit=True
-    )
+    ).to(device)
     return tokenizer, model
 
 
@@ -36,13 +38,15 @@ def load_from_local(save_dir):
     tokenizer = LlamaTokenizer.from_pretrained(
         save_dir, return_tensors="pt", legacy=False
     )
-    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True)
+    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True).to(device)
     return tokenizer, model
 
 
 # Load the model
 def load_model(model_name, hf_auth, save_directory):
     if not os.path.exists(save_directory):
+        os.makedirs(save_directory, exist_ok=True)
+
         # Load model and tokenizer from Hugging Face and then save locally
         print("Downloading model from Hugging Face")
         tokenizer, model = load_from_hf(model_name, hf_auth)

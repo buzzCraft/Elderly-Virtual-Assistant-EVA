@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 load_dotenv(".env")
 
 # CONSTANTS
 MODEL_NAME = "meta-llama/Llama-2-7b-chat-hf"
-SAVE_DIRECTORY = "./llama_models"
+SAVE_DIRECTORY = "llama_models/"
 HF_KEY = os.getenv("HF_KEY")
 
 # Initialize the chatbot
@@ -41,4 +42,4 @@ def generate_response():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=6000, debug=True)

@@ -1,6 +1,7 @@
-version: '2.2'
+version: '2.3'
 
 services:
+  # Transcribe service
   transcribe:
     build:
       context: ./app/VoiceToText
@@ -10,21 +11,10 @@ services:
     ports:
       - "5000:5000"
 
-  llm:
-    depends_on:
-      - transcribe
-    build:
-      context: ./app/Llm
-      dockerfile: Dockerfile
-    command:
-      - python
-      - /llm-app/start_llm.py
-    volumes:
-      - ./app/Llm/app:/llm-app
-
+  # Text-to-voice service
   texttovoice:
     depends_on:
-      - llm
+      - transcribe
     build:
       context: ./app/TextToVoice
       dockerfile: Dockerfile
@@ -33,3 +23,15 @@ services:
       - /text-to-voice-app/start_texttovoice.py
     volumes:
       - ./app/TextToVoice/app:/text-to-voice-app
+
+# Uncomment the following lines to enable the LLM service
+#  llm:
+#    depends_on:
+#      - transcribe
+#    build:
+#      context: ./app/Llm
+#      dockerfile: Dockerfile
+#    volumes:
+#      - ./app/Llm/app:/llm-app
+#    ports:
+#      - "6000:6000"
