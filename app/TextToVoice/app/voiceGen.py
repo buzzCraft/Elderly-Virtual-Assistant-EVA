@@ -49,9 +49,9 @@ def main():
     # Constants and paths
     TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
-    MODEL_PATH = "models/"
+    MODEL_PATH = "/text-to-voice-app/models/"
     SAVE_DIR = "/text-to-voice-app/"
-    VOICE_PRESET = "v2/en_speaker_1"
+    VOICE_PRESET = "v2/en_speaker_6"
     SAMPLE_RATE = 22050
 
     # Extract text from transcription
