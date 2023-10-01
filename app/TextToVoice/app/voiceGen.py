@@ -1,8 +1,12 @@
 import json
 import os
 import time
+import torch
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
+
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def load_transcription_from_file(file_path):
@@ -23,7 +27,7 @@ def get_model_and_processor(model_name, model_path):
     else:
         # Load model and processor from local directory
         processor = AutoProcessor.from_pretrained(model_path)
-        model = BarkModel.from_pretrained(model_path)
+        model = BarkModel.from_pretrained(model_path).to(device)
     return model, processor
 
 
@@ -45,7 +49,7 @@ def main():
     # Constants and paths
     TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
-    MODEL_PATH = ".models/"
+    MODEL_PATH = "models/"
     SAVE_DIR = "/text-to-voice-app/"
     VOICE_PRESET = "v2/en_speaker_1"
     SAMPLE_RATE = 22050

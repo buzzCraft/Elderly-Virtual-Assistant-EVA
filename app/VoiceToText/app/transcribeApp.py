@@ -44,9 +44,11 @@ def transcribe_magic():
         with NamedTemporaryFile() as temp:
             handle.save(temp.name)
             result = model.transcribe(temp.name)
-            results.append({
-                "transcript": result["text"],
-            })
+            results.append(
+                {
+                    "transcript": result["text"],
+                }
+            )
 
     save_transcription(results)
 

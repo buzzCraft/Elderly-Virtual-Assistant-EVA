@@ -28,7 +28,12 @@ def play_welcome_message():
 
 def send_file_to_endpoint(filename):
     """Send the file to the transcription endpoint."""
-    send_command = ["curl.exe", "-F", f"file=@{filename}", "http://localhost:5000/transcribe-service"]
+    send_command = [
+        "curl.exe",
+        "-F",
+        f"file=@{filename}",
+        "http://localhost:5000/transcribe-service",
+    ]
     subprocess.run(send_command)
 
 
@@ -56,7 +61,11 @@ def record_and_save(filename="recorded_audio.wav"):
     while True:
         frames = []  # Reset frames for multiple recordings
         stream = audio.open(
-            format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK
+            format=FORMAT,
+            channels=CHANNELS,
+            rate=RATE,
+            input=True,
+            frames_per_buffer=CHUNK,
         )
 
         print(
