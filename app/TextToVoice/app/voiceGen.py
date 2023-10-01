@@ -40,3 +40,4 @@ audio_array = audio_array.cpu().numpy().squeeze()
 save_dr = "/text-to-voice-app/"
 output_path = os.path.join(save_dr, f"outaudio{time.time()}.wav")
 sf.write(output_path, audio_array, 22050, "PCM_24")
+print(f"Audio saved to {output_path}")
