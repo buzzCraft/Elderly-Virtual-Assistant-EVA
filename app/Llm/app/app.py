@@ -11,7 +11,7 @@ load_dotenv(".env")
 
 # CONSTANTS
 MODEL_NAME = "meta-llama/Llama-2-7b-chat-hf"
-SAVE_DIRECTORY = "llama_models/"
+SAVE_DIRECTORY = "/llm-app/llama_models/"
 HF_KEY = os.getenv("HF_KEY")
 
 # Initialize the chatbot
@@ -19,6 +19,11 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
 # Initialize the Flask app
 app = Flask(__name__)
+
+
+@app.route("/")
+def test():
+    return "Our API is Working!"
 
 
 @app.route("/generate_response", methods=["POST"])
