@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y wget
 RUN apt-get update && apt-get install -y python3-pip
 
 
-COPY llama.cpp/main.exe .
+COPY llama/main.exe .
 COPY requirements.txt .
 COPY client.py .
 COPY server.py .
