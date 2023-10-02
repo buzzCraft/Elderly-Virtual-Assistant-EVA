@@ -9,7 +9,7 @@ def generate():
     data = request.json
     instruction = data['instruction']
     prompt = data['prompt']
-
+    #
     cmd = ["wine",
         "/app/main.exe",
         "-t", "12",

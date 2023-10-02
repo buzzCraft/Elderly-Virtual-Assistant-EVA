@@ -3,33 +3,31 @@ FROM ubuntu:latest
 WORKDIR /app
 
 
-#LABEL description="LLM server"
+LABEL description="Please clone the model 'llama-2-7b-chat.Q2_K.gguf'on your local machine (inside llama/model) before running the image"
 
 # Create the model directory
 RUN mkdir -p /app/model/
-COPY llama.cpp/model/llama-2-7b-chat.Q2_K.gguf /app/model/llama-2-7b-chat.Q2_K.gguf
-# Install wget
-RUN apt-get update && apt-get install -y wget
 
-#install the model from huggingface
+#copy the model from the local folder to the working dir.
+COPY llama/model/llama-2-7b-chat.Q2_K.gguf /app/model/llama-2-7b-chat.Q2_K.gguf
+
+#Altarnative: install the model from huggingface
 #RUN wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q2_K.gguf -O /app/model/llama-2-7b.Q2_K.gguf
 
 
-# Create the necessary directories
-#RUN mkdir -p /app/llama.cpp/model/ https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q2_K.gguf 
+# Install wget
+RUN apt-get update && apt-get install -y wget
 
-# Download the model directly into the correct location in the Docker image
-#RUN wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q2_K.gguf -O /app/llama.cpp/model/llama-2-7b.Q2_K.gguf
 
 
 # Install Python
 RUN apt-get update && apt-get install -y python3-pip
 
 
-COPY llama/main.exe .
 COPY requirements.txt .
-COPY client.py .
 COPY server.py .
+COPY client.py .
+COPY llama/main.exe .
 
 # Install Wine and its dependencies ( allowing to run Windows applications on Linux-based system)
 RUN dpkg --add-architecture i386 && \
@@ -50,7 +48,6 @@ RUN chmod +x main.exe
 EXPOSE 5000
 
 CMD ["python3", "server.py"]
-
 
 
 #docker build --cache-from llm_img .

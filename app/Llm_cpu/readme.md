@@ -6,12 +6,14 @@ Pre-requirements:
 
 - Navigatto the empty folder llama.cpp/model:
 
+- if you get error  "warning: in the working copy of 'app/Llm_cpu/Dockerfile', CRLF will be replaced by LF the next time Git touches it" you can either write: git config --global core.autocrlf true or git config --global core.autocrlf input
 cd llama.cpp/model
 
 - So run the following command:
 
 wget 'https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q2_K.gguf'
 
+-Remember to change the number cores from server.py (in my case "-t", "12")
 
 
 1. Using Docker:
