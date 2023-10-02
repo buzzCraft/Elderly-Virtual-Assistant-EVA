@@ -2,7 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+llama_models/
+models/
+.models/
+*.pt
+.env
+*.json
 # C extensions
 *.so
 .pt
@@ -25,7 +30,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -120,7 +124,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+app/VoiceToText/app/.env
 .venv
 env/
 venv/

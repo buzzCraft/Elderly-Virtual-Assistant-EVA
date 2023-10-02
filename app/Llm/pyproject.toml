@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "llm"
+version = "0.1.0"
+description = "LLM app with docker"
+authors = ["Vebjørn Berstad <s341910@oslomet.no>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+#transformers = "^4.33.2"
+langchain = "^0.0.300"
+flask = "^2.3.3"
+sentencepiece = "^0.1.99"
+protobuf = "^4.24.3"
+scipy = "^1.11.2"
+python-dotenv = "^1.0.0"
+accelerate = "^0.23.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
