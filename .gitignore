@@ -6,7 +6,7 @@ llama_models/
 models/
 .models/
 *.pt
-#.env
+.env
 *.json
 # C extensions
 *.so
