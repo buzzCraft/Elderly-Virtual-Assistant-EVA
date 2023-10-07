@@ -1,8 +1,9 @@
 import os
 import time
+import subprocess
 
 
-def wait_for_transcription(file_path, timeout=300):
+def wait_for_transcription(file_path, timeout=200):
     """Wait for the transcription file to be ready.
 
     Args:
@@ -37,10 +38,11 @@ def process_transcription(transcription_path):
     """
     current_timestamp = wait_for_transcription(transcription_path)
     print(f"New {transcription_path} detected. Starting texttovoice processing...")
-
     os.system("python /text-to-voice-app/voiceGen.py")
 
+    # Rename the transcription file after voiceGen.py is done
     renamed_file = f"/text-to-voice-app/transcription_{int(current_timestamp)}.json"
+    subprocess.run(["python", "/text-to-voice-app/voiceGen.py"])  # Wait for the process to finish
     os.rename(transcription_path, renamed_file)
 
 
