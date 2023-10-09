@@ -1,32 +1,28 @@
-# Use the specific PyTorch image with CUDA support
+# Use the Python 3.10 image
 FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 
-# Set non-interactive mode for apt-get and update packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    portaudio19-dev \
-    libsndfile1 \
-    apt-utils
+    DEBIAN_FRONTEND=noninteractive apt-get install -y portaudio19-dev libsndfile1 apt-utils
 
-# Install the latest version of pip and poetry
+
+# Install the latest version of poetry
 RUN pip install --upgrade pip && \
     pip install poetry
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the required files for poetry
+# Copy the pyproject.toml and poetry.lock files
 COPY pyproject.toml poetry.lock ./
 
-# Copy the app contents
+# Copy only the contents of the app directory
 COPY app/ ./
 
-# Configure poetry settings and install the dependencies
+# Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev
 
-# Expose the specified port
 EXPOSE 5000
+#CMD ["python", "/app/transcribemagic.py"]
 
-# Command to run the application
 CMD ["python", "/app/transcribeApp.py"]
