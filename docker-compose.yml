@@ -2,36 +2,36 @@ version: '2.3'
 
 services:
   # Transcribe service
-  transcribe:
-    build:
-      context: ./app/VoiceToText
-      dockerfile: Dockerfile
-    volumes:
-      - ./app/TextToVoice/app:/text-to-voice-app
-    ports:
-      - "5000:5000"
-
-  # Text-to-voice service
-  texttovoice:
-    depends_on:
-      - transcribe
-    build:
-      context: ./app/TextToVoice
-      dockerfile: Dockerfile
-    command:
-      - python
-      - /text-to-voice-app/start_texttovoice.py
-    volumes:
-      - ./app/TextToVoice/app:/text-to-voice-app
-
-# Uncomment the following lines to enable the LLM service
-#  llm:
+#  transcribe:
+#    build:
+#      context: ./app/VoiceToText
+#      dockerfile: Dockerfile
+#    volumes:
+#      - ./app/TextToVoice/app:/text-to-voice-app
+#    ports:
+#      - "5000:5000"
+#
+#  # Text-to-voice service
+#  texttovoice:
 #    depends_on:
 #      - transcribe
 #    build:
-#      context: ./app/Llm
+#      context: ./app/TextToVoice
 #      dockerfile: Dockerfile
+#    command:
+#      - python
+#      - /text-to-voice-app/voiceGen.py
 #    volumes:
-#      - ./app/Llm/app:/llm-app
-#    ports:
-#      - "6000:6000"
+#      - ./app/TextToVoice/app:/text-to-voice-app
+
+ #Uncomment the following lines to enable the LLM service
+  llm:
+    depends_on:
+      - transcribe
+    build:
+      context: ./app/Llm
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/Llm/app:/llm-app
+    ports:
+      - "6000:6000"
