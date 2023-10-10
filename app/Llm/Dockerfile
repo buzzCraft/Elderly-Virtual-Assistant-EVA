@@ -1,8 +1,5 @@
 # Use the Python 3.10 image
 FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
-RUN pip install transformers==4.30
-RUN pip install accelerate
-RUN pip install -i https://test.pypi.org/simple/ bitsandbytes
 
 # Install the latest version of poetry
 RUN pip install --upgrade pip && \
