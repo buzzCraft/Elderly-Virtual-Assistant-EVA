@@ -35,3 +35,4 @@ services:
       - ./app/Llm/app:/llm-app
     ports:
       - "6000:6000"
+      -
