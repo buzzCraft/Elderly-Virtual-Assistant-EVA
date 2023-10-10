@@ -19,6 +19,6 @@ RUN poetry config virtualenvs.create false && \
 # Copy only the contents of the app directory
 COPY app/ ./
 
-EXPOSE 6000
+EXPOSE 8000
 
 CMD ["python", "app.py"]
