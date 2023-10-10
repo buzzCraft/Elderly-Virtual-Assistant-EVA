@@ -1,5 +1,5 @@
 # Use the Python 3.10 image
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+#FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
 RUN pip install transformers==4.30
 RUN pip install accelerate
