@@ -16,8 +16,6 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
 
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
@@ -25,7 +23,7 @@ def load_from_hf(model_name, hf_auth):
     )
     model = LlamaForCausalLM.from_pretrained(
         model_name, use_auth_token=hf_auth, load_in_8bit=True
-    ).to(device)
+    )
     return tokenizer, model
 
 
