@@ -17,7 +17,7 @@ from langchain.prompts import (
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+print(device)
 
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
@@ -38,7 +38,7 @@ def load_from_local(save_dir):
     tokenizer = LlamaTokenizer.from_pretrained(
         save_dir, return_tensors="pt", legacy=False
     )
-    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True).to(device)
+    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True)
     return tokenizer, model
 
 
