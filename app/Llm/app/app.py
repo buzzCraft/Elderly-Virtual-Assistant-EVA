@@ -15,7 +15,7 @@ SAVE_DIRECTORY = "/llm-app/llama_models/"
 HF_KEY = os.getenv("HF_KEY")
 
 # Initialize the chatbot
-chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY).to(device)
+chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
 # Initialize the Flask app
 app = Flask(__name__)
