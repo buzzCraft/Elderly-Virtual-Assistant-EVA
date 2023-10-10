@@ -1,4 +1,4 @@
-version: '2.3'
+#version: '2.21'
 
 services:
   # Transcribe service
@@ -33,6 +33,10 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app/Llm/app:/llm-app
-    ports:
-      - "6000:6000"
-
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
