@@ -34,7 +34,7 @@ services:
     volumes:
       - ./app/Llm/app:/llm-app
     ports:
-      - "8000:8000"
+      - "5002:5002"
     deploy:
       resources:
         reservations:
