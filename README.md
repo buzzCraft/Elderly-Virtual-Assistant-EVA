@@ -1,5 +1,5 @@
 # ACIT4040-AI-Project
-A repository for ACIT4040 at OsloMet
+Implementation of EVA, an AI avatar for elderly companionship.
 
 
 ## Code style
@@ -43,3 +43,4 @@ ACIT4040-AI-Project
 - [Jackson Herbert Sinamenye]
 - [Majdi Omar Alali]
 - [Alexander Theo Strand]
+- 
