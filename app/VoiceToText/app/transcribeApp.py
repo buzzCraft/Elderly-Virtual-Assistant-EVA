@@ -5,6 +5,7 @@ import torch
 import json
 import os
 import time
+import requests
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
@@ -49,25 +50,39 @@ def transcribe_magic():
                     "transcript": result["text"],
                 }
             )
+    # Flag done transcribing
+    with open("/text-to-voice-app/transcription.json", "w") as flag_file:
+        flag_file.write("done")
 
-    save_transcription(results)
-
-    return jsonify({"results": results})
-
-
-def save_transcription(results):
-    """Save transcribed results to a file and handle renaming of old files."""
-    if os.path.exists(f"{SAVE_PATH}transcription.json"):
-        current_timestamp = int(time.time())
-        renamed_file = f"{SAVE_PATH}transcription_{current_timestamp}.json"
-        os.rename(f"{SAVE_PATH}transcription.json", renamed_file)
-
+    # Notify llama2 to process the transcription
     try:
-        with open(f"{SAVE_PATH}transcription.json", "w") as outfile:
-            json.dump({"results": results}, outfile, indent=4)
+        response = requests.post(
+            "http://llm:5002/generate_response",
+            json={"user_input": results[0]["transcript"]},
+        )
+        feedback = response.json().get("response", "")
     except Exception as e:
-        print(f"Error saving file: {e}")
-        abort(500, description="Internal Server Error while saving transcription")
+        print(f"Error notifying Llama2 {e}")
+        feedback = "Error sending transcription to llama2"
+
+    # save_transcription(results)
+
+    return jsonify({"transcription": results, "feedback": feedback})
+
+
+# def save_transcription(results):
+#     """Save transcribed results to a file and handle renaming of old files."""
+#     if os.path.exists(f"{SAVE_PATH}transcription.json"):
+#         current_timestamp = int(time.time())
+#         renamed_file = f"{SAVE_PATH}transcription_{current_timestamp}.json"
+#         os.rename(f"{SAVE_PATH}transcription.json", renamed_file)
+#
+#     try:
+#         with open(f"{SAVE_PATH}transcription.json", "w") as outfile:
+#             json.dump({"results": results}, outfile, indent=4)
+#     except Exception as e:
+#         print(f"Error saving file: {e}")
+#         abort(500, description="Internal Server Error while saving transcription")
 
 
 if __name__ == "__main__":

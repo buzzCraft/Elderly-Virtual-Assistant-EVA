@@ -28,4 +28,4 @@ RUN poetry config virtualenvs.create false && \
 COPY app/ ./
 
 # Expose the specified port
-EXPOSE 5001
+EXPOSE 5003

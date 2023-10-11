@@ -72,7 +72,9 @@ def initialize_pipeline(model, tokenizer):
 def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content="You are a assistant to an elderly person and your name is EVA"),
+            SystemMessage(
+                content="You are a assistant to an elderly person and your name is EVA"
+            ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
         ]

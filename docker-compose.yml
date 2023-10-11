@@ -11,20 +11,7 @@ services:
     ports:
       - "5000:5000"
 
-  # Text-to-voice service
-  texttovoice:
-    depends_on:
-      - transcribe
-    build:
-      context: ./app/TextToVoice
-      dockerfile: Dockerfile
-    command:
-      - python
-      - /text-to-voice-app/voiceGen.py
-    volumes:
-      - ./app/TextToVoice/app:/text-to-voice-app
-
- #Uncomment the following lines to enable the LLM service
+    # LLM service
   llm:
     depends_on:
       - transcribe
@@ -42,3 +29,18 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
+
+  # Text-to-voice service
+  texttovoice:
+    depends_on:
+      - llm
+    build:
+      context: ./app/TextToVoice
+      dockerfile: Dockerfile
+    command:
+      - python
+      - /text-to-voice-app/voiceGen.py
+    volumes:
+      - ./app/TextToVoice/app:/text-to-voice-app
+    ports:
+        - "5003:5003"
