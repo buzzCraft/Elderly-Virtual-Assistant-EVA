@@ -56,7 +56,7 @@ def generate_audio_from_text(model, processor, text, voice_preset):
 def generate_audio():
     feedback_text = request.json.get("feedback-text")
     # Constants and paths
-    TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
+   # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
     MODEL_PATH = "/text-to-voice-app/models/"
     SAVE_DIR = "/text-to-voice-app/"
@@ -64,8 +64,8 @@ def generate_audio():
     SAMPLE_RATE = 22050
 
     # Extract text from transcription
-    text = load_transcription_from_file(TRANSCRIPTION_FILE)
-    print(f"Processing text: {text}")
+    #text = load_transcription_from_file(TRANSCRIPTION_FILE)
+    #print(f"Processing text: {text}")
 
     # Get model and processor
     model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
@@ -73,7 +73,7 @@ def generate_audio():
     # Wait for LLM to finish processing
     #wait_for_llm_flag()
     # Generate audio from text
-    audio_array = generate_audio_from_text(model, processor, text, VOICE_PRESET)
+    audio_array = generate_audio_from_text(model, processor, feedback_text, VOICE_PRESET)
     #os.remove("/text-to-voice-app/llm_done.flag")
 
     # Save the generated audio
