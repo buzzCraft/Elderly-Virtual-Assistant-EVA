@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/Llm/app:/llm-app
     ports:
       - "5000:5000"
 
@@ -20,6 +21,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app/Llm/app:/llm-app
+      - ./app/TextToVoice/app:/text-to-voice-app
     ports:
       - "5002:5002"
     deploy:
@@ -41,6 +43,7 @@ services:
       - python
       - /text-to-voice-app/voiceGen.py
     volumes:
+      - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
     ports:
         - "5003:5003"
