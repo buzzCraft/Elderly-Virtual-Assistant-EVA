@@ -16,14 +16,14 @@ AMPLITUDE_THRESHOLD = 1000  # Amplitude threshold for detecting silence
 frames = []
 
 
-def play_welcome_message():
-    """Play the welcome message."""
-    mixer.init()
-    mixer.music.load("welcome.mp3")
-    mixer.music.play()
-
-    while mixer.music.get_busy():
-        time.sleep(0.1)
+# def play_welcome_message():
+#     """Play the welcome message."""
+#     mixer.init()
+#     mixer.music.load("welcome.mp3")
+#     mixer.music.play()
+#
+#     while mixer.music.get_busy():
+#         time.sleep(0.1)
 
 
 def send_file_to_endpoint(filename):
@@ -105,6 +105,6 @@ def record_and_save(filename="recorded_audio.wav"):
 
 
 if __name__ == "__main__":
-    play_welcome_message()
+    #play_welcome_message()
     audio = pyaudio.PyAudio()
     record_and_save()
