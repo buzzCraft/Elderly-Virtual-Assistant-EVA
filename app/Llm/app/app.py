@@ -7,9 +7,9 @@ import requests
 import time
 
 
-def wait_for_flag():
-    while not os.path.exists("/llm-app/transcription_done.flag"):
-        time.sleep(10)  # Sleep for 10 seconds before checking again
+# def wait_for_flag():
+#     while not os.path.exists("/llm-app/transcription_done.flag"):
+#         time.sleep(10)  # Sleep for 10 seconds before checking again
 
 
 # Set device
@@ -45,15 +45,15 @@ def generate_response():
             return jsonify({"error": "Empty user input"})
 
         # Wait for the transcription to be done
-        wait_for_flag()
+       # wait_for_flag()
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
-        os.remove("/llm-app/transcription_done.flag")
+        #os.remove("/llm-app/transcription_done.flag")
 
         # Flag done processing
-        with open("/llm-app/llm_done.flag", "w") as flag_file:
-            flag_file.write("done")
+        # with open("/llm-app/llm_done.flag", "w") as flag_file:
+        #     flag_file.write("done")
 
         # Notify voiceGen of the response
         voice_response = requests.post(

@@ -7,9 +7,9 @@ import soundfile as sf
 from flask import Flask, request, jsonify
 
 
-def wait_for_llm_flag():
-    while not os.path.exists("/text-to-voice-app/llm_done.flag"):
-        time.sleep(10)  # Sleep for 10 seconds before checking again
+# def wait_for_llm_flag():
+#     while not os.path.exists("/text-to-voice-app/llm_done.flag"):
+#         time.sleep(10)  # Sleep for 10 seconds before checking again
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -71,10 +71,10 @@ def generate_audio():
     model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
 
     # Wait for LLM to finish processing
-    wait_for_llm_flag()
+    #wait_for_llm_flag()
     # Generate audio from text
     audio_array = generate_audio_from_text(model, processor, text, VOICE_PRESET)
-    os.remove("/text-to-voice-app/llm_done.flag")
+    #os.remove("/text-to-voice-app/llm_done.flag")
 
     # Save the generated audio
     output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")

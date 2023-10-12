@@ -51,8 +51,8 @@ def transcribe_magic():
                 }
             )
     # Flag done transcribing
-    with open("/llm-app/transcription_done.flag", "w") as flag_file:
-        flag_file.write("done")
+    # with open("/llm-app/transcription_done.flag", "w") as flag_file:
+    #    flag_file.write("done")
 
     # Notify llama2 to process the transcription
     try:
@@ -62,7 +62,7 @@ def transcribe_magic():
             timeout=10  # Set a timeout of 10 seconds
         )
 
-        response.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
+        response.raise_for_status()
 
         feedback = response.json().get("response", "")
 
