@@ -59,7 +59,7 @@ def transcribe_magic():
         response = requests.post(
             "http://llm:5002/generate_response",
             json={"user_input": results[0]["transcript"]},
-            timeout=10  # Set a timeout of 10 seconds
+            timeout=60  # Set a timeout of 10 seconds
         )
 
         response.raise_for_status()

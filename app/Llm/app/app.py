@@ -5,6 +5,8 @@ import torch
 from dotenv import load_dotenv
 import requests
 import time
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 # def wait_for_flag():
@@ -49,6 +51,8 @@ def generate_response():
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
+        logging.info(f"Generated response: {chatbot_response}")
+
         #os.remove("/llm-app/transcription_done.flag")
 
         # Flag done processing
