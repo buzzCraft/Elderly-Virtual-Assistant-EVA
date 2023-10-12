@@ -51,7 +51,7 @@ def transcribe_magic():
                 }
             )
     # Flag done transcribing
-    with open("/text-to-voice-app/transcription.json", "w") as flag_file:
+    with open("/llm-app/transcription_done.flag", "w") as flag_file:
         flag_file.write("done")
 
     # Notify llama2 to process the transcription
