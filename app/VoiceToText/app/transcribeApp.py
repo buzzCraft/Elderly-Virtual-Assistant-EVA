@@ -59,11 +59,25 @@ def transcribe_magic():
         response = requests.post(
             "http://llm:5002/generate_response",
             json={"user_input": results[0]["transcript"]},
+            timeout=10  # Set a timeout of 10 seconds
         )
+
+        response.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
+
         feedback = response.json().get("response", "")
+
+    except requests.Timeout:
+        print("Error notifying Llama2: Request timed out")
+        feedback = "Error: The request to llama2 timed out"
+
+    except requests.RequestException as e:
+        print(f"Error notifying Llama2: {e}")
+        feedback = f"Error sending transcription to llama2: {e}"
+
     except Exception as e:
-        print(f"Error notifying Llama2 {e}")
-        feedback = "Error sending transcription to llama2"
+        # General exception handler for any other unexpected errors
+        print(f"Unexpected error: {e}")
+        feedback = "An unexpected error occurred"
 
     # save_transcription(results)
 

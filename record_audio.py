@@ -16,14 +16,14 @@ AMPLITUDE_THRESHOLD = 1000  # Amplitude threshold for detecting silence
 frames = []
 
 
-# def play_welcome_message():
-#     """Play the welcome message."""
-#     mixer.init()
-#     mixer.music.load("welcome.mp3")
-#     mixer.music.play()
-#
-#     while mixer.music.get_busy():
-#         time.sleep(0.1)
+def play_welcome_message():
+    """Play the welcome message."""
+    mixer.init()
+    mixer.music.load("welcome.mp3")
+    mixer.music.play()
+
+    while mixer.music.get_busy():
+        time.sleep(0.1)
 
 
 def send_file_to_endpoint(filename):
