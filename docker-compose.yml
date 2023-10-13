@@ -9,6 +9,7 @@ services:
     volumes:
       - ./app/TextToVoice/app:/text-to-voice-app
       - ./app/Llm/app:/llm-app
+      - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
       - "5000:5000"
 
