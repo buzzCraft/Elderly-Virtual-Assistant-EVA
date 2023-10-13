@@ -10,7 +10,7 @@ import requests
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
 SAVE_PATH = "/text-to-voice-app/"
-
+AUDIO_DIR = "audio_asset"
 app = Flask(__name__)
 
 
@@ -29,27 +29,35 @@ def download_and_load_model(model_name, model_path, device):
 model = download_and_load_model("base", MODEL_PATH, DEVICE)
 
 
-@app.route("/")
-def test():
-    return "Our API is Working!"
-
-
-@app.route("/transcribe-service", methods=["POST"])
-def transcribe_magic():
-    if not request.files:
-        abort(400)
-
+# @app.route("/")
+# def test():
+#     return "Our API is Working!"
+#
+#
+# @app.route("/transcribe-service", methods=["POST"])
+def transcribe_magic(filename):
+    # if not request.files:
+    #     abort(400)
+    #
     results = []
 
-    for filename, handle in request.files.items():
-        with NamedTemporaryFile() as temp:
-            handle.save(temp.name)
-            result = model.transcribe(temp.name)
-            results.append(
-                {
-                    "transcript": result["text"],
-                }
-            )
+    # for filename, handle in request.files.items():
+    #     with NamedTemporaryFile() as temp:
+    #         handle.save(temp.name)
+    #         result = model.transcribe(temp.name)
+    #         results.append(
+    #             {
+    #                 "transcript": result["text"],
+    #             }
+    #         )
+
+    with open(filename, "r") as file:
+        result = model.transcribe(file.name)
+        results.append(
+            {
+                "transcript": result["text"],
+            }
+        )
 
     # Notify llama2 to process the transcription
     try:
@@ -82,4 +90,19 @@ def transcribe_magic():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    # app.run(host="0.0.0.0", port=5000)
+    while True:
+        files = os.listdir(AUDIO_DIR)
+        wav_files = [f for f in files if f.endswith(".wav")]
+
+        for wav_file in wav_files:
+            full_path = os.path.join(AUDIO_DIR, wav_file)
+
+            # Process the audio file
+            results = transcribe_magic(full_path)
+
+            # After processing, delete or move the file
+            os.remove(full_path)
+
+        # Sleep for a short duration before checking again
+        time.sleep(1)

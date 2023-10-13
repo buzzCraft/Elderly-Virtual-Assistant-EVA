@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import subprocess
 import torch
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
@@ -64,6 +65,7 @@ def generate_audio():
     output_path = os.path.join(SAVE_DIR, f"bark_audio.wav")
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
+    subprocess.run(['python', 'audio_check_server.py'])
 
     return jsonify({"status": "success", "audio_path": output_path})
 
