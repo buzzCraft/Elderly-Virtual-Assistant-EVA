@@ -6,6 +6,7 @@ import json
 import os
 import time
 import requests
+import logging
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
@@ -51,7 +52,7 @@ def transcribe_magic(filename):
     #             }
     #         )
 
-    with open(filename, "r") as file:
+    with open(filename, "rb") as file:
         result = model.transcribe(file.name)
         results.append(
             {
@@ -86,7 +87,7 @@ def transcribe_magic(filename):
 
     # save_transcription(results)
 
-    return jsonify({"transcription": results, "feedback": feedback})
+    return results
 
 
 if __name__ == "__main__":
@@ -97,12 +98,14 @@ if __name__ == "__main__":
 
         for wav_file in wav_files:
             full_path = os.path.join(AUDIO_DIR, wav_file)
+            try:
+                # Process the audio file
+                results = transcribe_magic(full_path)
 
-            # Process the audio file
-            results = transcribe_magic(full_path)
-
-            # After processing, delete or move the file
-            os.remove(full_path)
+                # After processing, delete or move the file
+                os.remove(full_path)
+            except Exception as e:
+                logging.error(f"Error processing file {wav_file}: {e}")
 
         # Sleep for a short duration before checking again
         time.sleep(1)

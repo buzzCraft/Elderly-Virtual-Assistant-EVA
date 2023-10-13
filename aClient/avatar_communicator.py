@@ -47,7 +47,7 @@ def send_file_to_server(recordedfilename):
     ssh.connect(
         hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
     )
-    destination = SERVER_PATH_UP + '/' + recordedfilename
+    destination = SERVER_PATH_UP + "/" + recordedfilename
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(recordedfilename, destination)
 
