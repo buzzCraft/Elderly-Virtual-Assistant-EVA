@@ -23,7 +23,8 @@ AMPLITUDE_THRESHOLD = 1000  # Amplitude threshold for detecting silence
 frames = []
 SERVER_HOST = os.getenv("SERVER_HOST_ENV")
 SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
-SERVER_PATH = os.getenv("SERVER_PATH_ENV")
+SERVER_PATH_UP = os.getenv("SERVER_PATH_ENV_UP")
+SERVER_PATH_DOWN = os.getenv("SERVER_PATH_ENV_DOWN")
 SERVER_PASSWORD = os.getenv("SERVER_PASSWORD_ENV")
 
 CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
@@ -48,7 +49,7 @@ def send_file_to_server(recordedfilename):
     )
 
     with SCPClient(ssh.get_transport()) as scp:
-        scp.put(recordedfilename, SERVER_PATH + recordedfilename)
+        scp.put(recordedfilename, SERVER_PATH_UP + recordedfilename)
 
     ssh.close()
 
@@ -63,7 +64,7 @@ def download_response_from_server(responsefilename):
     )
 
     with SCPClient(ssh.get_transport()) as scp:
-        scp.get(SERVER_PATH + response_filename, response_filename)
+        scp.get(SERVER_PATH_DOWN + response_filename, response_filename)
 
     ssh.close()
     return response_filename
