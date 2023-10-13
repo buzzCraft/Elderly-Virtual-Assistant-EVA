@@ -44,9 +44,7 @@ def send_file_to_server(recordedfilename):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(
-        hostname=SERVER_HOST,
-        username=SERVER_USERNAME,
-        password=SERVER_PASSWORD
+        hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
     )
 
     with SCPClient(ssh.get_transport()) as scp:
@@ -61,9 +59,7 @@ def download_response_from_server(responsefilename):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(
-        hostname=SERVER_HOST,
-        username=SERVER_USERNAME,
-        password=SERVER_PASSWORD
+        hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
     )
 
     with SCPClient(ssh.get_transport()) as scp:
