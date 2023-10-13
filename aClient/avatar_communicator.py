@@ -47,9 +47,9 @@ def send_file_to_server(recordedfilename):
     ssh.connect(
         hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
     )
-
+    destination = os.path.join(SERVER_PATH_UP, recordedfilename)
     with SCPClient(ssh.get_transport()) as scp:
-        scp.put(recordedfilename, SERVER_PATH_UP + recordedfilename)
+        scp.put(recordedfilename, destination)
 
     ssh.close()
 
@@ -62,9 +62,9 @@ def download_response_from_server(responsefilename):
     ssh.connect(
         hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
     )
-
+    source = os.path.join(SERVER_PATH_UP, response_filename)
     with SCPClient(ssh.get_transport()) as scp:
-        scp.get(SERVER_PATH_DOWN + response_filename, response_filename)
+        scp.get(source, response_filename)
 
     ssh.close()
     return response_filename
