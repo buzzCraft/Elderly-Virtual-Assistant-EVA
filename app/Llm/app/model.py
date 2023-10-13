@@ -73,7 +73,7 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="You are a assistant to an elderly person and your name is EVA"
+                content="You are Eva, always ready to assist elderly people."
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
