@@ -50,16 +50,13 @@ def transcribe_magic():
                     "transcript": result["text"],
                 }
             )
-    # Flag done transcribing
-    # with open("/llm-app/transcription_done.flag", "w") as flag_file:
-    #    flag_file.write("done")
 
     # Notify llama2 to process the transcription
     try:
         response = requests.post(
             "http://llm:5002/generate_response",
             json={"user_input": results[0]["transcript"]},
-            timeout=60  # Set a timeout of 10 seconds
+            timeout=60,  # Set a timeout of 10 seconds
         )
 
         response.raise_for_status()
@@ -82,21 +79,6 @@ def transcribe_magic():
     # save_transcription(results)
 
     return jsonify({"transcription": results, "feedback": feedback})
-
-
-# def save_transcription(results):
-#     """Save transcribed results to a file and handle renaming of old files."""
-#     if os.path.exists(f"{SAVE_PATH}transcription.json"):
-#         current_timestamp = int(time.time())
-#         renamed_file = f"{SAVE_PATH}transcription_{current_timestamp}.json"
-#         os.rename(f"{SAVE_PATH}transcription.json", renamed_file)
-#
-#     try:
-#         with open(f"{SAVE_PATH}transcription.json", "w") as outfile:
-#             json.dump({"results": results}, outfile, indent=4)
-#     except Exception as e:
-#         print(f"Error saving file: {e}")
-#         abort(500, description="Internal Server Error while saving transcription")
 
 
 if __name__ == "__main__":

@@ -105,6 +105,6 @@ def record_and_save(filename="recorded_audio.wav"):
 
 
 if __name__ == "__main__":
-    #play_welcome_message()
+    # play_welcome_message()
     audio = pyaudio.PyAudio()
     record_and_save()

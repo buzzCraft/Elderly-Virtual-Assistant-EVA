@@ -7,11 +7,6 @@ import soundfile as sf
 from flask import Flask, request, jsonify
 
 
-# def wait_for_llm_flag():
-#     while not os.path.exists("/text-to-voice-app/llm_done.flag"):
-#         time.sleep(10)  # Sleep for 10 seconds before checking again
-
-
 device = "cuda" if torch.cuda.is_available() else "cpu"
 app = Flask(__name__)
 
@@ -45,36 +40,24 @@ def generate_audio_from_text(model, processor, text, voice_preset):
     return audio_array.cpu().numpy().squeeze()
 
 
-# def save_audio_to_file(audio_array, sample_rate, directory):
-#     """Save the generated audio to a WAV file."""
-#     output_path = os.path.join(directory, f"outaudio{time.time()}.wav")
-#     sf.write(output_path, audio_array, sample_rate, "PCM_24")
-#     return output_path
-
-
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
     feedback_text = request.json.get("feedback-text")
     # Constants and paths
-   # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
+    # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
     MODEL_PATH = "/text-to-voice-app/models/"
     SAVE_DIR = "/text-to-voice-app/"
     VOICE_PRESET = "v2/en_speaker_6"
     SAMPLE_RATE = 22050
 
-    # Extract text from transcription
-    #text = load_transcription_from_file(TRANSCRIPTION_FILE)
-    #print(f"Processing text: {text}")
-
     # Get model and processor
     model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
 
-    # Wait for LLM to finish processing
-    #wait_for_llm_flag()
     # Generate audio from text
-    audio_array = generate_audio_from_text(model, processor, feedback_text, VOICE_PRESET)
-    #os.remove("/text-to-voice-app/llm_done.flag")
+    audio_array = generate_audio_from_text(
+        model, processor, feedback_text, VOICE_PRESET
+    )
 
     # Save the generated audio
     output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
