@@ -7,6 +7,8 @@ import subprocess
 import os
 import requests
 from dotenv import load_dotenv
+import paramiko
+from scp import SCPClient
 
 load_dotenv(".env")
 
@@ -19,8 +21,11 @@ THRESHOLD_SILENCE = 100  # Number of silent chunks before ending recording
 AMPLITUDE_THRESHOLD = 1000  # Amplitude threshold for detecting silence
 
 frames = []
+SERVER_HOST = os.getenv("SERVER_HOST_ENV")
+SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
 SERVER_PATH = os.getenv("SERVER_PATH_ENV")
 SERVER_PASSWORD = os.getenv("SERVER_PASSWORD_ENV")
+
 CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
 
 
@@ -36,15 +41,35 @@ def play_welcome_message():
 
 def send_file_to_server(recordedfilename):
     """Send the file to the server using SCP."""
-    command = ["scp_with_password.exp", recordedfilename, SERVER_PATH + recordedfilename, SERVER_PASSWORD, "upload"]
-    subprocess.run(command)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(
+        hostname=SERVER_HOST,
+        username=SERVER_USERNAME,
+        password=SERVER_PASSWORD
+    )
+
+    with SCPClient(ssh.get_transport()) as scp:
+        scp.put(recordedfilename, SERVER_PATH + recordedfilename)
+
+    ssh.close()
 
 
 def download_response_from_server(responsefilename):
     """Download the response audio file from the server using SCP."""
     response_filename = responsefilename.replace(".wav", "_response.wav")
-    command = ["scp_with_password.exp", response_filename, SERVER_PATH + response_filename, SERVER_PASSWORD, "download"]
-    subprocess.run(command)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(
+        hostname=SERVER_HOST,
+        username=SERVER_USERNAME,
+        password=SERVER_PASSWORD
+    )
+
+    with SCPClient(ssh.get_transport()) as scp:
+        scp.get(SERVER_PATH + response_filename, response_filename)
+
+    ssh.close()
     return response_filename
 
 
