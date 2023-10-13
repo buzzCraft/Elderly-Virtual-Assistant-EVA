@@ -12,7 +12,9 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
 SAVE_PATH = "/text-to-voice-app/"
 AUDIO_DIR = "audio_asset"
-app = Flask(__name__)
+
+
+# app = Flask(__name__)
 
 
 def model_exists(model_path, filename):
@@ -91,21 +93,24 @@ def transcribe_magic(filename):
 
 
 if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=5000)
+    logging.basicConfig(level=logging.INFO)
+
     while True:
         files = os.listdir(AUDIO_DIR)
         wav_files = [f for f in files if f.endswith(".wav")]
 
-        for wav_file in wav_files:
-            full_path = os.path.join(AUDIO_DIR, wav_file)
-            try:
-                # Process the audio file
-                results = transcribe_magic(full_path)
+        if wav_files:  # If there are any .wav files
+            for wav_file in wav_files:
+                full_path = os.path.join(AUDIO_DIR, wav_file)
+                try:
+                    # Process the audio file
+                    results = transcribe_magic(full_path)
 
-                # After processing, delete or move the file
-                os.remove(full_path)
-            except Exception as e:
-                logging.error(f"Error processing file {wav_file}: {e}")
+                    # After processing, delete or move the file
+                    os.remove(full_path)
+                except Exception as e:
+                    logging.error(f"Error processing file {wav_file}: {e}")
 
-        # Sleep for a short duration before checking again
-        time.sleep(1)
+        else:  # If there are no .wav files
+            logging.info("No .wav files found. Waiting for 10 seconds before checking again.")
+            time.sleep(10)
