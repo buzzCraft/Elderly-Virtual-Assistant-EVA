@@ -60,7 +60,8 @@ def generate_audio():
     )
 
     # Save the generated audio
-    output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
+    #output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
+    output_path = os.path.join(SAVE_DIR, f"bark_audio.wav")
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
 
