@@ -41,6 +41,7 @@ def generate_response():
     try:
         # Get the request data
         user_input = request.json.get("user_input")
+        logging.info(f"Received transcription: {user_input}")
 
         # Check if the user input is empty
         if not user_input:
