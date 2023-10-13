@@ -41,10 +41,11 @@ services:
       context: ./app/TextToVoice
       dockerfile: Dockerfile
     command:
-      - python
-      - /text-to-voice-app/voiceGen.py
+      - /bin/bash
+      - /text-to-voice-app/runapps.sh
     volumes:
       - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
     ports:
         - "5003:5003"
+        - "5004:5004"
