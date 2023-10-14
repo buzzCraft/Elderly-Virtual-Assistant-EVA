@@ -32,27 +32,8 @@ def download_and_load_model(model_name, model_path, device):
 model = download_and_load_model("base", MODEL_PATH, DEVICE)
 
 
-# @app.route("/")
-# def test():
-#     return "Our API is Working!"
-#
-#
-# @app.route("/transcribe-service", methods=["POST"])
 def transcribe_magic(filename):
-    # if not request.files:
-    #     abort(400)
-    #
     results = []
-
-    # for filename, handle in request.files.items():
-    #     with NamedTemporaryFile() as temp:
-    #         handle.save(temp.name)
-    #         result = model.transcribe(temp.name)
-    #         results.append(
-    #             {
-    #                 "transcript": result["text"],
-    #             }
-    #         )
 
     with open(filename, "rb") as file:
         result = model.transcribe(file.name)

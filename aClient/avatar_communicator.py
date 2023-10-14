@@ -56,6 +56,8 @@ def send_file_to_server(recordedfilename):
 
 def download_response_from_server(responsefilename):
     """Download the response audio file from the server using SCP."""
+    if os.path.exists(responsefilename):
+        os.remove(responsefilename)
 
     source = f"{SERVER_USERNAME}@{SERVER_HOST}:{SERVER_PATH_DOWN}/{responsefilename}"
     destination = f"./{responsefilename}"
@@ -72,6 +74,8 @@ def download_response_from_server(responsefilename):
 def play_response_from_server(responsefilename):
     """Play the response audio file."""
     mixer.init()
+    mixer.music.unload()
+    time.sleep(1)  # Wait for 1 second
     mixer.music.load(responsefilename)
     mixer.music.play()
 
@@ -126,6 +130,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
 
         save_as_wav(recordfilename)
         send_file_to_server(recordfilename)
+        time.sleep(20)  # wait for 10 seconds
 
         try:
             # Try downloading the response file directly
@@ -133,6 +138,8 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             responsefilename = download_response_from_server(processed_audio_filename)
             if responsefilename:  # Check if the download was successful
                 play_response_from_server(responsefilename)
+                time.sleep(1)  # Wait for 1 second
+                os.remove(responsefilename)
 
             else:
                 print(
@@ -146,7 +153,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
         choice = input("Do you want to record again? (y/n): ")
         if choice != "y":
             print("Exiting...")
-        break
+            break
 
 
 if __name__ == "__main__":
