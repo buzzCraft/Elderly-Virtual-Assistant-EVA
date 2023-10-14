@@ -56,18 +56,17 @@ def send_file_to_server(recordedfilename):
 
 def download_response_from_server(responsefilename):
     """Download the response audio file from the server using SCP."""
-    response_filename = responsefilename.replace(".wav", "_response.wav")
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(
-        hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
-    )
-    source = SERVER_PATH_UP + "/" + response_filename
-    with SCPClient(ssh.get_transport()) as scp:
-        scp.get(source, response_filename)
 
-    ssh.close()
-    return response_filename
+    source = f"{SERVER_USERNAME}@{SERVER_HOST}:{SERVER_PATH_DOWN}/{responsefilename}"
+    destination = f"./{responsefilename}"
+
+    try:
+        subprocess.run(["scp", source, destination], check=True)
+        print(f"Downloaded {responsefilename} from the server.")
+        return responsefilename
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred while downloading {responsefilename} using scp: {e}")
+        return None
 
 
 def play_response_from_server(responsefilename):
@@ -128,20 +127,26 @@ def record_and_save(recordfilename="recorded_audio.wav"):
         save_as_wav(recordfilename)
         send_file_to_server(recordfilename)
 
-        response = requests.get(CHECK_ENDPOINT)
-        data = response.json()
-        if data["available"]:
-            audio_filename = data["filename"]
-            responsefilename = download_response_from_server(audio_filename)
-            play_response_from_server(responsefilename)
+        try:
+            # Try downloading the response file directly
+            processed_audio_filename = "bark_audio.wav"
+            responsefilename = download_response_from_server(processed_audio_filename)
+            if responsefilename:  # Check if the download was successful
+                play_response_from_server(responsefilename)
+
+            else:
+                print(
+                    "No response received from the server. Please check and try again."
+                )
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        os.remove(recordfilename)
 
         choice = input("Do you want to record again? (y/n): ")
         if choice != "y":
             print("Exiting...")
-            break
-
-        os.remove(recordfilename)
-        os.remove(responsefilename)
+        break
 
 
 if __name__ == "__main__":

@@ -65,10 +65,24 @@ def generate_audio():
     output_path = os.path.join(SAVE_DIR, f"bark_audio.wav")
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
-    subprocess.run(['python', 'audio_check_server.py'])
+    subprocess.run(["python", "audio_check_server.py"])
 
     return jsonify({"status": "success", "audio_path": output_path})
 
 
 if __name__ == "__main__":
+    current_directory = "/text-to-voice-app/"
+
+    # List all files in the current directory
+    files = os.listdir(current_directory)
+
+    # Filter files with .wav extension and delete them
+    for file in files:
+        if file.endswith(".wav"):
+            file_path = os.path.join(current_directory, file)
+            os.remove(file_path)
+            print(f"Deleted: {file_path}")
+
+    print("Deletion of .wav files in the current directory complete.")
+
     app.run(host="0.0.0.0", port=5003, debug=True)

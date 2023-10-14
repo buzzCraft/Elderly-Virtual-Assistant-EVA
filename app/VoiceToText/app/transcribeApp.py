@@ -112,5 +112,7 @@ if __name__ == "__main__":
                     logging.error(f"Error processing file {wav_file}: {e}")
 
         else:  # If there are no .wav files
-            logging.info("No .wav files found. Waiting for 10 seconds before checking again.")
+            logging.info(
+                "No .wav files found. Waiting for 10 seconds before checking again."
+            )
             time.sleep(10)
