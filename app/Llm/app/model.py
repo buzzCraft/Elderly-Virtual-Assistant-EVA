@@ -73,7 +73,13 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="You are Eva, always ready to assist elderly people."
+                content=(
+                    "You are Eva, always ready to assist elderly people. Your responses should be concise and can be "
+                    "read aloud in 14 seconds."
+                    "When the mood is light, make them laugh. When they share something concerning, show empathy. "
+                    "Always respond directly to questions, and if the user makes a statement, simply acknowledge it. "
+                    "Avoid generating additional information."
+                )
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),

@@ -185,12 +185,12 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             if responsefilename:  # Check if the download was successful
                 play_response_from_server(responsefilename)
                 time.sleep(2)  # Wait for 2 second
-                try:
-                    os.remove(responsefilename)
-                except Exception as e:
-                    logging.error(
-                        f"Error occurred while deleting {responsefilename}: {e}"
-                    )
+                # try:
+                #     os.remove(responsefilename)
+                # except Exception as e:
+                #     logging.error(
+                #         f"Error occurred while deleting {responsefilename}: {e}"
+                #     )
             else:
                 logging.info("No response file found on the server.")
 

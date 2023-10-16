@@ -60,8 +60,9 @@ def remove_old_files():
         if file.endswith(".wav"):
             file_path = os.path.join(current_directory, file)
             os.remove(file_path)
-            logging.info(f"Deleted: {file_path}")
-    logging.info(f"Deletion of .wav files in the current directory complete.")
+            logging.info(f"Deleted old file: {file_path}")
+        else:
+            logging.info("No old files to delete.")
 
 
 @app.route("/generate_voice", methods=["POST"])
@@ -102,4 +103,5 @@ def generate_audio():
 
 
 if __name__ == "__main__":
+    remove_old_files()
     app.run(host="0.0.0.0", port=5003, debug=True)
