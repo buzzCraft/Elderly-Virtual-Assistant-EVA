@@ -12,7 +12,7 @@ project-backups/
 *.json
 # C extensions
 *.so
-
+cmds.sbatch
 # Distribution / packaging
 .Python
 build/
