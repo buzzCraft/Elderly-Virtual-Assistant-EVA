@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # List all files in the current directory
     files = os.listdir(current_directory)
 
-    # Filter files with .wav extension and delete them
+    # Filter files with .wav extension and delete the
     for file in files:
         if file.endswith(".wav"):
             file_path = os.path.join(current_directory, file)
