@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 llama_models/
 models/
+project-backups/
 *.sbatch
 .wav
 *.pt
