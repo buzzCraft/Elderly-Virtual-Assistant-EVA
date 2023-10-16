@@ -8,6 +8,12 @@ import time
 import requests
 import logging
 
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
+
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
 SAVE_PATH = "/text-to-voice-app/"

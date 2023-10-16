@@ -136,8 +136,14 @@ def record_and_save(recordfilename="recorded_audio.wav"):
         send_file_to_server(recordfilename)
 
         def is_audio_ready(filename):
-            response = requests.post(CHECK_ENDPOINT, data={"filename": filename})
-            server_response = response.json()
+            try:
+                response = requests.post(
+                    CHECK_ENDPOINT, data={"filename": filename}, timeout=60
+                )
+                server_response = response.json()
+            except requests.exceptions.RequestException as e:
+                print(f"Error while making request: {e}")
+                return None
 
             if server_response["status"] == "success":
                 return server_response[

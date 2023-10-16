@@ -7,7 +7,11 @@ import requests
 import time
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

@@ -7,8 +7,15 @@ from transformers import AutoProcessor, BarkModel
 import soundfile as sf
 from flask import Flask, request, jsonify
 import logging
+import warnings
 
-logging.basicConfig(level=logging.INFO)
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 app = Flask(__name__)
@@ -45,7 +52,7 @@ def generate_audio_from_text(model, processor, text, voice_preset):
 
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
-    logging.info("Started processing audio generation request.")
+    logging.info(f"Started processing audio generation request.")
 
     feedback_text = request.json.get("feedback-text")
     # Constants and paths
@@ -92,6 +99,6 @@ if __name__ == "__main__":
             os.remove(file_path)
             print(f"Deleted: {file_path}")
 
-    print("Deletion of .wav files in the current directory complete.")
+    logging.info(f"Deletion of .wav files in the current directory complete.")
 
     app.run(host="0.0.0.0", port=5003, debug=True)
