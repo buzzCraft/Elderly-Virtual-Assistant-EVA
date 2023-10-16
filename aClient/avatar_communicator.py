@@ -64,7 +64,7 @@ def send_file_to_server(recordedfilename):
     ssh.close()
 
 
-def get_latest_bark_filename(timeout=60):  # default timeout of 60 seconds
+def get_latest_bark_filename(timeout=120):  # Timeout in seconds
     start_time = time.time()
 
     while time.time() - start_time < timeout:
@@ -94,14 +94,17 @@ def get_latest_bark_filename(timeout=60):  # default timeout of 60 seconds
 
 def download_response_from_server():
     """Download the response audio file from the server using SCP."""
-    responsefilename = get_latest_bark_filename()
-    if not responsefilename:
-        logging.info("No valid filename to download.")
+    full_path_on_server = get_latest_bark_filename()
+    if not full_path_on_server:
         return None
+
+    # Extract only the filename from the full path
+    responsefilename = os.path.basename(full_path_on_server)
     logging.info(f"Attempting to download {responsefilename} from the server.")
     if os.path.exists(responsefilename):
         os.remove(responsefilename)
 
+    # Build source and destination paths for scp
     source = f"{SERVER_USERNAME}@{SERVER_HOST}:{SERVER_PATH_DOWN}/{responsefilename}"
     destination = f"./{responsefilename}"
 

@@ -97,10 +97,11 @@ if __name__ == "__main__":
                 try:
                     # Process the audio file
                     results = transcribe_magic(full_path)
-
-                    # After processing, delete or move the file
-                    os.remove(full_path)
-                    logging.info(f"Deleted: {full_path}")
+                    if results:
+                        logging.info(f"Transcription of {wav_file} is done")
+                        # After processing, delete or move the file
+                        os.remove(full_path)
+                        logging.info(f"Deleted: {full_path}")
                 except Exception as e:
                     logging.error(f"Error processing file {wav_file}: {e}")
 
