@@ -49,6 +49,7 @@ def generate_response():
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
+        logging.info(f"Generated response: {chatbot_response}")
 
         # Notify voiceGen of the response
         voice_response = requests.post(

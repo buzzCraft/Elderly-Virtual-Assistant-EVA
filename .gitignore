@@ -6,7 +6,7 @@ llama_models/
 models/
 project-backups/
 *.sbatch
-.wav
+*.wav
 *.pt
 .env
 *.json
