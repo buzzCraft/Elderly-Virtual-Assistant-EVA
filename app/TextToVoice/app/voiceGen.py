@@ -58,8 +58,8 @@ def generate_audio():
     # Constants and paths
     # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
-    MODEL_PATH = "/text-to-voice-app/models/"
-    SAVE_DIR = "/text-to-voice-app/"
+    MODEL_PATH = "/app/models/"
+    SAVE_DIR = "/app/"
     VOICE_PRESET = "v2/en_speaker_6"
     SAMPLE_RATE = 22050
 
@@ -87,7 +87,7 @@ def generate_audio():
 
 
 if __name__ == "__main__":
-    current_directory = "/text-to-voice-app/"
+    current_directory = "/app/"
 
     # List all files in the current directory
     files = os.listdir(current_directory)

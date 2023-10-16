@@ -16,7 +16,7 @@ logging.basicConfig(
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
-SAVE_PATH = "/text-to-voice-app/"
+SAVE_PATH = "/app/"
 AUDIO_DIR = "audio_asset"
 
 

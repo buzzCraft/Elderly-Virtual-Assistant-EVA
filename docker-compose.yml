@@ -7,7 +7,7 @@ services:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
     volumes:
-      - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/TextToVoice/app:/app
       - ./app/Llm/app:/llm-app
       - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app/Llm/app:/llm-app
-      - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/TextToVoice/app:/app
     ports:
       - "5002:5002"
     deploy:
@@ -45,7 +45,7 @@ services:
       - /text-to-voice-app/runapps.sh
     volumes:
       - ./app/Llm/app:/llm-app
-      - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/TextToVoice/app:/app
     ports:
         - "5003:5003"
         - "5004:5004"
