@@ -50,10 +50,25 @@ def generate_audio_from_text(model, processor, text, voice_preset):
     return audio_array.cpu().numpy().squeeze()
 
 
+def remove_old_files():
+    """Remove old audio files from the current directory."""
+    current_directory = "/text-to-voice-app/"
+    # List all files in the current directory
+    files = os.listdir(current_directory)
+    # Filter files with .wav extension and delete the
+    for file in files:
+        if file.endswith(".wav"):
+            file_path = os.path.join(current_directory, file)
+            os.remove(file_path)
+            logging.info(f"Deleted: {file_path}")
+    logging.info(f"Deletion of .wav files in the current directory complete.")
+
+
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
     logging.info(f"Started processing audio generation request.")
-
+    # Remove old audio files
+    remove_old_files()
     feedback_text = request.json.get("feedback-text")
     # Constants and paths
     # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
@@ -87,17 +102,4 @@ def generate_audio():
 
 
 if __name__ == "__main__":
-    current_directory = "/text-to-voice-app/"
-
-    # List all files in the current directory
-    files = os.listdir(current_directory)
-
-    # Filter files with .wav extension and delete the
-    for file in files:
-        if file.endswith(".wav"):
-            file_path = os.path.join(current_directory, file)
-            os.remove(file_path)
-            logging.info(f"Deleted: {file_path}")
-    logging.info(f"Deletion of .wav files in the current directory complete.")
-
     app.run(host="0.0.0.0", port=5003, debug=True)
