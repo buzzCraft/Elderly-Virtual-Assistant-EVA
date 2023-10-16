@@ -246,7 +246,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
 
         try:
             # Try downloading the response file directly
-            processed_audio_filename = "bark_audio.wav"
+            processed_audio_filename = "bark_audio_*.wav"
             responsefilename = download_response_from_server(processed_audio_filename)
             if responsefilename:  # Check if the download was successful
                 play_response_from_server(responsefilename)
@@ -275,3 +275,24 @@ if __name__ == "__main__":
     play_welcome_message()
     audio = pyaudio.PyAudio()
     record_and_save()
+
+
+# # if i want to return latest
+# def get_latest_bark_filename():
+#     ssh = paramiko.SSHClient()
+#     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#     ssh.connect(
+#         hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
+#     )
+#
+#     stdin, stdout, stderr = ssh.exec_command(f"ls {SERVER_PATH_DOWN} | grep bark_audio_ | sort -r | head -n 1")
+#     latest_filename = stdout.readline().strip()
+#
+#     ssh.close()
+#     return latest_filename
+#
+#
+# def download_response_from_server():
+#     """Download the response audio file from the server using SCP."""
+#     responsefilename = get_latest_bark_filename()
+#     # ... (rest of your code remains unchanged)

@@ -9,6 +9,13 @@ import requests
 from dotenv import load_dotenv
 import paramiko
 from scp import SCPClient
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 
 load_dotenv(".env")
 
@@ -20,10 +27,6 @@ CHUNK = 1024
 THRESHOLD_SILENCE = 100  # Number of silent chunks before ending recording
 AMPLITUDE_THRESHOLD = 1000  # Amplitude threshold for detecting silence
 
-MAX_RETRIES = 10
-BASE_WAIT_TIME = 2  # seconds
-TIMEOUT = 60  # seconds
-
 frames = []
 SERVER_HOST = os.getenv("SERVER_HOST_ENV")
 SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
@@ -31,7 +34,8 @@ SERVER_PATH_UP = os.getenv("SERVER_PATH_ENV_UP")
 SERVER_PATH_DOWN = os.getenv("SERVER_PATH_ENV_DOWN")
 SERVER_PASSWORD = os.getenv("SERVER_PASSWORD_ENV")
 
-CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5003/generate_voice"
+
+# CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
 
 
 def play_welcome_message():
@@ -55,11 +59,46 @@ def send_file_to_server(recordedfilename):
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(recordedfilename, destination)
 
+    logging.info(f"Sent file {recordedfilename} to server.")
+
     ssh.close()
 
 
-def download_response_from_server(responsefilename):
+def get_latest_bark_filename(timeout=60):  # default timeout of 60 seconds
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(
+            hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
+        )
+        stdin, stdout, stderr = ssh.exec_command(
+            f"ls {SERVER_PATH_DOWN}/bark_audio_*.wav"
+        )
+        latest_filename = stdout.readline().strip()
+        ssh.close()
+
+        if latest_filename:
+            logging.info(f"Latest filename: {latest_filename}")
+            return latest_filename
+        else:
+            logging.warning("No filename retrieved from the server. Retrying...")
+            time.sleep(5)  # wait for 5 seconds before retrying
+
+    logging.error(
+        "Failed to retrieve filename from the server after waiting for the timeout period."
+    )
+    return None
+
+
+def download_response_from_server():
     """Download the response audio file from the server using SCP."""
+    responsefilename = get_latest_bark_filename()
+    if not responsefilename:
+        logging.info("No valid filename to download.")
+        return None
+    logging.info(f"Attempting to download {responsefilename} from the server.")
     if os.path.exists(responsefilename):
         os.remove(responsefilename)
 
@@ -68,10 +107,12 @@ def download_response_from_server(responsefilename):
 
     try:
         subprocess.run(["scp", source, destination], check=True)
-        print(f"Downloaded {responsefilename} from the server.")
+        logging.info(f"Downloaded {responsefilename} from the server.")
         return responsefilename
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred while downloading {responsefilename} using scp: {e}")
+        logging.error(
+            f"Error occurred while downloading {responsefilename} using scp: {e}"
+        )
         return None
 
 
@@ -94,7 +135,7 @@ def save_as_wav(recordfilename):
         wf.setsampwidth(audio.get_sample_size(FORMAT))
         wf.setframerate(RATE)
         wf.writeframes(b"".join(frames))
-    print(f"File saved as {recordfilename}")
+        logging.info(f"Saved file {recordfilename} to disk.")
 
 
 def record_and_save(recordfilename="recorded_audio.wav"):
@@ -110,9 +151,8 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             frames_per_buffer=CHUNK,
         )
 
-        print(
-            "Recording... Start talking. Be silent for a few seconds to end and save the recording."
-        )
+        logging.info("Started recording.")
+
         silent_chunks = 0
 
         while True:
@@ -128,58 +168,34 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             if silent_chunks > THRESHOLD_SILENCE:
                 break
 
-        print("Finished recording.")
+        logging.info("Stopped recording.")
         stream.stop_stream()
         stream.close()
 
         save_as_wav(recordfilename)
         send_file_to_server(recordfilename)
+        time.sleep(20)  # wait for 10 seconds
 
-        def is_audio_ready(filename):
-            try:
-                response = requests.post(
-                    CHECK_ENDPOINT, data={"filename": filename}, timeout=60
-                )
-                server_response = response.json()
-            except requests.exceptions.RequestException as e:
-                print(f"Error while making request: {e}")
-                return None
-
-            if server_response["status"] == "success":
-                return server_response[
-                    "filename"
-                ]  # Return the generated audio filename
-            return None
-
-        retry_count = 0
-        start_time = time.time()
-        processed_audio_filename = None
-
-        while retry_count < MAX_RETRIES:
-            processed_audio_filename = is_audio_ready(recordfilename)
-
-            if processed_audio_filename:
-                # Download and play the audio using the returned filename
-                responsefilename = download_response_from_server(
-                    processed_audio_filename
-                )
-                if responsefilename:
-                    play_response_from_server(responsefilename)
-                    try:
-                        os.remove(responsefilename)
-                    except Exception as e:
-                        print(f"Error deleting {responsefilename}: {e}")
-                break
+        try:
+            # Try downloading the response file directly
+            responsefilename = download_response_from_server()
+            if responsefilename:  # Check if the download was successful
+                play_response_from_server(responsefilename)
+                time.sleep(2)  # Wait for 2 second
+                try:
+                    os.remove(responsefilename)
+                except Exception as e:
+                    logging.error(
+                        f"Error occurred while deleting {responsefilename}: {e}"
+                    )
             else:
-                retry_count += 1
-                wait_time = BASE_WAIT_TIME * retry_count
-                elapsed_time = time.time() - start_time
-                if elapsed_time + wait_time > TIMEOUT:
-                    wait_time = TIMEOUT - elapsed_time
-                    if wait_time <= 0:
-                        print("Timed out waiting for audio processing.")
-                        break
-                time.sleep(wait_time)
+                logging.info("No response file found on the server.")
+
+        except Exception as e:
+            logging.error(
+                f"Error occurred while downloading {responsefilename} using scp: {e}"
+            )
+        os.remove(recordfilename)
 
         choice = input("Do you want to record again? (y/n): ")
         if choice != "y":

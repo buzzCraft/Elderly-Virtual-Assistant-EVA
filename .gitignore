@@ -12,6 +12,8 @@ project-backups/
 *.json
 # C extensions
 *.so
+record_audio.py
+
 cmds.sbatch
 # Distribution / packaging
 .Python

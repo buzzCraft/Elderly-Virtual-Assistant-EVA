@@ -48,7 +48,7 @@ def transcribe_magic(filename):
                 "transcript": result["text"],
             }
         )
-
+        logging.info(f"Transcribed {file.name}")
     # Notify llama2 to process the transcription
     try:
         response = requests.post(
@@ -62,16 +62,16 @@ def transcribe_magic(filename):
         feedback = response.json().get("response", "")
 
     except requests.Timeout:
-        print("Error notifying Llama2: Request timed out")
+        logging.info("Error notifying Llama2: Request timed out")
         feedback = "Error: The request to llama2 timed out"
 
     except requests.RequestException as e:
-        print(f"Error notifying Llama2: {e}")
+        logging.info(f"Error notifying Llama2: {e}")
         feedback = f"Error sending transcription to llama2: {e}"
 
     except Exception as e:
         # General exception handler for any other unexpected errors
-        print(f"Unexpected error: {e}")
+        logging.info(f"Unexpected error: {e}")
         feedback = "An unexpected error occurred"
 
     # save_transcription(results)
@@ -80,11 +80,16 @@ def transcribe_magic(filename):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%H:%M:%S",
+        level=logging.INFO,
+    )
 
     while True:
         files = os.listdir(AUDIO_DIR)
         wav_files = [f for f in files if f.endswith(".wav")]
+        logging.info(f"Found {len(wav_files)} .wav files.")
 
         if wav_files:  # If there are any .wav files
             for wav_file in wav_files:
@@ -95,6 +100,7 @@ if __name__ == "__main__":
 
                     # After processing, delete or move the file
                     os.remove(full_path)
+                    logging.info(f"Deleted: {full_path}")
                 except Exception as e:
                     logging.error(f"Error processing file {wav_file}: {e}")
 
