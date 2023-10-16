@@ -45,6 +45,8 @@ def generate_audio_from_text(model, processor, text, voice_preset):
 
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
+    logging.info("Started processing audio generation request.")
+
     feedback_text = request.json.get("feedback-text")
     # Constants and paths
     # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
@@ -64,15 +66,17 @@ def generate_audio():
 
     # Save the generated audio
     # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
-    output_path = os.path.join(SAVE_DIR, f"bark_audio.wav")
+    output_filename = f"bark_audio_{int(time.time())}.wav"
+    output_path = os.path.join(SAVE_DIR, output_filename)
+
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
     time.sleep(1)  # Ensure the file is completely written
-    logging.info(
-        f"Processed audio for request from {request.remote_addr}. Response saved to {output_path}"
-    )
 
-    return jsonify({"status": "success", "audio_path": output_path})
+    logging.info(f"Finished processing audio. Saved to {output_path}.")
+    return jsonify(
+        {"status": "success", "audio_path": output_path, "filename": output_filename}
+    )
 
 
 if __name__ == "__main__":
