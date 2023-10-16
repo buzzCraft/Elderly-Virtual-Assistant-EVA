@@ -97,8 +97,7 @@ if __name__ == "__main__":
         if file.endswith(".wav"):
             file_path = os.path.join(current_directory, file)
             os.remove(file_path)
-            print(f"Deleted: {file_path}")
-
+            logging.info(f"Deleted: {file_path}")
     logging.info(f"Deletion of .wav files in the current directory complete.")
 
     app.run(host="0.0.0.0", port=5003, debug=True)
