@@ -61,8 +61,6 @@ def remove_old_files():
             file_path = os.path.join(current_directory, file)
             os.remove(file_path)
             logging.info(f"Deleted old file: {file_path}")
-        else:
-            logging.info("No old files to delete.")
 
 
 @app.route("/generate_voice", methods=["POST"])
