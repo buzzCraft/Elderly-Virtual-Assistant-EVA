@@ -130,7 +130,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
 
         save_as_wav(recordfilename)
         send_file_to_server(recordfilename)
-        time.sleep(20)  # wait for 10 seconds
+        time.sleep(10)  # wait for 10 seconds
 
         try:
             # Try downloading the response file directly
@@ -138,7 +138,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             responsefilename = download_response_from_server(processed_audio_filename)
             if responsefilename:  # Check if the download was successful
                 play_response_from_server(responsefilename)
-                time.sleep(1)  # Wait for 1 second
+                time.sleep(2)  # Wait for 2 second
                 os.remove(responsefilename)
 
             else:

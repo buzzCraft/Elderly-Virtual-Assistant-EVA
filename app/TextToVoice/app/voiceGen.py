@@ -6,6 +6,9 @@ import torch
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
 from flask import Flask, request, jsonify
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 app = Flask(__name__)
@@ -64,7 +67,10 @@ def generate_audio():
     output_path = os.path.join(SAVE_DIR, f"bark_audio.wav")
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
-    time.sleep(2)  # Ensure the file is completely written
+    time.sleep(1)  # Ensure the file is completely written
+    logging.info(
+        f"Processed audio for request from {request.remote_addr}. Response saved to {output_path}"
+    )
 
     return jsonify({"status": "success", "audio_path": output_path})
 
