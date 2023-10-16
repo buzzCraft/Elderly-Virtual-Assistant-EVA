@@ -32,7 +32,7 @@ SERVER_HOST = os.getenv("SERVER_HOST_ENV")
 SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
 SERVER_PATH_UP = os.getenv("SERVER_PATH_ENV_UP")
 SERVER_PATH_DOWN = os.getenv("SERVER_PATH_ENV_DOWN")
-SERVER_PASSWORD = os.getenv("SERVER_PASSWORD_ENV")
+SSH_PRIVATE_KEY_PATH = os.getenv("SSH_PRIVATE_KEY_PATH")
 
 
 # CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
@@ -52,9 +52,9 @@ def send_file_to_server(recordedfilename):
     """Send the file to the server using SCP."""
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(
-        hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
-    )
+    private_key = paramiko.Ed25519Key(filename=SSH_PRIVATE_KEY_PATH)
+
+    ssh.connect(hostname=SERVER_HOST, username=SERVER_USERNAME, pkey=private_key)
     destination = SERVER_PATH_UP + "/" + recordedfilename
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(recordedfilename, destination)
@@ -71,7 +71,9 @@ def get_latest_bark_filename(timeout=120):  # Timeout in seconds
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(
-            hostname=SERVER_HOST, username=SERVER_USERNAME, password=SERVER_PASSWORD
+            hostname=SERVER_HOST,
+            username=SERVER_USERNAME,
+            key_filename=SSH_PRIVATE_KEY_PATH,
         )
         stdin, stdout, stderr = ssh.exec_command(
             f"ls {SERVER_PATH_DOWN}/bark_audio_*.wav"
@@ -109,7 +111,9 @@ def download_response_from_server():
     destination = f"./{responsefilename}"
 
     try:
-        subprocess.run(["scp", source, destination], check=True)
+        subprocess.run(
+            ["scp", "-i", SSH_PRIVATE_KEY_PATH, source, destination], check=True
+        )
         logging.info(f"Downloaded {responsefilename} from the server.")
         return responsefilename
     except subprocess.CalledProcessError as e:

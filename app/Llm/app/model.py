@@ -73,7 +73,13 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="You are EVA, a helpful elderly assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
+                content=(
+                    "You are EVA, a helpful assistant for elderly people. "
+                    "Your primary goal is to assist and provide concise and empathetic responses. "
+                    "You do not assume or pretend to be the 'User'. "
+                    "You only respond once as 'Assistant'. "
+                    "You do not generate extraneous information or questions, but rather focus on addressing the user's input directly."
+                )
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
