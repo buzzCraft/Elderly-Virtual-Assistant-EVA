@@ -8,6 +8,8 @@ import soundfile as sf
 from flask import Flask, request, jsonify
 import logging
 import warnings
+import nltk
+import numpy as np
 
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
@@ -69,21 +71,18 @@ def generate_audio():
     # Remove old audio files
     remove_old_files()
     feedback_text = request.json.get("feedback-text")
-    # Constants and paths
-    # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
-    MODEL_NAME = "suno/bark-small"
-    MODEL_PATH = "/text-to-voice-app/models/"
-    SAVE_DIR = "/text-to-voice-app/"
-    VOICE_PRESET = "v2/en_speaker_6"
-    SAMPLE_RATE = 22050
+    sentences = nltk.sent_tokenize(feedback_text)
+    silence = np.zeros(int(0.25 * SAMPLE_RATE))
+    pieces = []
 
     # Get model and processor
     model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
-
-    # Generate audio from text
-    audio_array = generate_audio_from_text(
-        model, processor, feedback_text, VOICE_PRESET
-    )
+    for sentence in sentences:
+        # Generate audio from text
+        audio_array = generate_audio_from_text(model, processor, sentence, VOICE_PRESET)
+        pieces.append(audio_array)
+        pieces.append(silence)
+    audio_array = np.concatenate(pieces)
 
     # Save the generated audio
     # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
@@ -101,5 +100,12 @@ def generate_audio():
 
 
 if __name__ == "__main__":
+    # Constants and paths
+    # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
+    MODEL_NAME = "suno/bark-small"
+    MODEL_PATH = "/text-to-voice-app/models/"
+    SAVE_DIR = "/text-to-voice-app/"
+    VOICE_PRESET = "v2/en_speaker_6"
+    SAMPLE_RATE = 22050
     remove_old_files()
     app.run(host="0.0.0.0", port=5003, debug=True)
