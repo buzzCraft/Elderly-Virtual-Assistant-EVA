@@ -72,7 +72,7 @@ def send_file_to_server(recordedfilename):
     ssh.close()
 
 
-def get_latest_bark_filename(timeout=120):  # Timeout in seconds
+def get_latest_bark_filename(timeout=240):  # Timeout in seconds
     start_time = time.time()
 
     while time.time() - start_time < timeout:
