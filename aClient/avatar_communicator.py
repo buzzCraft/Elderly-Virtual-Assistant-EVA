@@ -33,6 +33,7 @@ SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
 SERVER_PATH_UP = os.getenv("SERVER_PATH_ENV_UP")
 SERVER_PATH_DOWN = os.getenv("SERVER_PATH_ENV_DOWN")
 SSH_PRIVATE_KEY_PATH = os.getenv("SSH_PRIVATE_KEY_PATH")
+SSH_PRIVATE_KEY_PASSPHRASE = os.getenv("SSH_PRIVATE_KEY_PASSPHRASE")
 
 
 # CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
@@ -52,9 +53,16 @@ def send_file_to_server(recordedfilename):
     """Send the file to the server using SCP."""
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    private_key = paramiko.Ed25519Key(filename=SSH_PRIVATE_KEY_PATH)
+    private_key = paramiko.Ed25519Key(
+        filename=SSH_PRIVATE_KEY_PATH, password=SSH_PRIVATE_KEY_PASSPHRASE
+    )
 
-    ssh.connect(hostname=SERVER_HOST, username=SERVER_USERNAME, pkey=private_key)
+    ssh.connect(
+        hostname=SERVER_HOST,
+        username=SERVER_USERNAME,
+        pkey=private_key,
+        passphrase=SSH_PRIVATE_KEY_PASSPHRASE,
+    )
     destination = SERVER_PATH_UP + "/" + recordedfilename
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(recordedfilename, destination)
@@ -70,10 +78,14 @@ def get_latest_bark_filename(timeout=120):  # Timeout in seconds
     while time.time() - start_time < timeout:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        private_key = paramiko.Ed25519Key(
+            filename=SSH_PRIVATE_KEY_PATH, password=SSH_PRIVATE_KEY_PASSPHRASE
+        )
         ssh.connect(
             hostname=SERVER_HOST,
             username=SERVER_USERNAME,
-            key_filename=SSH_PRIVATE_KEY_PATH,
+            pkey=private_key,
+            passphrase=SSH_PRIVATE_KEY_PASSPHRASE,
         )
         stdin, stdout, stderr = ssh.exec_command(
             f"ls {SERVER_PATH_DOWN}/bark_audio_*.wav"
