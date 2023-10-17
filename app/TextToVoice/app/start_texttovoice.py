@@ -42,7 +42,9 @@ def process_transcription(transcription_path):
 
     # Rename the transcription file after voiceGen.py is done
     renamed_file = f"/text-to-voice-app/transcription_{int(current_timestamp)}.json"
-    subprocess.run(["python", "/text-to-voice-app/voiceGen.py"])  # Wait for the process to finish
+    subprocess.run(
+        ["python", "/text-to-voice-app/voiceGen.py"]
+    )  # Wait for the process to finish
     os.rename(transcription_path, renamed_file)
 
 

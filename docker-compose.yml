@@ -1,27 +1,39 @@
-version: '2.2'
+#version: '2.21'
 
 services:
+  # Transcribe service
   transcribe:
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
     volumes:
       - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/Llm/app:/llm-app
+      - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
       - "5000:5000"
 
+    # LLM service
   llm:
     depends_on:
       - transcribe
     build:
       context: ./app/Llm
       dockerfile: Dockerfile
-    command:
-      - python
-      - /llm-app/start_llm.py
     volumes:
       - ./app/Llm/app:/llm-app
+      - ./app/TextToVoice/app:/text-to-voice-app
+    ports:
+      - "5002:5002"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
 
+  # Text-to-voice service
   texttovoice:
     depends_on:
       - llm
@@ -29,7 +41,11 @@ services:
       context: ./app/TextToVoice
       dockerfile: Dockerfile
     command:
-      - python
-      - /text-to-voice-app/start_texttovoice.py
+      - /bin/bash
+      - /text-to-voice-app/runapps.sh
     volumes:
+      - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
+    ports:
+        - "5003:5003"
+        - "5004:5004"

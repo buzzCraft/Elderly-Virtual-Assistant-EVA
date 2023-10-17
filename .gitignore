@@ -4,14 +4,17 @@ __pycache__/
 *$py.class
 llama_models/
 models/
-
-.wav
+project-backups/
+*.sbatch
+*.wav
 *.pt
 .env
 *.json
 # C extensions
 *.so
+record_audio.py
 
+cmds.sbatch
 # Distribution / packaging
 .Python
 build/

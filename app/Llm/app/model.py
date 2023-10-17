@@ -16,8 +16,6 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
@@ -25,7 +23,7 @@ def load_from_hf(model_name, hf_auth):
     )
     model = LlamaForCausalLM.from_pretrained(
         model_name, use_auth_token=hf_auth, load_in_8bit=True
-    ).to(device)
+    )
     return tokenizer, model
 
 
@@ -38,7 +36,7 @@ def load_from_local(save_dir):
     tokenizer = LlamaTokenizer.from_pretrained(
         save_dir, return_tensors="pt", legacy=False
     )
-    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True).to(device)
+    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True)
     return tokenizer, model
 
 
@@ -74,7 +72,15 @@ def initialize_pipeline(model, tokenizer):
 def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content="You are a assistant to an elderly person."),
+            SystemMessage(
+                content=(
+                    "You are EVA, a helpful assistant for elderly people. "
+                    "Your primary goal is to assist and provide concise and empathetic responses. "
+                    "You do not assume or pretend to be the 'User'. "
+                    "You only respond once as 'Assistant'. "
+                    "You do not generate extraneous information or questions, but rather focus on addressing the user's input directly."
+                )
+            ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
         ]

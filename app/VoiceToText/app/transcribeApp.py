@@ -5,12 +5,22 @@ import torch
 import json
 import os
 import time
+import requests
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "models/"
 SAVE_PATH = "/text-to-voice-app/"
+AUDIO_DIR = "audio_asset"
 
-app = Flask(__name__)
+
+# app = Flask(__name__)
 
 
 def model_exists(model_path, filename):
@@ -28,47 +38,75 @@ def download_and_load_model(model_name, model_path, device):
 model = download_and_load_model("base", MODEL_PATH, DEVICE)
 
 
-@app.route("/")
-def test():
-    return "Our API is Working!"
-
-
-@app.route("/transcribe-service", methods=["POST"])
-def transcribe_magic():
-    if not request.files:
-        abort(400)
-
+def transcribe_magic(filename):
     results = []
 
-    for filename, handle in request.files.items():
-        with NamedTemporaryFile() as temp:
-            handle.save(temp.name)
-            result = model.transcribe(temp.name)
-            results.append(
-                {
-                    "transcript": result["text"],
-                }
-            )
-
-    save_transcription(results)
-
-    return jsonify({"results": results})
-
-
-def save_transcription(results):
-    """Save transcribed results to a file and handle renaming of old files."""
-    if os.path.exists(f"{SAVE_PATH}transcription.json"):
-        current_timestamp = int(time.time())
-        renamed_file = f"{SAVE_PATH}transcription_{current_timestamp}.json"
-        os.rename(f"{SAVE_PATH}transcription.json", renamed_file)
-
+    with open(filename, "rb") as file:
+        result = model.transcribe(file.name)
+        results.append(
+            {
+                "transcript": result["text"],
+            }
+        )
+        logging.info(f"Transcribed {file.name}")
+    # Notify llama2 to process the transcription
     try:
-        with open(f"{SAVE_PATH}transcription.json", "w") as outfile:
-            json.dump({"results": results}, outfile, indent=4)
+        response = requests.post(
+            "http://llm:5002/generate_response",
+            json={"user_input": results[0]["transcript"]},
+            timeout=60,  # Set a timeout of 10 seconds
+        )
+
+        response.raise_for_status()
+
+        feedback = response.json().get("response", "")
+
+    except requests.Timeout:
+        logging.info("Error notifying Llama2: Request timed out")
+        feedback = "Error: The request to llama2 timed out"
+
+    except requests.RequestException as e:
+        logging.info(f"Error notifying Llama2: {e}")
+        feedback = f"Error sending transcription to llama2: {e}"
+
     except Exception as e:
-        print(f"Error saving file: {e}")
-        abort(500, description="Internal Server Error while saving transcription")
+        # General exception handler for any other unexpected errors
+        logging.info(f"Unexpected error: {e}")
+        feedback = "An unexpected error occurred"
+
+    # save_transcription(results)
+
+    return results
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%H:%M:%S",
+        level=logging.INFO,
+    )
+
+    while True:
+        files = os.listdir(AUDIO_DIR)
+        wav_files = [f for f in files if f.endswith(".wav")]
+        logging.info(f"Found {len(wav_files)} .wav files.")
+
+        if wav_files:  # If there are any .wav files
+            for wav_file in wav_files:
+                full_path = os.path.join(AUDIO_DIR, wav_file)
+                try:
+                    # Process the audio file
+                    results = transcribe_magic(full_path)
+                    if results:
+                        logging.info(f"Transcription of {wav_file} is done")
+                        # After processing, delete or move the file
+                        os.remove(full_path)
+                        logging.info(f"Deleted: {full_path}")
+                except Exception as e:
+                    logging.error(f"Error processing file {wav_file}: {e}")
+
+        else:  # If there are no .wav files
+            logging.info(
+                "No .wav files found. Waiting for 10 seconds before checking again."
+            )
+            time.sleep(10)

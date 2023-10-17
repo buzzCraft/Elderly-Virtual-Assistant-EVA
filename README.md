@@ -1,5 +1,5 @@
 # ACIT4040-AI-Project
-A repository for ACIT4040 at OsloMet
+Implementation of EVA, an AI avatar for elderly companionship.
 
 
 ## Code style
@@ -7,14 +7,14 @@ A repository for ACIT4040 at OsloMet
 
 Formatting: Black
 
-Naming PEP 8 https://peps.python.org/pep-0008/ 
+Naming PEP 8 https://peps.python.org/pep-0008/
 
 	function_names and variable_names should be lowercase_with_underscores.
 	ClassNames should use CapWords convention.
 	CONSTANTS are usually all-uppercase.
 	_non_public_methods_or_variables start with an underscore.
 
-Use type hinting, makes code more readable 
+Use type hinting, makes code more readable
 
 
 ## Repository structure
@@ -43,3 +43,4 @@ ACIT4040-AI-Project
 - [Jackson Herbert Sinamenye]
 - [Majdi Omar Alali]
 - [Alexander Theo Strand]
+-

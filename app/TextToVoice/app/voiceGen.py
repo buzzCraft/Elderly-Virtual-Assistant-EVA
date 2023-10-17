@@ -1,12 +1,27 @@
 import json
 import os
 import time
+import subprocess
 import torch
 from transformers import AutoProcessor, BarkModel
 import soundfile as sf
+from flask import Flask, request, jsonify
+import logging
+import warnings
+import nltk
+import numpy as np
 
+nltk.download("punkt")
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+app = Flask(__name__)
 
 
 def load_transcription_from_file(file_path):
@@ -38,36 +53,60 @@ def generate_audio_from_text(model, processor, text, voice_preset):
     return audio_array.cpu().numpy().squeeze()
 
 
-def save_audio_to_file(audio_array, sample_rate, directory):
-    """Save the generated audio to a WAV file."""
-    output_path = os.path.join(directory, f"outaudio{time.time()}.wav")
-    sf.write(output_path, audio_array, sample_rate, "PCM_24")
-    return output_path
+def remove_old_files():
+    """Remove old audio files from the current directory."""
+    current_directory = "/text-to-voice-app/"
+    # List all files in the current directory
+    files = os.listdir(current_directory)
+    # Filter files with .wav extension and delete the
+    for file in files:
+        if file.endswith(".wav"):
+            file_path = os.path.join(current_directory, file)
+            os.remove(file_path)
+            logging.info(f"Deleted old file: {file_path}")
 
 
-def main():
+@app.route("/generate_voice", methods=["POST"])
+def generate_audio():
+    logging.info(f"Started processing audio generation request.")
+    # Remove old audio files
+    remove_old_files()
+    feedback_text = request.json.get("feedback-text")
+    sentences = nltk.sent_tokenize(feedback_text)
+    silence = np.zeros(int(0.25 * SAMPLE_RATE))
+    pieces = []
+
+    # Get model and processor
+    model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
+    for sentence in sentences:
+        # Generate audio from text
+        audio_array = generate_audio_from_text(model, processor, sentence, VOICE_PRESET)
+        pieces.append(audio_array)
+        pieces.append(silence)
+    audio_array = np.concatenate(pieces)
+
+    # Save the generated audio
+    # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
+    output_filename = f"bark_audio_{int(time.time())}.wav"
+    output_path = os.path.join(SAVE_DIR, output_filename)
+
+    sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
+    print(f"Audio saved to {output_path}")
+    time.sleep(1)  # Ensure the file is completely written
+
+    logging.info(f"Finished processing audio. Saved to {output_path}.")
+    return jsonify(
+        {"status": "success", "audio_path": output_path, "filename": output_filename}
+    )
+
+
+if __name__ == "__main__":
     # Constants and paths
-    TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
+    # TRANSCRIPTION_FILE = "/text-to-voice-app/transcription.json"
     MODEL_NAME = "suno/bark-small"
     MODEL_PATH = "/text-to-voice-app/models/"
     SAVE_DIR = "/text-to-voice-app/"
     VOICE_PRESET = "v2/en_speaker_6"
     SAMPLE_RATE = 22050
-
-    # Extract text from transcription
-    text = load_transcription_from_file(TRANSCRIPTION_FILE)
-    print(f"Processing text: {text}")
-
-    # Get model and processor
-    model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
-
-    # Generate audio from text
-    audio_array = generate_audio_from_text(model, processor, text, VOICE_PRESET)
-
-    # Save the generated audio
-    output_path = save_audio_to_file(audio_array, SAMPLE_RATE, SAVE_DIR)
-    print(f"Audio saved to {output_path}")
-
-
-if __name__ == "__main__":
-    main()
+    remove_old_files()
+    app.run(host="0.0.0.0", port=5003, debug=True)
