@@ -11,6 +11,7 @@ import warnings
 import nltk
 import numpy as np
 
+nltk.download("punkt")
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 logging.basicConfig(
