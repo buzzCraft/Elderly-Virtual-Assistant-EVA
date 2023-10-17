@@ -1,1 +1,0 @@
-source myenv/bin/activate
