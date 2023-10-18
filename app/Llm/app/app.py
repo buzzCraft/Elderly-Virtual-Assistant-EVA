@@ -26,6 +26,27 @@ HF_KEY = os.getenv("HF_KEY")
 # Initialize the chatbot
 chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
+# Default responses for unclear input
+DEFAULT_RESPONSES = [
+    "I'm sorry, I didn't quite understand that. Could you please rephrase or provide more details?",
+    "I apologize for the confusion. Can you clarify what you meant?",
+    "I'm here to help, but I'm not sure about your request. Can you provide more context or rephrase it?",
+    "I'm not certain about your query. Can you explain it a bit more?",
+]
+
+
+def get_default_response():
+    return random.choice(DEFAULT_RESPONSES)
+
+
+def respond_to_input(user_input):
+    if chatbot:
+        response = chatbot(user_input)
+        return response.get("text", "")
+    else:
+        return get_default_response()
+
+
 # Initialize the Flask app
 app = Flask(__name__)
 
@@ -47,8 +68,7 @@ def generate_response():
             return jsonify({"error": "Empty user input"})
 
         # Generate the response
-        response = chatbot(user_input)
-        chatbot_response = response.get("text", "")
+        chatbot_response = respond_to_input(user_input)
         logging.info(f"Generated response: {chatbot_response}")
 
         # Notify voiceGen of the response

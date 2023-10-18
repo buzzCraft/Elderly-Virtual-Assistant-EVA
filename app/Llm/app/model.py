@@ -1,6 +1,6 @@
 import os
 import random
-import logging
+from torch import cuda
 from transformers import (
     pipeline,
     LlamaTokenizer,
@@ -15,18 +15,6 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
-
-# Default responses for unclear input
-DEFAULT_RESPONSES = [
-    "I'm sorry, I didn't quite understand that. Could you please rephrase or provide more details?",
-    "I apologize for the confusion. Can you clarify what you meant?",
-    "I'm here to help, but I'm not sure about your request. Can you provide more context or rephrase it?",
-    "I'm not certain about your query. Can you explain it a bit more?",
-]
-
-
-def get_default_response():
-    return random.choice(DEFAULT_RESPONSES)
 
 
 def load_from_hf(model_name, hf_auth):
@@ -122,14 +110,9 @@ def define_chain(llm, prompt, memory):
 
 # Define the chatbot
 def initialize_model(model_name, hf_auth, save_directory):
-    try:
-        tokenizer, model = load_model(model_name, hf_auth, save_directory)
-        llm = initialize_pipeline(model, tokenizer)
-        prompt = define_prompt()
-        memory = define_memory()
-        chain = define_chain(llm, prompt, memory)
-        return chain
-    except Exception as e:
-        # Log the error for debugging purposes
-        logging.error(f"Error initializing the model: {e}")
-        return get_default_response
+    tokenizer, model = load_model(model_name, hf_auth, save_directory)
+    llm = initialize_pipeline(model, tokenizer)
+    prompt = define_prompt()
+    memory = define_memory()
+    chain = define_chain(llm, prompt, memory)
+    return chain
