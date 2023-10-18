@@ -236,4 +236,13 @@ We welcome contributions!
 
 This project is licensed under MIT License - see the [LICENSE.md](LICENSE) file for details.
 
+## Contributors
+
+- [Vebjørn Berstad](#)
+- [Pratima Kumari](#)
+- [Jackson Herbert Sinamenye](#)
+- [Majdi Omar Alali](#)
+- [Alexander Theo Strand](#)
+- [Contributor 6 Name](#)
+- [Contributor 7 Name](#)
 
