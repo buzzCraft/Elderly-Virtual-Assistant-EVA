@@ -109,4 +109,4 @@ if __name__ == "__main__":
     VOICE_PRESET = "v2/en_speaker_6"
     SAMPLE_RATE = 22050
     remove_old_files()
-    app.run(host="0.0.0.0", port=5003, debug=True)
+    app.run(host="0.0.0.0", port=5003, debug=False)
