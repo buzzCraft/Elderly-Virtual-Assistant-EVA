@@ -1,10 +1,10 @@
 import os
+import random
 from flask import Flask, request, jsonify
 from model import initialize_model
 import torch
 from dotenv import load_dotenv
 import requests
-import time
 import logging
 
 logging.basicConfig(
@@ -35,14 +35,35 @@ DEFAULT_RESPONSES = [
 ]
 
 
+def is_acceptable_question(response):
+    # List of acceptable questions that EVA can ask
+    acceptable_questions = [
+        "Do you need more assistance?",
+        "Is there anything else I can help with?",
+        "Would you like more information on this topic?",
+    ]
+    return response in acceptable_questions
+
+
 def get_default_response():
     return random.choice(DEFAULT_RESPONSES)
 
 
 def respond_to_input(user_input):
     if chatbot:
-        response = chatbot(user_input)
-        return response.get("text", "")
+        response = chatbot(user_input).get("text", "").strip()
+
+        # Check if the response is a question and if it's acceptable
+        if response.endswith("?") and not is_acceptable_question(response):
+            response = (
+                "I'm here to assist you. Please let me know how I can help further."
+            )
+
+        # If the response is empty or doesn't make sense, use a default response
+        if not response:
+            response = get_default_response()
+
+        return response
     else:
         return get_default_response()
 
