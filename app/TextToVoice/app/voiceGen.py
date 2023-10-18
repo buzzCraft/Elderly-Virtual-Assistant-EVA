@@ -48,6 +48,8 @@ def get_model_and_processor(model_name, model_path):
 def generate_audio_from_text(model, processor, text, voice_preset):
     """Generate audio from the given text."""
     inputs = processor(text, voice_preset=voice_preset, return_attention_mask=True)
+    if "attention_mask" in inputs:
+        del inputs["attention_mask"]
     audio_array = model.generate(**inputs, attention_mask=inputs["attention_mask"])
     return audio_array.cpu().numpy().squeeze()
 
