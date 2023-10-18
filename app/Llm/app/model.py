@@ -1,6 +1,6 @@
 import os
-import torch
-from torch import cuda
+import random
+import logging
 from transformers import (
     pipeline,
     LlamaTokenizer,
@@ -15,6 +15,18 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
+
+# Default responses for unclear input
+DEFAULT_RESPONSES = [
+    "I'm sorry, I didn't quite understand that. Could you please rephrase or provide more details?",
+    "I apologize for the confusion. Can you clarify what you meant?",
+    "I'm here to help, but I'm not sure about your request. Can you provide more context or rephrase it?",
+    "I'm not certain about your query. Can you explain it a bit more?",
+]
+
+
+def get_default_response():
+    return random.choice(DEFAULT_RESPONSES)
 
 
 def load_from_hf(model_name, hf_auth):
@@ -74,12 +86,11 @@ def define_prompt():
         [
             SystemMessage(
                 content=(
-                    "You are EVA, a helpful assistant for elderly people. "
-                    "Your primary goal is to assist and provide concise and empathetic responses. "
-                    "You always have to respond to user input. "
-                    "You do not assume or pretend to be the 'User'. "
-                    "You only respond once as 'Assistant'. "
-                    "You do not generate extraneous information or questions, but rather focus on addressing the user's input directly."
+                    "You are EVA, tailored for assisting the elderly. "
+                    "Provide empathetic, clear, and direct responses. "
+                    "Always acknowledge user input. "
+                    "You represent only the 'Assistant' role. "
+                    "Answer once per query, focusing solely on the user's needs."
                 )
             ),
             MessagesPlaceholder(variable_name="chat_history"),
@@ -111,9 +122,14 @@ def define_chain(llm, prompt, memory):
 
 # Define the chatbot
 def initialize_model(model_name, hf_auth, save_directory):
-    tokenizer, model = load_model(model_name, hf_auth, save_directory)
-    llm = initialize_pipeline(model, tokenizer)
-    prompt = define_prompt()
-    memory = define_memory()
-    chain = define_chain(llm, prompt, memory)
-    return chain
+    try:
+        tokenizer, model = load_model(model_name, hf_auth, save_directory)
+        llm = initialize_pipeline(model, tokenizer)
+        prompt = define_prompt()
+        memory = define_memory()
+        chain = define_chain(llm, prompt, memory)
+        return chain
+    except Exception as e:
+        # Log the error for debugging purposes
+        logging.error(f"Error initializing the model: {e}")
+        return get_default_response
