@@ -36,7 +36,7 @@ def load_from_local(save_dir):
     tokenizer = LlamaTokenizer.from_pretrained(
         save_dir, return_tensors="pt", legacy=False
     )
-    model = LlamaForCausalLM.from_pretrained(save_dir)  # , load_in_8bit=True
+    model = LlamaForCausalLM.from_pretrained(save_dir, load_in_8bit=True)
     return tokenizer, model
 
 
