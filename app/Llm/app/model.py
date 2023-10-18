@@ -16,6 +16,18 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 
+# Default responses for unclear input
+DEFAULT_RESPONSES = [
+    "I'm sorry, I didn't quite understand that. Could you please rephrase or provide more details?",
+    "I apologize for the confusion. Can you clarify what you meant?",
+    "I'm here to help, but I'm not sure about your request. Can you provide more context or rephrase it?",
+    "I'm not certain about your query. Can you explain it a bit more?",
+]
+
+
+def get_default_response():
+    return random.choice(DEFAULT_RESPONSES)
+
 
 def load_from_hf(model_name, hf_auth):
     tokenizer = LlamaTokenizer.from_pretrained(
@@ -73,13 +85,7 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content=(
-                    "You are EVA, tailored for assisting the elderly. "
-                    "Provide empathetic, clear, and direct responses. "
-                    "Always acknowledge user input. "
-                    "You represent only the 'Assistant' role. "
-                    "Answer once per query, focusing solely on the user's needs."
-                )
+                content="You are EVA, an assistant for the elderly; always respond clearly, empathetically, and directly to user input."
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
