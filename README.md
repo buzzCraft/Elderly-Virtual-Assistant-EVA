@@ -230,7 +230,7 @@ ACIT4040-AI-Project
 
 ## Contributing
 
-We welcome contributions!
+We welcome contributions! Please refer to GitHub Community Guidelines at [CONTRIBUTING.md](https://docs.github.com/articles/github-community-guidelines) before submitting a pull request.
 
 ## License
 
