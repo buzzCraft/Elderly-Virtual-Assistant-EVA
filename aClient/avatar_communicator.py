@@ -5,7 +5,6 @@ from pygame import mixer
 import time
 import subprocess
 import os
-import requests
 from dotenv import load_dotenv
 import paramiko
 from scp import SCPClient
@@ -33,7 +32,6 @@ SERVER_USERNAME = os.getenv("SERVER_USERNAME_ENV")
 SERVER_PATH_UP = os.getenv("SERVER_PATH_ENV_UP")
 SERVER_PATH_DOWN = os.getenv("SERVER_PATH_ENV_DOWN")
 SSH_PRIVATE_KEY_PATH = os.getenv("SSH_PRIVATE_KEY_PATH")
-SSH_PRIVATE_KEY_PASSPHRASE = os.getenv("SSH_PRIVATE_KEY_PASSPHRASE")
 
 
 # CHECK_ENDPOINT = "http://sgpu1.cs.oslomet.no:5004/check_audio"
@@ -53,15 +51,12 @@ def send_file_to_server(recordedfilename):
     """Send the file to the server using SCP."""
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    private_key = paramiko.Ed25519Key(
-        filename=SSH_PRIVATE_KEY_PATH, password=SSH_PRIVATE_KEY_PASSPHRASE
-    )
+    private_key = paramiko.Ed25519Key(filename=SSH_PRIVATE_KEY_PATH)
 
     ssh.connect(
         hostname=SERVER_HOST,
         username=SERVER_USERNAME,
         pkey=private_key,
-        passphrase=SSH_PRIVATE_KEY_PASSPHRASE,
     )
     destination = SERVER_PATH_UP + "/" + recordedfilename
     with SCPClient(ssh.get_transport()) as scp:
@@ -78,14 +73,11 @@ def get_latest_bark_filename(timeout=240):  # Timeout in seconds
     while time.time() - start_time < timeout:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        private_key = paramiko.Ed25519Key(
-            filename=SSH_PRIVATE_KEY_PATH, password=SSH_PRIVATE_KEY_PASSPHRASE
-        )
+        private_key = paramiko.Ed25519Key(filename=SSH_PRIVATE_KEY_PATH)
         ssh.connect(
             hostname=SERVER_HOST,
             username=SERVER_USERNAME,
             pkey=private_key,
-            passphrase=SSH_PRIVATE_KEY_PASSPHRASE,
         )
         stdin, stdout, stderr = ssh.exec_command(
             f"ls {SERVER_PATH_DOWN}/bark_audio_*.wav"
@@ -106,29 +98,61 @@ def get_latest_bark_filename(timeout=240):  # Timeout in seconds
     return None
 
 
+# def download_response_from_server():
+#     """Download the response audio file from the server using SCP."""
+#     full_path_on_server = get_latest_bark_filename()
+#     if not full_path_on_server:
+#         return None
+#
+#     # Extract only the filename from the full path
+#     responsefilename = os.path.basename(full_path_on_server)
+#     logging.info(f"Attempting to download {responsefilename} from the server.")
+#     if os.path.exists(responsefilename):
+#         os.remove(responsefilename)
+#
+#     # Build source and destination paths for scp
+#     source = f"{SERVER_USERNAME}@{SERVER_HOST}:{SERVER_PATH_DOWN}/{responsefilename}"
+#     destination = f"./{responsefilename}"
+#
+#     try:
+#         subprocess.run(
+#             ["scp", "-i", SSH_PRIVATE_KEY_PATH, source, destination], check=True
+#         )
+#         logging.info(f"Downloaded {responsefilename} from the server.")
+#         return responsefilename
+#     except subprocess.CalledProcessError as e:
+#         logging.error(
+#             f"Error occurred while downloading {responsefilename} using scp: {e}"
+#         )
+#         return None
+
+
 def download_response_from_server():
-    """Download the response audio file from the server using SCP."""
     full_path_on_server = get_latest_bark_filename()
     if not full_path_on_server:
         return None
 
-    # Extract only the filename from the full path
     responsefilename = os.path.basename(full_path_on_server)
     logging.info(f"Attempting to download {responsefilename} from the server.")
+
     if os.path.exists(responsefilename):
         os.remove(responsefilename)
 
-    # Build source and destination paths for scp
-    source = f"{SERVER_USERNAME}@{SERVER_HOST}:{SERVER_PATH_DOWN}/{responsefilename}"
+    source = f"{SERVER_PATH_DOWN}/{responsefilename}"
     destination = f"./{responsefilename}"
 
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    private_key = paramiko.Ed25519Key(filename=SSH_PRIVATE_KEY_PATH)
+
     try:
-        subprocess.run(
-            ["scp", "-i", SSH_PRIVATE_KEY_PATH, source, destination], check=True
-        )
+        ssh.connect(hostname=SERVER_HOST, username=SERVER_USERNAME, pkey=private_key)
+        with SCPClient(ssh.get_transport()) as scp:
+            scp.get(source, destination)
         logging.info(f"Downloaded {responsefilename} from the server.")
         return responsefilename
-    except subprocess.CalledProcessError as e:
+
+    except Exception as e:
         logging.error(
             f"Error occurred while downloading {responsefilename} using scp: {e}"
         )

@@ -1,5 +1,5 @@
 import os
-import torch
+import random
 from torch import cuda
 from transformers import (
     pipeline,
@@ -22,7 +22,7 @@ def load_from_hf(model_name, hf_auth):
         model_name, use_auth_token=hf_auth, legacy=False, return_tensors="pt"
     )
     model = LlamaForCausalLM.from_pretrained(
-        model_name, use_auth_token=hf_auth, load_in_8bit=True
+        model_name, use_auth_token=hf_auth  # , load_in_8bit=True
     )
     return tokenizer, model
 
@@ -73,13 +73,7 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content=(
-                    "You are EVA, a helpful assistant for elderly people. "
-                    "Your primary goal is to assist and provide concise and empathetic responses. "
-                    "You do not assume or pretend to be the 'User'. "
-                    "You only respond once as 'Assistant'. "
-                    "You do not generate extraneous information or questions, but rather focus on addressing the user's input directly."
-                )
+                content="EVA is a friendly assistant designed specifically for the elderly. Always respond with clarity, empathy, and directness. If unsure or unclear about a user's input, respond with 'I'm not certain about that. Could you please clarify or ask in another way?'. For off-topic or potentially offensive remarks, steer the conversation back with 'Let's keep our conversation constructive. How can I assist you further?'. When faced with emotional or concerning statements, show support: 'I'm here to help and support you. Please let me know how I can be of assistance.'. If a conversation needs wrapping up, conclude with 'I'm here whenever you need. Don't hesitate to return if you have more questions.'. Answer in no more than two sentences.'."
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),

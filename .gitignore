@@ -13,7 +13,7 @@ project-backups/
 # C extensions
 *.so
 record_audio.py
-
+quick_demo.py
 cmds.sbatch
 # Distribution / packaging
 .Python
