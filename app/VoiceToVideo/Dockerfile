@@ -24,6 +24,7 @@ COPY . /VoiceToVideo-app
 # Install Python dependencies
 RUN pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 RUN pip install -r requirements.txt
+RUN pip install Flask
 
 RUN apt-get install -y wget
 
