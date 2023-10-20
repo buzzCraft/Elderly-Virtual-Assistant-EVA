@@ -14,14 +14,13 @@ RUN apt-get update && apt-get install -y \
     git \
     && apt-get clean
 
-# Clone the SadTalker repository into a temporary directory
-RUN git clone https://github.com/OpenTalker/SadTalker /tmp/SadTalker
-
 # Set the working directory
 WORKDIR /VoiceToVideo-app
 
+# Clone the SadTalker repository into a temporary directory
+RUN git clone https://github.com/OpenTalker/SadTalker .
+
 # Move the cloned repository contents into the working directory
-RUN mv /tmp/SadTalker/* /tmp/SadTalker/.[!.]* .
 COPY app/videoGen.py /VoiceToVideo-app/
 COPY app/photos /VoiceToVideo-app/photos/
 
