@@ -12,7 +12,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-IMG_PATH = "/app/examples/source_image/face.png"
+IMG_PATH = "/VoiceToVideo-app/examples/source_image/face.png"
 RESULT_DIR = "/VoiceToVideo-app"
 
 
