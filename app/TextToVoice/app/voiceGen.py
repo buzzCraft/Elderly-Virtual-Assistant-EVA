@@ -91,18 +91,19 @@ def generate_audio():
     # Save the generated audio
     # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
     output_filename = f"bark_audio_{int(time.time())}.wav"
+    output_path = os.path.join(SAVE_DIR, output_filename)
+    sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     ##NEW....................................
     # Notify VideoGen of the response
-    video_response = requests.post(
-        "http://texttovideo:5005/receive_voice",
-        json={"VoiceFile": audio_array},
-    )
-    logging.info(f"Generated talker_response: {video_response}")
+    with open(output_path, "rb") as f:
+        files = {"VoiceFile": (output_filename, f)}
+        video_response = requests.post(
+            "http://texttovideo:5005/receive_voice", files=files
+        )
+        video_status = video_response.json().get("status", "")
+    logging.info(f"VideoGen status: {video_status}")
     ##END NEW................................
 
-    output_path = os.path.join(SAVE_DIR, output_filename)
-
-    sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     print(f"Audio saved to {output_path}")
     time.sleep(1)  # Ensure the file is completely written
 
