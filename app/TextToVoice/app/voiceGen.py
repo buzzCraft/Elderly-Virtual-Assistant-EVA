@@ -99,7 +99,7 @@ def generate_audio():
         with open(output_path, "rb") as f:
             files = {"VoiceFile": (output_filename, f)}
             video_response = requests.post(
-                "http://texttovideo:5005/receive_voice", files=files
+                "http://voicetovideo:5005/receive_voice", files=files
             )
             video_status = video_response.json().get("status", "")
         logging.info(f"VideoGen status: {video_status}")
