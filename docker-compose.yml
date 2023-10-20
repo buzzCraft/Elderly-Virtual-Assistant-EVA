@@ -36,6 +36,7 @@ services:
   # Text-to-voice service
   texttovoice:
     depends_on:
+      - transcribe
       - llm
     build:
       context: ./app/TextToVoice
@@ -49,3 +50,16 @@ services:
     ports:
         - "5003:5003"
         - "5004:5004"
+
+  voicetovideo:
+    build:
+      context: ./app/VoiceToVideo
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/VoiceToVideo/app:/VoiceToVideo-app
+    ports:
+      - "5005:5005"
+    depends_on:
+      - transcribe
+      - llm
+      - texttovoice

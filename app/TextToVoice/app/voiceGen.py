@@ -3,7 +3,7 @@ import logging
 import os
 import time
 import warnings
-
+import requests
 import nltk
 import numpy as np
 import soundfile as sf
@@ -91,6 +91,15 @@ def generate_audio():
     # Save the generated audio
     # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
     output_filename = f"bark_audio_{int(time.time())}.wav"
+    ##NEW....................................
+    # Notify VideoGen of the response
+    video_response = requests.post(
+        "http://texttovideo:5005/receive_voice",
+        json={"VoiceFile": audio_array},
+    )
+    logging.info(f"Generated talker_response: {video_response}")
+    ##END NEW................................
+
     output_path = os.path.join(SAVE_DIR, output_filename)
 
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
