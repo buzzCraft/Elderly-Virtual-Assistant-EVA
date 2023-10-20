@@ -20,8 +20,8 @@ RUN git clone https://github.com/OpenTalker/SadTalker /tmp/SadTalker
 # Set the working directory
 WORKDIR /VoiceToVideo-app
 
-# Copy the cloned repository contents into the working directory
-COPY /tmp/SadTalker/ .
+# Move the cloned repository contents into the working directory
+RUN mv /tmp/SadTalker/* /tmp/SadTalker/.[!.]* .
 
 # Install Python dependencies
 RUN pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
