@@ -1,6 +1,6 @@
 import os
-import time
 import subprocess
+import time
 
 
 def wait_for_transcription(file_path, timeout=200):

@@ -1,12 +1,10 @@
-from flask import Flask, abort, request, jsonify
-from tempfile import NamedTemporaryFile
-import whisper
-import torch
-import json
+import logging
 import os
 import time
+
 import requests
-import logging
+import torch
+import whisper
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -72,7 +70,6 @@ def transcribe_magic(filename):
     except Exception as e:
         # General exception handler for any other unexpected errors
         logging.info(f"Unexpected error: {e}")
-        feedback = "An unexpected error occurred"
 
     # save_transcription(results)
 

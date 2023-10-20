@@ -1,14 +1,14 @@
-import pyaudio
-import wave
 import audioop
-from pygame import mixer
-import time
-import subprocess
-import os
-from dotenv import load_dotenv
-import paramiko
-from scp import SCPClient
 import logging
+import os
+import time
+import wave
+
+import paramiko
+import pyaudio
+from dotenv import load_dotenv
+from pygame import mixer
+from scp import SCPClient
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",

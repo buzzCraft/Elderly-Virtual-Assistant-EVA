@@ -1,11 +1,11 @@
+import logging
 import os
-from flask import Flask, request, jsonify
-from model import initialize_model
+
+import requests
 import torch
 from dotenv import load_dotenv
-import requests
-import time
-import logging
+from flask import Flask, jsonify, request
+from model import initialize_model
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",

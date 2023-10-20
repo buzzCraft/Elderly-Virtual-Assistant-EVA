@@ -1,20 +1,15 @@
 import os
-import random
-from torch import cuda
-from transformers import (
-    pipeline,
-    LlamaTokenizer,
-    LlamaForCausalLM,
-)
-from langchain.memory import ConversationBufferWindowMemory
+
 from langchain.chains import LLMChain
 from langchain.llms import HuggingFacePipeline
-from langchain.schema import SystemMessage
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
+from langchain.schema import SystemMessage
+from transformers import LlamaForCausalLM, LlamaTokenizer, pipeline
 
 
 def load_from_hf(model_name, hf_auth):

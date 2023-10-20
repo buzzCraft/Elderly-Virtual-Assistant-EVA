@@ -1,15 +1,15 @@
 import json
+import logging
 import os
 import time
-import subprocess
-import torch
-from transformers import AutoProcessor, BarkModel
-import soundfile as sf
-from flask import Flask, request, jsonify
-import logging
 import warnings
+
 import nltk
 import numpy as np
+import soundfile as sf
+import torch
+from flask import Flask, jsonify, request
+from transformers import AutoProcessor, BarkModel
 
 nltk.download("punkt")
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
@@ -72,18 +72,21 @@ def generate_audio():
     # Remove old audio files
     remove_old_files()
     feedback_text = request.json.get("feedback-text")
-    sentences = nltk.sent_tokenize(feedback_text)
-    silence = np.zeros(int(0.25 * SAMPLE_RATE))
-    pieces = []
+    # sentences = nltk.sent_tokenize(feedback_text)
+    # silence = np.zeros(int(0.25 * SAMPLE_RATE))
+    # pieces = []
 
     # Get model and processor
     model, processor = get_model_and_processor(MODEL_NAME, MODEL_PATH)
-    for sentence in sentences:
-        # Generate audio from text
-        audio_array = generate_audio_from_text(model, processor, sentence, VOICE_PRESET)
-        pieces.append(audio_array)
-        pieces.append(silence)
-    audio_array = np.concatenate(pieces)
+    audio_array = generate_audio_from_text(
+        model, processor, feedback_text, VOICE_PRESET
+    )
+    # for sentence in sentences:
+    #     # Generate audio from text
+    #     audio_array = generate_audio_from_text(model, processor, sentence, VOICE_PRESET)
+    #     pieces.append(audio_array)
+    #     pieces.append(silence)
+    # audio_array = np.concatenate(pieces)
 
     # Save the generated audio
     # output_path = os.path.join(SAVE_DIR, f"barkaudio{time.time()}.wav")
