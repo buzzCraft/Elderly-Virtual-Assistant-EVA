@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Clone the SadTalker repository
-RUN git clone https://github.com/Winfredy/SadTalker /SadTalker
+RUN git clone https://github.com/Winfredy/SadTalker /VoiceToVideo-app
 
 # Set the working directory
 WORKDIR /VoiceToVideo-app
