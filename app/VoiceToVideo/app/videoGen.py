@@ -47,7 +47,7 @@ def run_inference():
             "gfpgan",
         ]
     )
-
+    logging.info()
     os.remove(temp_voice_path)  # Clean up the temporary file
     return jsonify({"message": "Inference completed"}), 200
 
