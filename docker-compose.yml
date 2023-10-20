@@ -65,8 +65,8 @@ services:
     build:
       context: ./app/VoiceToVideo
       dockerfile: Dockerfile
-#    volumes:
-#      - ./app/VoiceToVideo/app:/VoiceToVideo-app
+    volumes:
+      - ./app/VoiceToVideo/app:/VoiceToVideo-app
     ports:
       - "5005:5005"
     depends_on:
