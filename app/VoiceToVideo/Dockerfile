@@ -35,4 +35,4 @@ RUN bash scripts/download_models.sh
 EXPOSE 5005
 
 # Define the command to run on container start
-CMD ["python3.8", "main.py"]
+CMD ["python3.8", "videoGen.py"]
