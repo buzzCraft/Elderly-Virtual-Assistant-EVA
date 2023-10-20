@@ -1,4 +1,4 @@
-#version: '2.21'
+#version: '3.8' # docker-compose version enable to print diagram
 
 services:
   # Transcribe service
@@ -12,6 +12,9 @@ services:
       - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
       - "5000:5000"
+    labels:
+      "docker-compose_diagram.description": "Transcribe in put voice to text"
+      "docker-compose_diagram.icon": "fas fa-microphone"
 
     # LLM service
   llm:
@@ -32,6 +35,10 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
+    labels:
+      "docker-compose_diagram.description": "Processes transcribed Text"
+      "docker-compose_diagram.icon": "fas fa-processing"
+
 
   # Text-to-voice service
   texttovoice:
@@ -50,6 +57,9 @@ services:
     ports:
         - "5003:5003"
         - "5004:5004"
+    labels:
+      "docker-compose_diagram.description": "Converts text to voice"
+      "docker-compose_diagram.icon": "fas fa-volume-up"
 
   voicetovideo:
     build:
@@ -63,3 +73,6 @@ services:
       - transcribe
       - llm
       - texttovoice
+    labels:
+      "docker-compose_diagram.description": "Converts voice to video"
+      "docker-compose_diagram.icon": "fas fa-video"

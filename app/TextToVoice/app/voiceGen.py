@@ -95,13 +95,16 @@ def generate_audio():
     sf.write(output_path, audio_array, SAMPLE_RATE, "PCM_24")
     ##NEW....................................
     # Notify VideoGen of the response
-    with open(output_path, "rb") as f:
-        files = {"VoiceFile": (output_filename, f)}
-        video_response = requests.post(
-            "http://texttovideo:5005/receive_voice", files=files
-        )
-        video_status = video_response.json().get("status", "")
-    logging.info(f"VideoGen status: {video_status}")
+    try:
+        with open(output_path, "rb") as f:
+            files = {"VoiceFile": (output_filename, f)}
+            video_response = requests.post(
+                "http://texttovideo:5005/receive_voice", files=files
+            )
+            video_status = video_response.json().get("status", "")
+        logging.info(f"VideoGen status: {video_status}")
+    except Exception as e:
+        logging.error(f"Error occurred while sending audio to VideoGen: {e}")
     ##END NEW................................
 
     print(f"Audio saved to {output_path}")
