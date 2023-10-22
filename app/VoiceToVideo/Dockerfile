@@ -36,4 +36,4 @@ COPY app/ /SadTalker/
 # EXPOSE 5000
 
 # Define the command to run on container start
-CMD ["python3.8", "main.py"]
+CMD ["python3.8", "videoGen.py"]
