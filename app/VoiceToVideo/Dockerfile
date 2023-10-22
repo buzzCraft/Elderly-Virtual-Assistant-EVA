@@ -24,13 +24,13 @@ COPY app/ ./
 
 # Install Python dependencies
 RUN pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
-RUN pip install -r requirements.txt
+RUN pip install -r sadTalker/requirements.txt
 RUN pip install Flask
 
 RUN apt-get install -y wget
 
 # Download pre-trained models
-RUN bash scripts/download_models.sh
+RUN bash sadTalker/scripts/download_models.sh
 
 # Expose the required port
 EXPOSE 5005
