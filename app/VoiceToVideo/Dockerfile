@@ -30,6 +30,7 @@ RUN apt-get install -y wget
 RUN bash scripts/download_models.sh
 
 COPY . /SadTalker/
+COPY app /SadTalker/
 
 # Expose any ports the app is expecting in the environment
 # If the application runs on a specific port, expose it. For example:
