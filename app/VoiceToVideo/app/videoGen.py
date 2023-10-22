@@ -13,7 +13,7 @@ logging.basicConfig(
 app = Flask(__name__)
 
 IMG_PATH = "/sadTalker/photos/face.png"
-RESULT_DIR = "/VoiceToVideo-app"
+RESULT_DIR = "/SadTalker/results"
 
 
 @app.route("/receive_voice", methods=["POST"])

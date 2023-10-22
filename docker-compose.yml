@@ -66,7 +66,7 @@ services:
       context: ./app/VoiceToVideo
       dockerfile: Dockerfile
     volumes:
-      - ./app/VoiceToVideo/app:/VoiceToVideo-app
+      - ./app/VoiceToVideo/app:/SadTalker/results
     ports:
       - "5005:5005"
     depends_on:
