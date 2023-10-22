@@ -17,10 +17,9 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory
 WORKDIR /VoiceToVideo-app
 
-RUN git clone https://github.com/OpenTalker/SadTalker  /VoiceToVideo-app
+RUN git clone https://github.com/OpenTalker/SadTalker  /SadTalker
 
 # Move the cloned repository contents into the working directory
-COPY app/ ./
 COPY app/ ./
 
 # Install Python dependencies
