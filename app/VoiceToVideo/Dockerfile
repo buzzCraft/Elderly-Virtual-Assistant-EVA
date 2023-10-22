@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory
 WORKDIR /VoiceToVideo-app
 
-RUN git clone https://github.com/OpenTalker/SadTalker
+RUN git clone https://github.com/OpenTalker/SadTalker.git && \
+    mv SadTalker/* . && \
+    rm -rf SadTalker
 
 COPY app/ ./
 
