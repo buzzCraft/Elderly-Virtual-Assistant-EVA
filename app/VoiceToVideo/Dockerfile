@@ -29,7 +29,6 @@ RUN apt-get install -y wget
 # Download pre-trained models
 RUN bash scripts/download_models.sh
 
-COPY . /SadTalker/
 COPY app/ /SadTalker/
 
 # Expose any ports the app is expecting in the environment
