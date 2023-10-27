@@ -22,7 +22,7 @@ silero_model, _ = torch.hub.load(
     speaker=model_id,
 )
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cpu"
 silero_model.to(device)  # gpu or cpu
 
 app = Flask(__name__)
