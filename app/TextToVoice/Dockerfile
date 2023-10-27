@@ -11,11 +11,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
-# Install SoX
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get update && \
-    apt-get install -y sox ffmpeg && \
-    rm -rf /var/lib/apt/lists/*
 
 # Install torchaudio
 RUN pip install torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
