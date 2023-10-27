@@ -113,7 +113,7 @@ def get_latest_bark_filename(timeout=240):  # Timeout in seconds
             pkey=private_key,
         )
         stdin, stdout, stderr = ssh.exec_command(
-            f"ls {SERVER_PATH_DOWN}/bark_audio_*.wav"
+            f"ls {SERVER_PATH_DOWN}/silero_audio_*.wav"
         )
         latest_filename = stdout.readline().strip()
         ssh.close()
