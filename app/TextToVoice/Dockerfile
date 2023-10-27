@@ -1,5 +1,7 @@
 # Use the specific PyTorch image with CUDA support
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+#FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+# Use the official Python 3.11.5 image
+FROM python:3.11.5
 
 # Set non-interactive mode for apt-get, update and install necessary packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -8,7 +10,19 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     libsndfile1 \
     apt-utils && \
     apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+# Install SoX
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && \
+    apt-get install -y sox ffmpeg && \
     rm -rf /var/lib/apt/lists/*
+
+# Install torchaudio
+RUN pip install torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+
+# Set the torchaudio backend to 'sox_io'
+RUN python -c "import torchaudio; torchaudio.set_audio_backend('sox_io');"
+
 
 # Upgrade pip and install poetry
 RUN pip install --upgrade pip && \
