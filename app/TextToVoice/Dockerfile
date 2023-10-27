@@ -11,14 +11,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
-
-# Install torchaudio
-RUN pip install torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
-
-# Set the torchaudio backend to 'sox_io'
-RUN python -c "import torchaudio; torchaudio.set_audio_backend('sox_io');"
-
-
+    rm -rf /tmp/*
 # Upgrade pip and install poetry
 RUN pip install --upgrade pip && \
     pip install poetry
