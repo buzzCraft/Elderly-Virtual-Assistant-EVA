@@ -13,7 +13,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y libcufft11 libcublas11 && apt-get clean
+#RUN apt-get update && apt-get install -y libcufft11 libcublas11 && apt-get clean
 
 # Upgrade pip and install poetry
 RUN pip install --upgrade pip && \
