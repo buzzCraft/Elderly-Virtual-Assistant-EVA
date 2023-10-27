@@ -42,21 +42,17 @@ mixer.init()
 def play_welcome_message():
     """Play the welcome message."""
     mixer.init()
-    mixer.music.load("welcome.mp3")
+    mixer.music.load("welcome.wav")
     mixer.music.play()
 
     while mixer.music.get_busy():
         time.sleep(0.1)
 
 
-def speak(text, lang="en"):
-    tts = gTTS(text=text, lang=lang, slow=False)
-    filename = os.path.join(os.getcwd(), "voice.mp3")
-    tts.save(filename)
-
-    # Check if the file exists after saving
+def speak(filename):
+    # Check if the file exists
     if not os.path.exists(filename):
-        logging.error(f"File {filename} was not created!")
+        logging.error(f"File {filename} not found!")
         return
 
     mixer.music.load(filename)
@@ -66,15 +62,6 @@ def speak(text, lang="en"):
 
     # Release the file
     mixer.music.unload()
-
-    # Safely attempt to remove the file
-    for _ in range(5):  # Let's try 5 times to delete the file
-        try:
-            os.remove(filename)
-            break
-        except PermissionError:
-            logging.warning(f"Attempt to delete {filename} failed. Retrying...")
-            time.sleep(1)  # Waiting for 1 second before retrying
 
 
 def recognize_speech():
@@ -283,7 +270,7 @@ def record_and_save(recordfilename="recorded_audio.wav"):
             )
         os.remove(recordfilename)
 
-        speak("Do you want to record again? Say yes or no.")
+        speak("ask.wav")
         choice = recognize_speech()
 
         if choice == "no":
