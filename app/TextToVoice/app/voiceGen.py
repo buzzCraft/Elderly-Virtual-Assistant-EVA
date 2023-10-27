@@ -10,7 +10,7 @@ import torchaudio
 from flask import Flask, jsonify, request
 from omegaconf import OmegaConf
 
-nltk.download("punkt")
+# nltk.download("punkt")
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 logging.basicConfig(
@@ -32,7 +32,7 @@ silero_model, _ = torch.hub.load(
     language=language,
     speaker=model_id,
 )
-device = "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 silero_model.to(device)
 
 
@@ -77,6 +77,9 @@ def generate_audio():
     except Exception as e:
         logging.error(f"Error occurred while sending audio to VideoGen: {e}")
 
+    print(f"Audio saved to {output_path}")
+    time.sleep(1)  # Ensure the file is completely written
+
     logging.info(f"Finished processing audio. Saved to {output_path}.")
     return jsonify(
         {"status": "success", "audio_path": output_path, "filename": output_filename}
@@ -84,4 +87,5 @@ def generate_audio():
 
 
 if __name__ == "__main__":
+    remove_old_files()
     app.run(host="0.0.0.0", port=5003, debug=False)
