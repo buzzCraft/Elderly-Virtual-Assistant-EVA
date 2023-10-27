@@ -15,6 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 # Upgrade pip and install poetry
 RUN pip install --upgrade pip && \
     pip install poetry
+RUN pip install numpy
 
 # Set the working directory in the container
 WORKDIR /app
