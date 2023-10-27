@@ -1,6 +1,6 @@
 # Use the specific PyTorch image with CUDA support
 #FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
-FROM nvidia/cuda:11.7.0-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu22.04
 
 RUN apt-get update && apt-get install -y python3-pip && \
     pip3 install torch torchaudio
