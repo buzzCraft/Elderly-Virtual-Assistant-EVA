@@ -1,19 +1,27 @@
 # Use the specific PyTorch image with CUDA support
-#FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
-FROM nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu22.04
+FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 
-RUN apt-get update && apt-get install -y python3-pip && \
-    pip3 install torch torchaudio
+# Set non-interactive mode for apt-get and update
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
 
-# Set non-interactive mode for apt-get, update and install necessary packages
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+# Add NVIDIA's official repository for CUDA and install the required libraries
+RUN apt-get install -y wget software-properties-common && \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin && \
+    mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
+    wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda-repo-ubuntu2004-11-7-local_11.7.0-470.57.02-1_amd64.deb && \
+    dpkg -i cuda-repo-ubuntu2004-11-7-local_11.7.0-470.57.02-1_amd64.deb && \
+    apt-key add /var/cuda-repo-ubuntu2004-11-7-local/7fa2af80.pub && \
+    apt-get update && \
+    apt-get -y install cuda-cufft-11-7 cuda-cublas-11-7 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cuda-repo-ubuntu2004-11-7-local
+
+# Install additional required packages
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     portaudio19-dev \
     libsndfile1 \
-    apt-utils && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y libcufft11 libcublas11 && apt-get clean
+    apt-utils
 
 # Upgrade pip and install poetry
 RUN pip install --upgrade pip && \
