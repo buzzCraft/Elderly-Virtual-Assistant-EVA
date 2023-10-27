@@ -3,8 +3,6 @@ FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 
 ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
 
-RUN apt-get update && apt-get install -y libcufft11 libcublas11 && apt-get clean
-
 # Set non-interactive mode for apt-get, update and install necessary packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
