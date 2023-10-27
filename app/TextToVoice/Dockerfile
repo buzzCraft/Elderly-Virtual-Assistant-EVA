@@ -1,5 +1,11 @@
 # Use the specific PyTorch image with CUDA support
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+#FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+FROM nvidia/cuda:11.4.2-cudnn8-runtime-ubuntu20.04
+
+
+RUN apt-get update && apt-get install -y python3-pip && \
+    pip3 install torch torchaudio
+
 
 ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:${LD_LIBRARY_PATH}
 
