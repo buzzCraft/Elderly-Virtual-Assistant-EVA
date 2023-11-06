@@ -40,11 +40,9 @@ def run_inference():
             IMG_PATH,
             "--result_dir",
             RESULT_DIR,
-            "--still",
-            "--preprocess",
-            "full",
-            "--enhancer",
-            "gfpgan",
+            # "--still",
+            # "--preprocess", "full",
+            # "--enhancer", "gfpgan",
         ]
     )
     logging.info()
