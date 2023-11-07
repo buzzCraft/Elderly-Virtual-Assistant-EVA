@@ -12,7 +12,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-IMG_PATH = "/SadTalker/photos/face.png"
+IMG_PATH = "/SadTalker/photos/eva.png"
 RESULT_DIR = "/SadTalker/results"
 
 
