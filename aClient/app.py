@@ -4,6 +4,7 @@ import paramiko
 from scp import SCPClient
 import time
 from datetime import datetime
+import uuid
 
 app = Flask(__name__)
 
@@ -27,6 +28,13 @@ def create_ssh_client():
     return ssh
 
 
+def generate_unique_file_name(extension=".wav"):
+    """Generate a unique filename with timestamp"""
+    unique_id = str(uuid.uuid4())
+    datetime.now().strftime("%Y%m%d-%H%M%S")
+    return f"{unique_id}{extension}"
+
+
 def send_file_to_server(file_content, recordedfilename):
     """Send the file to the server using SCP."""
     ssh = create_ssh_client()
@@ -36,20 +44,19 @@ def send_file_to_server(file_content, recordedfilename):
     ssh.close()
 
 
-def get_latest_response_filename(timeout=240):
+def get_latest_response_filename(unique_id, timeout=240):
     """Retrieve the latest response filename from the server."""
     start_time = time.time()
     while time.time() - start_time < timeout:
         ssh = create_ssh_client()
-        stdin, stdout, stderr = ssh.exec_command(
-            f"ls -t {SERVER_PATH_DOWN}/*.wav | head -n 1"
-        )
+        command = f"ls -t {SERVER_PATH_DOWN}/*{unique_id}*.wav | head -n 1"
+        stdin, stdout, stderr = ssh.exec_command(command)
         latest_filename = stdout.readline().strip()
         ssh.close()
 
         if latest_filename:
             return latest_filename
-        time.sleep(5)  # wait for 5 seconds before retrying
+        time.sleep(3)  # wait for 5 seconds before retrying
     return None
 
 
@@ -64,25 +71,27 @@ def process_audio():
         return jsonify({"error": "No audio file received"})
 
     audio_file = request.files["audio_data"]
-    audio_filename = "received_audio.wav"
-    audio_file.save(audio_filename)
+    unique_id = str(uuid.uuid4())
+    unique_audio_filename = generate_unique_file_name()
+    audio_file.save(unique_audio_filename)
 
     # Send audio file to the Oslomet server
-    with open(audio_filename, "rb") as f:
-        send_file_to_server(f, audio_filename)
+    with open(unique_audio_filename, "rb") as f:
+        send_file_to_server(f, unique_audio_filename)
         time.sleep(10)
 
-    # Get the latest response file from the Oslomet server
-    response_filename = get_latest_response_filename()
+    # Get the latest response file from the server
+    response_filename = get_latest_response_filename(unique_id)
     if response_filename:
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        unique_filename = f"downloaded_response_{timestamp}.wav"
-        local_response_path = os.path.join(app.static_folder, unique_filename)
+        unique_response_filename = generate_unique_file_name()
+        datetime.now().strftime("%Y%m%d-%H%M%S")
+        # unique_filename = f"downloaded_response_{timestamp}.wav"
+        local_response_path = os.path.join(app.static_folder, unique_response_filename)
         ssh = create_ssh_client()
         with SCPClient(ssh.get_transport()) as scp:
             scp.get(response_filename, local_response_path)
         ssh.close()
-        return jsonify({"response_file_path": f"/static/{unique_filename}"})
+        return jsonify({"response_file_path": f"/static/{unique_response_filename}"})
         # return send_file(local_response_path, as_attachment=True, mimetype="audio/wav")
 
     return jsonify({"status": "error", "message": "Response not received"})

@@ -2,16 +2,15 @@ import logging
 import os
 import time
 import torch
-import warnings
 import requests
 import nltk
 import numpy as np
 import torchaudio
 from flask import Flask, jsonify, request
 from omegaconf import OmegaConf
+import uuid
 
 # nltk.download("punkt")
-warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -55,20 +54,27 @@ def remove_old_files():
             logging.info(f"Deleted old file: {file_path}")
 
 
+def generate_unique_filename(extension=".wav"):
+    """Generate a unique filename."""
+    unique_id = str(uuid.uuid4())
+    return f"{unique_id}{extension}"
+
+
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
     logging.info(f"Started processing audio generation request.")
     remove_old_files()
     feedback_text = request.json.get("feedback-text")
     waveform = _get_wave(feedback_text)
-    output_filename = f"silero_audio_{int(time.time())}.wav"
-    output_path = os.path.join("/text-to-voice-app/", output_filename)
+    unique_output_filename = generate_unique_filename()
+    output_path = os.path.join("/text-to-voice-app/", unique_output_filename)
     torchaudio.save(output_path, waveform.unsqueeze(0).cpu(), sample_rate)
 
     # Notify VideoGen of the response
+    """
     try:
         with open(output_path, "rb") as f:
-            files = {"VoiceFile": (output_filename, f)}
+            files = {"VoiceFile": (unique_output_filename, f)}
             video_response = requests.post(
                 "http://voicetovideo:5005/receive_voice", files=files
             )
@@ -76,13 +82,17 @@ def generate_audio():
         logging.info(f"VideoGen status: {video_status}")
     except Exception as e:
         logging.error(f"Error occurred while sending audio to VideoGen: {e}")
-
+      """
     print(f"Audio saved to {output_path}")
     time.sleep(1)  # Ensure the file is completely written
 
     logging.info(f"Finished processing audio. Saved to {output_path}.")
     return jsonify(
-        {"status": "success", "audio_path": output_path, "filename": output_filename}
+        {
+            "status": "success",
+            "audio_path": output_path,
+            "filename": unique_output_filename,
+        }
     )
 
 
