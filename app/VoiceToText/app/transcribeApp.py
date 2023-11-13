@@ -33,10 +33,10 @@ def download_and_load_model(model_name, model_path, device):
 model = download_and_load_model("base", MODEL_PATH, DEVICE)
 
 
-def transcribe_magic(file):
+def transcribe_magic(file_path):
     results = []
 
-    result = model.transcribe(file)
+    result = model.transcribe(file_path)
     results.append(
         {
             "transcript": result["text"],
@@ -72,8 +72,12 @@ def receive_audio():
         return jsonify({"error": "No audio file received"}), 400
 
     audio_file = request.files["audio_data"]
-    results, feedback = transcribe_magic(audio_file)
+    temp_filepath = os.path.join(SAVE_PATH, audio_file.filename)
+    audio_file.save(temp_filepath)  # Save the file temporarily
 
+    # process the audio file
+    results, feedback = transcribe_magic(audio_file)
+    os.remove(temp_filepath)  # Delete the temporary file
     return jsonify({"transcription": results, "feedback": feedback})
 
 
