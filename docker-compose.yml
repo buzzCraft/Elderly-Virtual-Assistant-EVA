@@ -1,7 +1,22 @@
 #version: '3.8' # docker-compose version enable to print diagram
 services:
   # Transcribe service
+  record:
+    build:
+      context: ./aClient
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./app/VoiceToText/app/audio_asset:/app/audio_asset
+    ports:
+      - "4999:4999"
+    labels:
+      "docker-compose_diagram.description": "Record voice"
+      "docker-compose_diagram.icon": "fas fa-microphone"
+
   transcribe:
+    depends_on:
+      - record
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
@@ -9,8 +24,8 @@ services:
       - ./app/TextToVoice/app:/text-to-voice-app
       - ./app/Llm/app:/llm-app
       - ./app/VoiceToText/app/audio_asset:/app/audio_asset
-    #ports:
-      #- "5000:5000"
+    ports:
+      - "5003:5003"
     labels:
       "docker-compose_diagram.description": "Transcribe in put voice to text"
       "docker-compose_diagram.icon": "fas fa-microphone"
