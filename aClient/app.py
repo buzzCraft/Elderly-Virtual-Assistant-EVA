@@ -27,7 +27,7 @@ def process_audio():
     files = {"audio_data": open(audio_filename, "rb")}
     try:
         response = requests.post(
-            "http://transcribe:5003/receive_audio",
+            "http://transcribe:5000/receive_audio",
             files=files,
             timeout=60,  # Set a timeout of 60 seconds
         )

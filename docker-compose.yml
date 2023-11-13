@@ -2,12 +2,7 @@
 services:
   # Transcribe service
   record:
-    build:
-      context: ./aClient
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - ./app/VoiceToText/app/audio_asset:/app/audio_asset
+    build: .
     ports:
       - "4999:4999"
     labels:
@@ -25,7 +20,7 @@ services:
       - ./app/Llm/app:/llm-app
       - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
-      - "5003:5003"
+      - "5000:5000"
     labels:
       "docker-compose_diagram.description": "Transcribe in put voice to text"
       "docker-compose_diagram.icon": "fas fa-microphone"
