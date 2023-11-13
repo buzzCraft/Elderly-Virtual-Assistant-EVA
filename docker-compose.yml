@@ -2,6 +2,9 @@
 services:
   # Transcribe service
   record:
+    depends_on:
+      transcribe:
+        condition: service_healthy
     build:
       context: ./aClient
       dockerfile: Dockerfile
@@ -12,8 +15,6 @@ services:
       "docker-compose_diagram.icon": "fas fa-microphone"
 
   transcribe:
-    depends_on:
-      - record
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
