@@ -1,0 +1,96 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.tablet {
+    background-color: cadetblue;
+    border-radius: 28px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    width: 400px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tablet-screen {
+    background-color: #fff;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.app-header {
+    background-color: cadetblue;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px; /* Spacing between header and avatar */
+}
+
+
+#avatar {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.control-panel {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: default;
+}
+
+button i {
+    pointer-events: none;
+}
+
+.tablet-home-button {
+    background-color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
