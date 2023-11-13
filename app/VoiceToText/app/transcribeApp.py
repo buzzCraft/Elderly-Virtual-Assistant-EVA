@@ -77,7 +77,9 @@ def receive_audio():
 
     # process the audio file
     results, feedback = transcribe_magic(temp_filepath)
-    os.remove(temp_filepath)  # Delete the temporary file
+    if os.path.exists(temp_filepath):
+        os.remove(temp_filepath)
+
     return jsonify({"transcription": results, "feedback": feedback})
 
 
