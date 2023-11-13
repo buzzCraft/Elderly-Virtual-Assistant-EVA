@@ -3,8 +3,7 @@ services:
   # Transcribe service
   record:
     depends_on:
-      transcribe:
-        condition: service_healthy
+      - transcribe
     build:
       context: ./aClient
       dockerfile: Dockerfile
