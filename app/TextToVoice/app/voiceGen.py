@@ -29,7 +29,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 silero_model.to(device)
 
 
-CLIENT_RECEIVE_ENDPOINT = "http://localhost:8000/receive_response"
+CLIENT_RECEIVE_ENDPOINT = "http://localhost:7000/receive_response"
 
 
 def _get_wave(text):
