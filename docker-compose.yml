@@ -2,7 +2,9 @@
 services:
   # Transcribe service
   record:
-    build: .
+    build:
+      context: ./aClient
+      dockerfile: Dockerfile
     ports:
       - "4999:4999"
     labels:
