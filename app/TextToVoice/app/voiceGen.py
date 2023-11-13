@@ -1,16 +1,10 @@
 import logging
 import os
-import time
 import torch
 import requests
-import nltk
-import numpy as np
 import torchaudio
 from flask import Flask, jsonify, request
-from omegaconf import OmegaConf
 import uuid
-
-# nltk.download("punkt")
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -35,6 +29,9 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 silero_model.to(device)
 
 
+CLIENT_RECEIVE_ENDPOINT = "http://localhost:8000/receive_response"
+
+
 def _get_wave(text):
     with torch.no_grad():
         waveform = silero_model.apply_tts(
@@ -44,7 +41,6 @@ def _get_wave(text):
 
 
 def remove_old_files():
-    """Remove old audio files from the current directory."""
     current_directory = "/text-to-voice-app/"
     files = os.listdir(current_directory)
     for file in files:
@@ -55,38 +51,31 @@ def remove_old_files():
 
 
 def generate_unique_filename(extension=".wav"):
-    """Generate a unique filename."""
     unique_id = str(uuid.uuid4())
     return f"{unique_id}{extension}"
 
 
 @app.route("/generate_voice", methods=["POST"])
 def generate_audio():
-    logging.info(f"Started processing audio generation request.")
+    logging.info("Started processing audio generation request.")
     remove_old_files()
+
     feedback_text = request.json.get("feedback-text")
     waveform = _get_wave(feedback_text)
     unique_output_filename = generate_unique_filename()
     output_path = os.path.join("/text-to-voice-app/", unique_output_filename)
     torchaudio.save(output_path, waveform.unsqueeze(0).cpu(), sample_rate)
 
-    # Notify VideoGen of the response
-    """
+    # Send the audio file to the client's receive_response endpoint
     try:
-        with open(output_path, "rb") as f:
-            files = {"VoiceFile": (unique_output_filename, f)}
-            video_response = requests.post(
-                "http://voicetovideo:5005/receive_voice", files=files
-            )
-            video_status = video_response.json().get("status", "")
-        logging.info(f"VideoGen status: {video_status}")
-    except Exception as e:
-        logging.error(f"Error occurred while sending audio to VideoGen: {e}")
-      """
-    print(f"Audio saved to {output_path}")
-    time.sleep(1)  # Ensure the file is completely written
+        with open(output_path, "rb") as audio_file:
+            files = {"response_file": audio_file}
+            response = requests.post(CLIENT_RECEIVE_ENDPOINT, files=files, timeout=60)
+            response.raise_for_status()
+            logging.info(f"Sent {unique_output_filename} to client successfully.")
+    except requests.RequestException as e:
+        logging.error(f"Error occurred while sending audio to client: {e}")
 
-    logging.info(f"Finished processing audio. Saved to {output_path}.")
     return jsonify(
         {
             "status": "success",
