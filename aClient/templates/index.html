@@ -76,7 +76,7 @@
                 console.log("AJAX response received:", response);
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
-                    audioPlayback.src = window.location.origin + response.file_path;
+                    audioPlayback.src = 'http://localhost:7000' + response.file_path;
                     console.log("Audio file path set to:", response.file_path);
 
                     updateAvatarState('talking');
