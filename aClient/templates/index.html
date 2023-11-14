@@ -74,6 +74,7 @@
             contentType: false,
             success: function (response) {
                 console.log("AJAX response received:", response);
+                response.file_path = '/static/response_a54154fc-6318-4760-8fba-fa75bde8fe02.wav'; // Hardcoded for testing
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = '/static/response_a54154fc-6318-4760-8fba-fa75bde8fe02.wav';
