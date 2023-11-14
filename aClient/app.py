@@ -17,7 +17,6 @@ def index():
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
     unique_id = str(uuid.uuid4())
-    file_path = None
     feedback = None
 
     if "audio_data" in request.files:
@@ -50,12 +49,8 @@ def process_audio():
         logging.info(f"Saved response file to {save_path}")
         logging.info(f"Response file path: {file_path}")
         return jsonify({"feedback": feedback, "file_path": file_path})
-    return jsonify(
-        {
-            "status": feedback,
-            "file_path": "/static/response_fabfc44b-cd11-478f-87c2-9f5e1f9f8e6c.wav",
-        }
-    )
+
+    return jsonify({"feedback": feedback, "file_path": None})
 
 
 if __name__ == "__main__":
