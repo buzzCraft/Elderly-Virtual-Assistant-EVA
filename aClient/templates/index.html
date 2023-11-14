@@ -78,7 +78,7 @@
                 console.log("AJAX response:", response);
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
-                    audioPlayback.src = response.file_path;
+                    audioPlayback.src = 'http://localhost:7000' + response.file_path;
                     console.log("File path:", response.file_path);
 
                     // Change avatar to talking state and play the audio
