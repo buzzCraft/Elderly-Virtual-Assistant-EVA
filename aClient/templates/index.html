@@ -31,11 +31,9 @@
 
     document.getElementById("start-interaction").addEventListener("click", function () {
         document.getElementById("welcome-audio").play();
-        // Optionally hide the start button after playing the audio
         this.style.display = 'none';
         document.getElementById("start-recording").disabled = false;
     });
-
 
     document.getElementById("start-recording").addEventListener("click", function () {
         navigator.mediaDevices.getUserMedia({audio: true})
@@ -50,18 +48,18 @@
                 mediaRecorder.addEventListener("stop", () => {
                     const audioBlob = new Blob(audioChunks);
                     sendAudioToServer(audioBlob);
-                    updateAvatarState('respond'); // Change avatar to responding state
+                    updateAvatarState('respond');
                 });
                 document.getElementById("start-recording").disabled = true;
                 document.getElementById("stop-recording").disabled = false;
-                updateAvatarState('listen'); // Change avatar to listening state
+                updateAvatarState('listen');
             });
     });
 
     document.getElementById("stop-recording").addEventListener("click", function () {
         mediaRecorder.stop();
         document.getElementById("stop-recording").disabled = true;
-        audioChunks = []; // Reset the audio chunks array
+        audioChunks = [];
     });
 
     function sendAudioToServer(audioBlob) {
@@ -79,18 +77,21 @@
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
 
-
-                    // Change avatar to talking state
                     updateAvatarState('talking');
 
-                    // Load the audio and then play it
                     audioPlayback.load();
                     audioPlayback.onloadeddata = function () {
-                        audioPlayback.play();
+                        if (audioPlayback.readyState >= 2) {
+                            audioPlayback.play();
+                        } else {
+                            console.error("Audio not loaded");
+                        }
                     };
-                    // audioPlayback.play();
 
-                    // Add an event listener to change the state to 'idle' after playback ends
+                    audioPlayback.onerror = function () {
+                        console.error("Error in audio playback");
+                    };
+
                     audioPlayback.onended = function () {
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
@@ -98,12 +99,11 @@
                 }
             },
             error: function (error) {
-                console.error(error);
-                updateAvatarState('idle'); // Change to idle state on error
+                console.error("Error in AJAX request:", error);
+                updateAvatarState('idle');
             }
         });
     }
-
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
