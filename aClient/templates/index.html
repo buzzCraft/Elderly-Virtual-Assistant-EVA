@@ -8,22 +8,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div class="tablet">
-    <div class="tablet-screen">
-        <div class="app-header">EVA: Elderly Virtual Assistant</div>
-        <div class="avatar-container">
-            <img id="avatar" src="/static/welcome.gif" alt="Avatar">
-            <div class="control-panel">
-                <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
-                <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
-                <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
+    <div class="tablet">
+        <div class="tablet-screen">
+            <div class="app-header">EVA: Elderly Virtual Assistant</div>
+            <div class="avatar-container">
+                <img id="avatar" src="/static/welcome.gif" alt="Avatar">
+                <div class="control-panel">
+                    <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                    <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
+                    <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
+                </div>
             </div>
         </div>
+        <div class="tablet-home-button"></div>
     </div>
-    <div class="tablet-home-button"></div>
-</div>
-<audio id="audio-playback" controls hidden></audio>
-<audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
+    <audio id="audio-playback" controls hidden></audio>
+    <audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
 
 <script>
     let mediaRecorder;
@@ -31,9 +31,11 @@
 
     document.getElementById("start-interaction").addEventListener("click", function () {
         document.getElementById("welcome-audio").play();
+        // Optionally hide the start button after playing the audio
         this.style.display = 'none';
         document.getElementById("start-recording").disabled = false;
     });
+
 
     document.getElementById("start-recording").addEventListener("click", function () {
         navigator.mediaDevices.getUserMedia({audio: true})
@@ -48,18 +50,18 @@
                 mediaRecorder.addEventListener("stop", () => {
                     const audioBlob = new Blob(audioChunks);
                     sendAudioToServer(audioBlob);
-                    updateAvatarState('respond');
+                    updateAvatarState('respond'); // Change avatar to responding state
                 });
                 document.getElementById("start-recording").disabled = true;
                 document.getElementById("stop-recording").disabled = false;
-                updateAvatarState('listen');
+                updateAvatarState('listen'); // Change avatar to listening state
             });
     });
 
     document.getElementById("stop-recording").addEventListener("click", function () {
         mediaRecorder.stop();
         document.getElementById("stop-recording").disabled = true;
-        audioChunks = [];
+        audioChunks = []; // Reset the audio chunks array
     });
 
     function sendAudioToServer(audioBlob) {
@@ -73,45 +75,26 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log("AJAX response received:", response);
-                response.file_path = '/static/response_a54154fc-6318-4760-8fba-fa75bde8fe02.wav'; // Hardcoded for testing
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
-                    audioPlayback.src = '/static/response_a54154fc-6318-4760-8fba-fa75bde8fe02.wav';
-                    console.log("Hardcoded audio file path set to:", audioPlayback.src);
-                    // audioPlayback.src = response.file_path;
-                    // console.log("Audio file path set to:", response.file_path);
-                    console.log("Audio playback element:", audioPlayback);
-                    console.log("Audio src attribute:", audioPlayback.getAttribute('src'));
-                    console.log("Audio currentSrc:", audioPlayback.currentSrc);
+                    audioPlayback.src = response.file_path;
 
+                    // Change avatar to talking state
                     updateAvatarState('talking');
 
-                    audioPlayback.load();
-                    audioPlayback.onloadeddata = function () {
-                        if (audioPlayback.readyState >= 2) {
-                            audioPlayback.play();
-                            console.log("Audio playback started");
-                        } else {
-                            console.error("Audio not loaded");
-                        }
-                    };
+                    // Play the audio
+                    audioPlayback.play();
 
-                    audioPlayback.onerror = function () {
-                        console.error("Error in audio playback", audioPlayback.error);
-                    };
-
+                    // Add an event listener to change the state to 'idle' after playback ends
                     audioPlayback.onended = function () {
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
-                } else {
-                    console.error("No file path in response");
                 }
             },
             error: function (error) {
-                console.error("Error in AJAX request:", error);
-                updateAvatarState('idle');
+                console.error(error);
+                updateAvatarState('idle'); // Change to idle state on error
             }
         });
     }

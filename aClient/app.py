@@ -9,6 +9,15 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 
+def save_response_audio(response_file):
+    unique_id = str(uuid.uuid4())
+    response_filename = f"response_{unique_id}.wav"
+    save_path = os.path.join(app.static_folder, response_filename)
+    response_file.save(save_path)
+    logging.info(f"Saved file size: {os.path.getsize(save_path)} bytes")
+    return f"/static/{response_filename}"
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -41,28 +50,14 @@ def process_audio():
         logging.error(f"Request failed: {e}")
         feedback = f"Error: {e}"
 
+    if "response_file" in request.files:
+        response_file = request.files["response_file"]
+        file_path = save_response_audio(response_file)
+        return jsonify(
+            {"status": "success", "message": "File received", "file_path": file_path}
+        )
+
     return jsonify({"feedback": feedback})
-
-
-@app.route("/receive_response", methods=["POST"])
-def receive_response():
-    if "response_file" not in request.files:
-        return jsonify({"error": "No response file received"}), 400
-
-    response_file = request.files["response_file"]
-    unique_id = str(uuid.uuid4())
-    response_filename = f"response_{unique_id}.wav"
-    save_path = os.path.join(app.static_folder, response_filename)
-    response_file.save(save_path)
-    logging.info(f"Saved file size: {os.path.getsize(save_path)} bytes")
-    file_path = f"/static/{response_filename}"
-
-    logging.info(f"Received response file saved as: {save_path}")
-    logging.info(f"Sending file path to client: {file_path}")
-
-    return jsonify(
-        {"status": "success", "message": "File received", "file_path": file_path}
-    )
 
 
 if __name__ == "__main__":
