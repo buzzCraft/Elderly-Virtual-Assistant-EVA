@@ -54,7 +54,7 @@ def receive_response():
     response_filename = f"response_{unique_id}.wav"
     save_path = os.path.join(app.static_folder, response_filename)
     response_file.save(save_path)
-
+    logging.info(f"File path sent to client: /static/{response_filename}")
     return jsonify(
         {
             "status": "success",
