@@ -47,20 +47,20 @@ def process_audio():
 @app.route("/receive_response", methods=["POST"])
 def receive_response():
     if "response_file" not in request.files:
-        return jsonify({"error": "No response file received"})
+        return jsonify({"error": "No response file received"}), 400
 
     response_file = request.files["response_file"]
     unique_id = str(uuid.uuid4())
     response_filename = f"response_{unique_id}.wav"
     save_path = os.path.join(app.static_folder, response_filename)
     response_file.save(save_path)
-    logging.info(f"File path sent to client: /static/{response_filename}")
+    file_path = f"/static/{response_filename}"
+
+    logging.info(f"Received response file saved as: {save_path}")
+    logging.info(f"Sending file path to client: {file_path}")
+
     return jsonify(
-        {
-            "status": "success",
-            "message": f"Received and saved response file as {response_filename}",
-            "file_path": f"/static/{response_filename}",
-        }
+        {"status": "success", "message": "File received", "file_path": file_path}
     )
 
 
