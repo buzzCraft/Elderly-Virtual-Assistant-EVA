@@ -53,7 +53,7 @@ def process_audio():
     return jsonify(
         {
             "status": feedback,
-            "message": "/static/response_fabfc44b-cd11-478f-87c2-9f5e1f9f8e6c.wav",
+            "file_path": "/static/response_fabfc44b-cd11-478f-87c2-9f5e1f9f8e6c.wav",
         }
     )
 
