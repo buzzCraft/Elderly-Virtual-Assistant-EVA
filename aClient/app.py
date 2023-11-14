@@ -16,28 +16,29 @@ def index():
 
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
-    if "audio_data" not in request.files:
-        return jsonify({"error": "No audio file received"}), 400
+    unique_id = str(uuid.uuid4())
+    file_path = None
+    feedback = None
 
     # Handle initial audio data for transcription
-    audio_file = request.files["audio_data"]
-    unique_id = str(uuid.uuid4())
-    audio_filename = f"{unique_id}.wav"
-    audio_file.save(audio_filename)
+    if "audio_data" in request.files:
+        audio_file = request.files["audio_data"]
+        audio_filename = f"{unique_id}_transcript.wav"
+        audio_file.save(audio_filename)
 
-    # Send audio file to transcription service and get feedback
-    files = {"audio_data": open(audio_filename, "rb")}
-    try:
-        transcription_response = requests.post(
-            "http://transcribe:5000/receive_audio", files=files, timeout=60
-        )
-        transcription_response.raise_for_status()
-        feedback = transcription_response.json().get("response", "")
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": str(e)}), 500
+        # Send audio file to transcription service and get feedback
+        try:
+            transcription_response = requests.post(
+                "http://transcribe:5000/receive_audio",
+                files={"audio_data": open(audio_filename, "rb")},
+                timeout=60,
+            )
+            transcription_response.raise_for_status()
+            feedback = transcription_response.json().get("response", "")
+        except requests.exceptions.RequestException as e:
+            return jsonify({"error": str(e)}), 500
 
     # Handle response file (if included)
-    file_path = None
     if "response_file" in request.files:
         response_file = request.files["response_file"]
         response_filename = f"response_{unique_id}.wav"
