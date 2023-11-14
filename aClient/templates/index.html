@@ -80,6 +80,9 @@
                     console.log("Hardcoded audio file path set to:", audioPlayback.src);
                     // audioPlayback.src = response.file_path;
                     // console.log("Audio file path set to:", response.file_path);
+                    console.log("Audio playback element:", audioPlayback);
+                    console.log("Audio src attribute:", audioPlayback.getAttribute('src'));
+                    console.log("Audio currentSrc:", audioPlayback.currentSrc);
 
                     updateAvatarState('talking');
 
