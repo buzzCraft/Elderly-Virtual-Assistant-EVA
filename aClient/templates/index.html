@@ -8,22 +8,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="tablet">
-        <div class="tablet-screen">
-            <div class="app-header">EVA: Elderly Virtual Assistant</div>
-            <div class="avatar-container">
-                <img id="avatar" src="/static/welcome.gif" alt="Avatar">
-                <div class="control-panel">
-                    <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
-                    <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
-                    <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
-                </div>
+<div class="tablet">
+    <div class="tablet-screen">
+        <div class="app-header">EVA: Elderly Virtual Assistant</div>
+        <div class="avatar-container">
+            <img id="avatar" src="/static/welcome.gif" alt="Avatar">
+            <div class="control-panel">
+                <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
+                <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
             </div>
         </div>
-        <div class="tablet-home-button"></div>
     </div>
-    <audio id="audio-playback" controls hidden></audio>
-    <audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
+    <div class="tablet-home-button"></div>
+</div>
+<audio id="audio-playback" controls hidden></audio>
+<audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
 
 <script>
     let mediaRecorder;
@@ -79,11 +79,16 @@
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
 
+
                     // Change avatar to talking state
                     updateAvatarState('talking');
 
-                    // Play the audio
-                    audioPlayback.play();
+                    // Load the audio and then play it
+                    audioPlayback.load();
+                    audioPlayback.onloadeddata = function () {
+                        audioPlayback.play();
+                    };
+                    // audioPlayback.play();
 
                     // Add an event listener to change the state to 'idle' after playback ends
                     audioPlayback.onended = function () {
