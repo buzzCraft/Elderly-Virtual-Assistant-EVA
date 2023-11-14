@@ -73,13 +73,11 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log("AJAX response:", response);
-                console.log("Audio file path:", response.file_path);
+                console.log("AJAX response received:", response);
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
-                    console.log("Audio file path:", response.file_path);
-                    console.log("Audio src set to:", audioPlayback.src);
+                    console.log("Audio file path set to:", response.file_path);
 
                     updateAvatarState('talking');
 
@@ -87,19 +85,22 @@
                     audioPlayback.onloadeddata = function () {
                         if (audioPlayback.readyState >= 2) {
                             audioPlayback.play();
+                            console.log("Audio playback started");
                         } else {
                             console.error("Audio not loaded");
                         }
                     };
 
                     audioPlayback.onerror = function () {
-                        console.error("Error in audio playback");
+                        console.error("Error in audio playback", audioPlayback.error);
                     };
 
                     audioPlayback.onended = function () {
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
+                } else {
+                    console.error("No file path in response");
                 }
             },
             error: function (error) {
@@ -108,6 +109,7 @@
             }
         });
     }
+
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
