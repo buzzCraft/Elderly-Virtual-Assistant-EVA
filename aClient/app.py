@@ -37,7 +37,7 @@ def process_audio():
     except requests.Timeout:
         logging.info("Error: Request to v2t timed out")
         feedback = "Error: The request to v2t timed out"
-    except requests.RequestException as e:
+    except requests.RequestExceptiona as e:
         logging.error(f"Request failed: {e}")
         feedback = f"Error: {e}"
 
