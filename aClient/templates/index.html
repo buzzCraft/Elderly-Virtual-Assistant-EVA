@@ -73,10 +73,14 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                console.log("AJAX response:", response);
+                console.log("Audio file path:", response.file_path);
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
                     console.log("Audio file path:", response.file_path);
+                    console.log("Audio src set to:", audioPlayback.src);
+
                     updateAvatarState('talking');
 
                     audioPlayback.load();
