@@ -8,22 +8,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="tablet">
-        <div class="tablet-screen">
-            <div class="app-header">EVA: Elderly Virtual Assistant</div>
-            <div class="avatar-container">
-                <img id="avatar" src="/static/welcome.gif" alt="Avatar">
-                <div class="control-panel">
-                    <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
-                    <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
-                    <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
-                </div>
+<div class="tablet">
+    <div class="tablet-screen">
+        <div class="app-header">EVA: Elderly Virtual Assistant</div>
+        <div class="avatar-container">
+            <img id="avatar" src="/static/welcome.gif" alt="Avatar">
+            <div class="control-panel">
+                <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
+                <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
             </div>
         </div>
-        <div class="tablet-home-button"></div>
     </div>
-    <audio id="audio-playback" controls hidden></audio>
-    <audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
+    <div class="tablet-home-button"></div>
+</div>
+<audio id="audio-playback" controls hidden></audio>
+<audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
 
 <script>
     let mediaRecorder;
@@ -74,14 +74,12 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function (response){
-                console.log("response", response);
-                if (response.file_path){
+            success: function (response) {
+                console.log("AJAX response:", response);
+                if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
-                    console.log("audioPlayback", audioPlayback.src);
-                    console.log("Filepath", response.file_path);
-
+                    console.log("Audio file path:", response.file_path);
 
                     // Change avatar to talking state
                     updateAvatarState('talking');
@@ -94,15 +92,17 @@
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
+                } else {
+                    // Handle the case where no file path is returned
+                    console.error("No file path in response");
                 }
             },
             error: function (error) {
-                console.error(error);
+                console.error("Error in AJAX request:", error);
                 updateAvatarState('idle'); // Change to idle state on error
             }
         });
     }
-
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
