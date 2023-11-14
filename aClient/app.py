@@ -20,6 +20,7 @@ def process_audio():
     file_path = None
     feedback = None
 
+    # Handling transcription
     if "audio_data" in request.files:
         audio_file = request.files["audio_data"]
         audio_filename = f"{unique_id}_transcript.wav"
@@ -36,21 +37,24 @@ def process_audio():
             feedback = transcription_response.json().get("response", "")
         except requests.exceptions.RequestException as e:
             logging.error(f"Error in transcription request: {e}")
-            os.remove(audio_filename)  # Cleanup if error occurs
             return jsonify({"error": str(e)}), 500
+        finally:
+            os.remove(audio_filename)
 
-        os.remove(audio_filename)  # Cleanup after successful transcription
-
+    # Handling response file
     if "response_file" in request.files:
         response_file = request.files["response_file"]
         response_filename = f"response_{unique_id}.wav"
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
         file_path = f"/static/{response_filename}"
-        logging.info(f"Saved response file to {save_path}")
-        logging.info(f"Response file path: {file_path}")
-        return jsonify({"feedback": feedback, "file_path": file_path})
-    # return jsonify({"status": feedback, "message": file_path})
+
+    # Constructing response object
+    response_data = {"feedback": feedback}
+    if file_path:
+        response_data["file_path"] = file_path
+
+    return jsonify(response_data)
 
 
 if __name__ == "__main__":
