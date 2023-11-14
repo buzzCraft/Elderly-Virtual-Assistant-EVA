@@ -14,7 +14,7 @@ def save_response_audio(response_file):
     response_filename = f"response_{unique_id}.wav"
     save_path = os.path.join(app.static_folder, response_filename)
     response_file.save(save_path)
-    logging.info(f"Saved file size: {os.path.getsize(save_path)} bytes")
+    logging.info(f"save path", save_path)
     return f"/static/{response_filename}"
 
 
