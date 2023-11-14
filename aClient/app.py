@@ -45,10 +45,12 @@ def process_audio():
         response_filename = f"response_{unique_id}.wav"
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
-        file_path = f"/static/{response_filename}"
+        # file_path = f"/static/{response_filename}"
         logging.info(f"Saved response file to {save_path}")
-        logging.info(f"Response file path: {file_path}")
-        return jsonify({"feedback": feedback, "file_path": file_path})
+        # logging.info(f"Response file path: {file_path}")
+        return jsonify(
+            {"feedback": feedback, "file_path": f"/static/{response_filename}"}
+        )
 
     return jsonify({"feedback": feedback, "file_path": None})
 
