@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import requests
 import uuid
 import logging
+import os
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -51,12 +52,14 @@ def receive_response():
     response_file = request.files["response_file"]
     unique_id = str(uuid.uuid4())
     response_filename = f"response_{unique_id}.wav"
-    response_file.save(response_filename)
+    save_path = os.path.join(app.static_folder, response_filename)
+    response_file.save(save_path)
 
     return jsonify(
         {
             "status": "success",
             "message": f"Received and saved response file as {response_filename}",
+            "file_path": f"/static/{response_filename}",
         }
     )
 

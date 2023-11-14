@@ -2,18 +2,20 @@
 services:
   # Transcribe service
   record:
-    depends_on:
-      - transcribe
     build:
       context: ./aClient
       dockerfile: Dockerfile
     ports:
       - "4999:4999"
+    volumes:
+      - ./aClient:/app
     labels:
       "docker-compose_diagram.description": "Record voice"
       "docker-compose_diagram.icon": "fas fa-microphone"
 
   transcribe:
+    depends_on:
+      - record
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
