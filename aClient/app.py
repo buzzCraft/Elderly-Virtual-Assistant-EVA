@@ -50,7 +50,7 @@ def process_audio():
         logging.info(f"Saved response file to {save_path}")
         logging.info(f"Response file path: {file_path}")
         return jsonify({"feedback": feedback, "file_path": file_path})
-    return jsonify({"status": "error", "message": "Response not received"})
+    return jsonify({"status": feedback, "message": file_path})
 
 
 if __name__ == "__main__":
