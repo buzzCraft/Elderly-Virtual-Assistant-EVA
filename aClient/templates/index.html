@@ -79,30 +79,28 @@
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
-                    console.log("Audio file path:", response.file_path);
+                    console.log("File path:", response.file_path);
 
-                    // Change avatar to talking state
+                    // Change avatar to talking state and play the audio
                     updateAvatarState('talking');
-
-                    // Play the audio
                     audioPlayback.play();
 
-                    // Add an event listener to change the state to 'idle' after playback ends
+                    // Listener for when audio ends
                     audioPlayback.onended = function () {
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
                 } else {
-                    // Handle the case where no file path is returned
                     console.error("No file path in response");
                 }
             },
             error: function (error) {
                 console.error("Error in AJAX request:", error);
-                updateAvatarState('idle'); // Change to idle state on error
+                updateAvatarState('idle');
             }
         });
     }
+
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
