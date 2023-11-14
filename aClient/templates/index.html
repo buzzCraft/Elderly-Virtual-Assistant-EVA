@@ -75,9 +75,9 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                if (response.response_file_path) {
+                if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
-                    audioPlayback.src = response.response_file_path;
+                    audioPlayback.src = response.file_path;
 
                     // Change avatar to talking state
                     updateAvatarState('talking');
