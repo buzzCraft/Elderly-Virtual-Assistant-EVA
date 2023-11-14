@@ -41,14 +41,14 @@ def process_audio():
 
         os.remove(audio_filename)  # Cleanup after successful transcription
 
-        if "response_file" in request.files:
-            response_file = request.files["response_file"]
-            response_filename = f"response_{unique_id}.wav"
-            save_path = os.path.join(app.static_folder, response_filename)
-            response_file.save(save_path)
-            file_path = f"/static/{response_filename}"
-            logging.info(f"Saved response file to {save_path}")
-            logging.info(f"Response file path: {file_path}")
+    if "response_file" in request.files:
+        response_file = request.files["response_file"]
+        response_filename = f"response_{unique_id}.wav"
+        save_path = os.path.join(app.static_folder, response_filename)
+        response_file.save(save_path)
+        file_path = f"/static/{response_filename}"
+        logging.info(f"Saved response file to {save_path}")
+        logging.info(f"Response file path: {file_path}")
         return jsonify({"feedback": feedback, "file_path": file_path})
     # return jsonify({"status": feedback, "message": file_path})
 

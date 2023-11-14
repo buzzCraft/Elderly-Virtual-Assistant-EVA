@@ -76,6 +76,7 @@
             contentType: false,
             success: function (response) {
                 console.log("AJAX response:", response);
+                console.log(response.file_path)
                 if (response.file_path) {
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
