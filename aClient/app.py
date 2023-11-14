@@ -53,6 +53,9 @@ def process_audio():
     if "response_file" in request.files:
         response_file = request.files["response_file"]
         file_path = save_response_audio(response_file)
+        logging.info(f"Received response file saved as: {response_file.filename}")
+        logging.info(f"Sending file path to client: {file_path}")
+
         return jsonify(
             {"status": "success", "message": "File received", "file_path": file_path}
         )
