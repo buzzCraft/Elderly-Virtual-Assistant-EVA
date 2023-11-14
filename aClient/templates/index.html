@@ -74,10 +74,14 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function (response) {
-                if (response.file_path) {
+            success: function (response){
+                console.log("response", response);
+                if (response.file_path){
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
+                    console.log("audioPlayback", audioPlayback.src);
+                    console.log("Filepath", response.file_path);
+
 
                     // Change avatar to talking state
                     updateAvatarState('talking');
