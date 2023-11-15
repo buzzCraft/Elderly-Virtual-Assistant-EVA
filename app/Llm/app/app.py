@@ -36,12 +36,19 @@ def test():
     return "Our API is Working!"
 
 
+def store_log(log_message):
+    # Append log message to a file
+    with open("chat_logs.txt", "a") as file:
+        file.write(log_message + "\n")
+
+
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
     try:
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
+        store_log(f"User Input: {user_input}")  # Store user input log
 
         # Check if the user input is empty
         if not user_input:
@@ -52,7 +59,7 @@ def generate_response():
         chatbot_response = response.get("text", "")
         chatbot_response = re.sub(
             r"^\w+(EVA|AI)\s*", "", chatbot_response
-        )  # Remove the EVA prefix
+        )  # Remove the EVA and AI prefix
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
         )  # Remove the *emphasis*
@@ -63,6 +70,7 @@ def generate_response():
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
+        store_log(f"Chatbot Response: {chatbot_response}")  # Store chatbot response log
 
         # Notify voiceGen of the response
         voice_response = requests.post(
@@ -75,6 +83,17 @@ def generate_response():
         return jsonify({"response": chatbot_response, "voice_status": voice_status})
     except Exception as e:
         return jsonify({"error": str(e)})
+
+
+@app.route("/get_chat_logs")
+def get_chat_logs():
+    try:
+        with open("chat_logs.txt", "r") as file:
+            log_entries = file.readlines()
+    except FileNotFoundError:
+        log_entries = []
+
+    return jsonify(log_entries[-100:])  # Adjust the number as needed
 
 
 if __name__ == "__main__":

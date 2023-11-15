@@ -24,6 +24,12 @@
 </div>
 <audio id="audio-playback" controls hidden></audio>
 <audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
+<div class="log-container">
+    <h3>Chat Logs</h3>
+    <div id="logs" style="overflow-y: scroll; height: 300px;">
+        <!-- Logs will be displayed here -->
+    </div>
+</div>
 
 <script>
     let mediaRecorder;
@@ -100,6 +106,21 @@
             }
         });
     }
+
+    function fetchAndDisplayLogs() {
+        $.ajax({
+            type: "GET",
+            url: "/get_chat_logs",
+            success: function (logs) {
+                $('#logs').html(logs.join('<br>'));
+            },
+            error: function (error) {
+                console.error("Error fetching logs:", error);
+            }
+        });
+    }
+
+    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
 
 
     function updateAvatarState(state) {
