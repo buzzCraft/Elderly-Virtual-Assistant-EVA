@@ -14,7 +14,9 @@ COPY pyproject.toml poetry.lock ./
 
 # Configure poetry to not create a virtual environment and install dependencies
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-dev flask-cors
+    poetry install --no-dev \
+
+RUN pip install flask-cors
 
 # Copy only the contents of the app directory
 COPY app/ ./
