@@ -91,7 +91,7 @@ def generate_response():
 @app.route("/get_chat_logs")
 def get_chat_logs():
     try:
-        with open("chat_logs.txt", "r") as file:
+        with open(LOG_FILE_PATH, "r") as file:  # Use LOG_FILE_PATH
             log_entries = file.readlines()
     except FileNotFoundError:
         log_entries = []
