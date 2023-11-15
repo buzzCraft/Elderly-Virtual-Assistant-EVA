@@ -40,9 +40,6 @@ body {
     width: 100%;
     border-radius: 20px;
     overflow: hidden;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
 }
 
 .app-header {
@@ -71,10 +68,9 @@ body {
 
 
 #avatar {
-    max-width: 100%; /* Increase size */
+    width: 100%; /* Increase size */
     height: auto;
-    margin: 0 auto;
-    display: block;
+    margin: 10px;
     transition: transform 0.3s ease; /* Smooth transition for hover effects */
 }
 #avatar:hover {
