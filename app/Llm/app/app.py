@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 
 import requests
 import torch
@@ -49,6 +50,18 @@ def generate_response():
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
+        chatbot_response = re.sub(
+            r"^\w+:\s*", "", chatbot_response
+        )  # Remove the speaker name
+        chatbot_response = re.sub(
+            r"\*.*?\*", "", chatbot_response
+        )  # Remove the *emphasis*
+        chatbot_response = re.sub(
+            r"[^A-Za-z .]", "", chatbot_response
+        )  # Remove all non-alphabetical characters
+        chatbot_response = (
+            chatbot_response.strip()
+        )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
 
         # Notify voiceGen of the response
