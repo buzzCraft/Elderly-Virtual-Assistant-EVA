@@ -40,10 +40,16 @@ def test():
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
 
 
-def store_log(log_message):
+def store_log(log_message, log_type):
+    # Determine the class based on log type
+    log_class = "user-input" if log_type == "user" else "chatbot-response"
+
+    # Create an HTML string with the appropriate class
+    html_log_message = f'<div class="{log_class}">{log_message}</div>'
+
     # Append log message to a file
     with open(LOG_FILE_PATH, "a") as file:
-        file.write(log_message + "\n")
+        file.write(html_log_message + "\n")
 
 
 @app.route("/generate_response", methods=["POST"])
@@ -52,7 +58,7 @@ def generate_response():
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
-        store_log(f"User Input: {user_input}")  # Store user input log
+        store_log(f"User Input: {user_input}", "user")  # Store user input log
 
         # Check if the user input is empty
         if not user_input:
@@ -62,7 +68,7 @@ def generate_response():
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
         chatbot_response = re.sub(
-            r"^\w+:\s*", "", chatbot_response
+            r"^\w+EVA:\s*", "", chatbot_response
         )  # Remove the EVA and AI prefix
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
@@ -74,7 +80,9 @@ def generate_response():
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
-        store_log(f"Chatbot Response: {chatbot_response}")  # Store chatbot response log
+        store_log(
+            f"Chatbot Response: {chatbot_response}", "chatbot"
+        )  # Store chatbot response log
 
         # Notify voiceGen of the response
         voice_response = requests.post(
@@ -92,12 +100,12 @@ def generate_response():
 @app.route("/get_chat_logs")
 def get_chat_logs():
     try:
-        with open(LOG_FILE_PATH, "r") as file:  # Use LOG_FILE_PATH
+        with open(LOG_FILE_PATH, "r") as file:
             log_entries = file.readlines()
     except FileNotFoundError:
         log_entries = []
 
-    return jsonify(log_entries[-100:])  # Adjust the number as needed
+    return jsonify("".join(log_entries[-100:]))  # Send HTML logs as a single string
 
 
 if __name__ == "__main__":

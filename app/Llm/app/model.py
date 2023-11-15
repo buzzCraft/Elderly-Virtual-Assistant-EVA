@@ -80,7 +80,7 @@ def define_prompt():
 # Define the memory
 def define_memory():
     memory = ConversationBufferWindowMemory(
-        k=3,
+        k=10,
         return_messages=True,
         memory_key="chat_history",
     )
