@@ -51,7 +51,7 @@ def generate_response():
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
         chatbot_response = re.sub(
-            r"^\w+EVA:\s*", "", chatbot_response
+            r"^\w+(EVA|AI)\s*", "", chatbot_response
         )  # Remove the EVA prefix
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
