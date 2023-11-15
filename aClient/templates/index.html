@@ -110,7 +110,7 @@
     function fetchAndDisplayLogs() {
         $.ajax({
             type: "GET",
-            url: "http://llm:5002/get_chat_logs",
+            url: "http://10.196.32.21:5002/get_chat_logs",
             success: function (logs) {
                 $('#logs').html(logs.join('<br>'));
             },
@@ -121,7 +121,6 @@
     }
 
     setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
-
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
