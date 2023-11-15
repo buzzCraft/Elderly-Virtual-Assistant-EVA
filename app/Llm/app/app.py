@@ -101,7 +101,7 @@ def generate_response():
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
-        store_log(f"{chatbot_response}", "chatbot")  # Store chatbot response log
+        store_log(f"{chatbot_response}", "Eva")  # Store chatbot response log
 
         # Notify voiceGen of the response
         voice_response = requests.post(

@@ -141,22 +141,35 @@ button i {
 .user-input {
     color: #003366; /* Darker blue for better readability */
     background-color: #e6f2ff;
+    background-image: linear-gradient(to left, #e6f2ff 50%, transparent 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
     border-radius: 15px;
     padding: 12px;
     margin-right: 30%;
     word-wrap: break-word; /* Ensure long texts are wrapped */
+    transition: all 0.5s ease;
 }
-
+.user-input:hover {
+    background-position: left bottom;
+}
 /* Chatbot Response Style */
 .chatbot-response {
     color: #4a4a4a;
     background-color: #f7f7f7;
+    background-image: linear-gradient(to right, #f7f7f7 50%, transparent 50%);
+    background-size: 200% 100%;
+    background-position: left bottom;
     border-radius: 15px;
     padding: 12px;
     margin-left: 10%;
     word-wrap: break-word;
+    transition: all 0.5s ease;
 }
 
+.chatbot-response:hover {
+    background-position: right bottom;
+}
 /* Clearfix */
 .clearfix::after {
     content: "";
@@ -177,7 +190,9 @@ button i {
 .participant-name {
     font-weight: bold;
     margin-right: 5px;
-    display: inline-block; /* Align name with message */
+    color: #007bff; /* A cool blue color */
+    font-size: 1.1em; /* Slightly larger font size */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
 }
 
 /* Animation for new messages */
