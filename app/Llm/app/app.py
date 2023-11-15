@@ -36,9 +36,12 @@ def test():
     return "Our API is Working!"
 
 
+LOG_FILE_PATH = "/llm-app/chat_logs.txt"
+
+
 def store_log(log_message):
     # Append log message to a file
-    with open("chat_logs.txt", "a") as file:
+    with open(LOG_FILE_PATH, "a") as file:
         file.write(log_message + "\n")
 
 
