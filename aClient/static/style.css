@@ -99,37 +99,56 @@ button i {
 /* style for chat window */
 /* Log Container Styles */
 .log-container {
-    background-color: #f2f2f2; /* Light grey background */
-    border: 1px solid #d1d1d1; /* Slight border for definition */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px; /* Padding inside the container */
-    margin: 20px 0; /* Margin for spacing */
-    max-width: 600px; /* Maximum width */
+    background-color: #f9f9f9; /* Light background for the container */
+    border: 1px solid #d3d3d3; /* Light border for definition */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside the container */
+    margin: 20px auto; /* Centered margin */
+    max-width: 800px; /* Maximum width */
     width: 100%; /* Full width */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
 }
 
 .log-container h3 {
-    margin-top: 0;
     color: #333; /* Dark text for the title */
+    text-align: center; /* Center align the title */
+    margin-bottom: 15px; /* Spacing after the title */
 }
 
 /* Log Content Style */
 #logs {
-    height: 300px; /* Fixed height */
+    height: 400px; /* Fixed height */
     overflow-y: auto; /* Scrollable */
     background-color: #fff; /* White background for the logs */
     border: 1px solid #ccc; /* Border for the log area */
     padding: 10px; /* Padding inside the log area */
-    font-family: 'Courier New', monospace; /* Monospaced font for log readability */
-    font-size: 14px; /* Slightly larger font size for readability */
+    font-family: 'Arial', sans-serif; /* Readable font */
+    font-size: 16px; /* Comfortable font size */
     color: #333; /* Dark color for text */
+}
+
+/* User Input Style */
+.user-input {
+    color: #2a5885; /* Dark blue for user input */
+    font-weight: bold; /* Bold font for emphasis */
+    margin-bottom: 5px; /* Spacing after user input */
+}
+
+/* Chatbot Response Style */
+.chatbot-response {
+    color: #4a4a4a; /* Slightly lighter color for response */
+    margin-bottom: 15px; /* Spacing after response */
+    padding-left: 20px; /* Indent for response */
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
     .log-container {
         width: 100%; /* Full width on smaller screens */
-        max-width: none; /* Override max-width */
+        padding: 10px; /* Adjust padding */
+    }
+
+    #logs {
+        height: 300px; /* Adjust height for smaller screens */
     }
 }
