@@ -7,7 +7,9 @@ from flask import Flask, jsonify, request
 import uuid
 import warnings
 
-warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.hub")
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",

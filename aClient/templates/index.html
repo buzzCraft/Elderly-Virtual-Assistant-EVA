@@ -159,6 +159,7 @@
             url: "http://localhost:7002/get_chat_logs",
             success: function (logs) {
                 $('#logs').html(logs); // Directly insert HTML logs
+                scrollToBottom();
             },
             error: function (error) {
                 console.error("Error fetching logs:", error);
@@ -179,8 +180,12 @@
 
     function scrollToBottom() {
         var logContainer = document.getElementById("logs");
-        logContainer.scrollTop = logContainer.scrollHeight - logContainer.clientHeight;
+        logContainer.scrollTop = logContainer.scrollHeight;
     }
+
+    window.onload = function () {
+        fetchAndDisplayLogs(); // Fetch logs and then scroll to bottom
+    };
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');

@@ -10,6 +10,8 @@ from model import initialize_model
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -76,7 +78,7 @@ def generate_response():
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
-        store_log(f"User: {user_input}", "user")  # Store user input log
+        store_log(f"{user_input}", "user")  # Store user input log
 
         # Check if the user input is empty
         if not user_input:
@@ -88,12 +90,13 @@ def generate_response():
         chatbot_response = re.sub(
             r"^\w+EVA:\s*", "", chatbot_response
         )  # Remove the EVA and AI prefix
+        chatbot_response = re.sub(r"^\w+AI:\s*", "", chatbot_response)
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
         )  # Remove the *emphasis*
-        # chatbot_response = re.sub(
-        # r"[^A-Za-z .]", "", chatbot_response
-        # )  # Remove all non-alphabetical characters
+        chatbot_response = re.sub(
+            r"[^A-Za-z .]", "", chatbot_response
+        )  # Remove all non-alphabetical characters
         chatbot_response = (
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
