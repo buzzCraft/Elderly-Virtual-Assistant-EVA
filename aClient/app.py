@@ -18,6 +18,7 @@ def index():
 def process_audio():
     unique_id = str(uuid.uuid4())
     feedback = None
+    file_path = None
 
     if "audio_data" in request.files:
         audio_file = request.files["audio_data"]
