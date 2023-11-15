@@ -94,3 +94,42 @@ button i {
     margin-top: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+/* Path: aClient/static/style.css */
+/* style for chat window */
+/* Log Container Styles */
+.log-container {
+    background-color: #f2f2f2; /* Light grey background */
+    border: 1px solid #d1d1d1; /* Slight border for definition */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the container */
+    margin: 20px 0; /* Margin for spacing */
+    max-width: 600px; /* Maximum width */
+    width: 100%; /* Full width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.log-container h3 {
+    margin-top: 0;
+    color: #333; /* Dark text for the title */
+}
+
+/* Log Content Style */
+#logs {
+    height: 300px; /* Fixed height */
+    overflow-y: auto; /* Scrollable */
+    background-color: #fff; /* White background for the logs */
+    border: 1px solid #ccc; /* Border for the log area */
+    padding: 10px; /* Padding inside the log area */
+    font-family: 'Courier New', monospace; /* Monospaced font for log readability */
+    font-size: 14px; /* Slightly larger font size for readability */
+    color: #333; /* Dark color for text */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .log-container {
+        width: 100%; /* Full width on smaller screens */
+        max-width: none; /* Override max-width */
+    }
+}
