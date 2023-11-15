@@ -38,14 +38,12 @@ def test():
 
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
-MAX_LOG_ENTRIES: int = 10
+MAX_LOG_ENTRIES: int = 1000
 
 
 def should_clear_logs():
     with open(LOG_FILE_PATH, "r") as file:
-        if (
-            len(file.readlines()) > MAX_LOG_ENTRIES
-        ):  # MAX_LOG_ENTRIES is a predefined limit
+        if len(file.readlines()) > MAX_LOG_ENTRIES:
             return True
     return False
 
@@ -97,7 +95,7 @@ def generate_response():
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
-        store_log(f"EVA: {chatbot_response}", "chatbot")  # Store chatbot response log
+        store_log(f"{chatbot_response}", "chatbot")  # Store chatbot response log
 
         # Notify voiceGen of the response
         voice_response = requests.post(
