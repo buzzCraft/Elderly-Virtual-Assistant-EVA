@@ -38,6 +38,21 @@ def test():
 
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
+MAX_LOG_ENTRIES: int = 10
+
+
+def should_clear_logs():
+    with open(LOG_FILE_PATH, "r") as file:
+        if (
+            len(file.readlines()) > MAX_LOG_ENTRIES
+        ):  # MAX_LOG_ENTRIES is a predefined limit
+            return True
+    return False
+
+
+# In your logging function
+if should_clear_logs():
+    open(LOG_FILE_PATH, "w").close()
 
 
 def store_log(log_message, log_type):
@@ -47,7 +62,7 @@ def store_log(log_message, log_type):
     )
 
     # Create an HTML string with the appropriate class
-    html_log_message = f'<div class="{log_class}">{log_message}</div>'
+    html_log_message = f'<div class="{log_class}"><span class="participant-name">{log_type.title()}:</span> {log_message}</div>'
 
     # Append log message to a file
     with open(LOG_FILE_PATH, "a") as file:

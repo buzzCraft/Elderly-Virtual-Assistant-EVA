@@ -120,8 +120,15 @@
         });
     }
 
+    window.onload = function() {
+    scrollToBottom();
+    };
 
     setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
+    function scrollToBottom() {
+    var logContainer = document.getElementById("logs");
+    logContainer.scrollTop = logContainer.scrollHeight;
+    }
 
 
     function updateAvatarState(state) {

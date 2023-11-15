@@ -19,6 +19,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto;
 }
 
 .tablet-screen {
@@ -95,67 +96,65 @@ button i {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Path: aClient/static/style.css */
-/* style for chat window */
 /* Log Container Styles */
 .log-container {
-    background-color: #f9f9f9;
-    border: 1px solid #d3d3d3;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 20px auto;
-    max-width: 500px;
+    background-color: #f0f0f0;
+    border: 1px solid #d0d0d0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 600px;
     width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .log-container h3 {
     color: #333;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 24px;
 }
 
 /* Log Content Style */
 #logs {
-    height: 400px;
+    height: 450px;
     overflow-y: auto;
     background-color: #fff;
     border: 1px solid #ccc;
-    padding: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.6;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse; /* Newest messages at the bottom */
 }
 
 /* Base styles for log entries */
 .log-entry {
-    clear: both;
-    padding: 5px;
-    margin-bottom: 10px;
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* User Input Style */
 .user-input {
-    color: royalblue;
-    font-weight: bold;
-    float: left;
-    clear: left;
+    color: #003366; /* Darker blue for better readability */
     background-color: #e6f2ff;
-    border-radius: 10px;
-    padding: 10px;
-    margin-right: 50%; /* Adjust as needed */
+    border-radius: 15px;
+    padding: 12px;
+    margin-right: 50%;
+    word-wrap: break-word; /* Ensure long texts are wrapped */
 }
 
 /* Chatbot Response Style */
 .chatbot-response {
     color: #4a4a4a;
-    float: right;
-    clear: right;
-    background-color: #f2f2f2;
-    border-radius: 10px;
-    padding: 10px;
-    margin-left: 50%; /* Adjust as needed */
+    background-color: #f7f7f7;
+    border-radius: 15px;
+    padding: 12px;
+    margin-left: 50%;
+    word-wrap: break-word;
 }
 
 /* Clearfix */
@@ -171,7 +170,14 @@ button i {
         float: none;
         margin-right: 0;
         margin-left: 0;
+        max-width: 100%;
     }
+}
+
+.participant-name {
+    font-weight: bold;
+    margin-right: 5px;
+    display: inline-block; /* Align name with message */
 }
 
 /* Animation for new messages */
@@ -188,4 +194,6 @@ button i {
 
 .user-input, .chatbot-response {
     animation: slideIn 0.5s ease-out;
+    display: block;
+    margin-top: 10px;
 }
