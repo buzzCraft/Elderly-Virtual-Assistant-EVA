@@ -5,6 +5,9 @@ import uuid
 import logging
 import os
 
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
+
 app = Flask(__name__)
 CORS(app)
 logging.basicConfig(level=logging.DEBUG)

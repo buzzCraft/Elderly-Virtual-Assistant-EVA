@@ -5,6 +5,8 @@ import torch
 import whisper
 from flask import Flask, request, jsonify
 
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     datefmt="%H:%M:%S",

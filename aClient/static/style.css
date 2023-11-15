@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Improved typography */
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -11,7 +11,7 @@ body {
 }
 
 .tablet {
-    background-color: cadetblue;
+    background-color: #f0f0f0;
     border-radius: 28px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     width: 400px;
@@ -20,8 +20,21 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-}
+    position: relative;
 
+}
+.tablet:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 5px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Speaker grille */
+}
 .tablet-screen {
     background-color: #fff;
     width: 100%;
@@ -45,16 +58,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px; /* Spacing between header and avatar */
+    margin-top: 10px;
+    border: 3px solid #ddd; /* Frame around avatar */
+    border-radius: 50%; /* Circular frame */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Subtle gradient */
+    overflow: hidden; /* Ensures the circular frame clips the content */
 }
 
 
 #avatar {
-    width: 100%;
+    width: 150%; /* Increase size */
     height: auto;
     margin-bottom: 10px;
+    transition: transform 0.3s ease; /* Smooth transition for hover effects */
 }
-
+#avatar:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
 .control-panel {
     display: flex;
     justify-content: center;
@@ -94,6 +115,10 @@ button i {
     height: 30px;
     margin-top: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    bottom: -15px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* Log Container Styles */
@@ -269,8 +294,19 @@ button i {
 #logs::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+#logs::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+/* Responsive Design Adjustments */
+@media (max-width: 600px) {
+    .tablet {
+        width: 90%; /* Adjust for smaller screens */
+    }
 
-
+    #avatar {
+        width: 100%; /* Adjust avatar size on smaller screens */
+    }
+}
 
 .control-button {
     background-color: #4CAF50; /* Green */

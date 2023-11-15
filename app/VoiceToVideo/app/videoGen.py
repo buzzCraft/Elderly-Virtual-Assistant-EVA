@@ -4,6 +4,8 @@ import logging
 import os
 import glob
 
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     datefmt="%H:%M:%S",
