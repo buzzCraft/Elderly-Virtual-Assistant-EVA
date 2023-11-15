@@ -99,56 +99,86 @@ button i {
 /* style for chat window */
 /* Log Container Styles */
 .log-container {
-    background-color: #f9f9f9; /* Light background for the container */
-    border: 1px solid #d3d3d3; /* Light border for definition */
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px; /* Padding inside the container */
-    margin: 20px auto; /* Centered margin */
-    max-width: 800px; /* Maximum width */
-    width: 100%; /* Full width */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    background-color: #f9f9f9;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .log-container h3 {
-    color: #333; /* Dark text for the title */
-    text-align: center; /* Center align the title */
-    margin-bottom: 15px; /* Spacing after the title */
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 /* Log Content Style */
 #logs {
-    height: 400px; /* Fixed height */
-    overflow-y: auto; /* Scrollable */
-    background-color: #fff; /* White background for the logs */
-    border: 1px solid #ccc; /* Border for the log area */
-    padding: 10px; /* Padding inside the log area */
-    font-family: 'Arial', sans-serif; /* Readable font */
-    font-size: 16px; /* Comfortable font size */
-    color: red; /* Dark color for text */
+    height: 400px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* User Input Style */
 .user-input {
-    color: red; /* Dark blue for user input */
-    font-weight: bold; /* Bold font for emphasis */
-    margin-bottom: 5px; /* Spacing after user input */
+    color: royalblue;
+    font-weight: bold;
+    margin-bottom: 5px;
+    align-self: flex-start; /* Align to the left */
+    background-color: #e7f3ff; /* Light blue background */
+    padding: 8px;
+    border-radius: 10px;
+    max-width: 70%;
 }
 
 /* Chatbot Response Style */
 .chatbot-response {
-    color: #4a4a4a; /* Slightly lighter color for response */
-    margin-bottom: 15px; /* Spacing after response */
-    padding-left: 20px; /* Indent for response */
+    color: #4a4a4a;
+    margin-bottom: 15px;
+    align-self: flex-end; /* Align to the right */
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 8px;
+    border-radius: 10px;
+    max-width: 70%;
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
     .log-container {
-        width: 100%; /* Full width on smaller screens */
-        padding: 10px; /* Adjust padding */
+        width: 100%;
+        padding: 10px;
     }
 
     #logs {
-        height: 300px; /* Adjust height for smaller screens */
+        height: 300px;
     }
+
+    .user-input, .chatbot-response {
+        max-width: 100%;
+    }
+}
+
+/* Animation for new messages */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-input, .chatbot-response {
+    animation: slideIn 0.5s ease-out;
 }
