@@ -46,11 +46,9 @@ def process_audio():
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
         file_path = f"/static/{response_filename}"
-        response_data = {"feedback": feedback, "file_path": file_path}
-        logging.info(f"Response data: {response_data}")
-        return jsonify(response_data)
-
-    return jsonify({"feedback": feedback, "file_path": None})
+    response_data = {"feedback": feedback, "file_path": file_path}
+    logging.info(f"Response data: {response_data}")
+    return jsonify(response_data)
 
 
 if __name__ == "__main__":

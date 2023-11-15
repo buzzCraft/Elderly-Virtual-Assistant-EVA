@@ -75,7 +75,6 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log("AJAX response:", response);
                 console.log("Full AJAX response:", response);
                 if (response.file_path && response.file_path !== null) {
                     const audioPlayback = document.getElementById("audio-playback");
