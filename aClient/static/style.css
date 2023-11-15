@@ -124,12 +124,12 @@ button i {
     padding: 10px; /* Padding inside the log area */
     font-family: 'Arial', sans-serif; /* Readable font */
     font-size: 16px; /* Comfortable font size */
-    color: #333; /* Dark color for text */
+    color: red; /* Dark color for text */
 }
 
 /* User Input Style */
 .user-input {
-    color: #2a5885; /* Dark blue for user input */
+    color: red; /* Dark blue for user input */
     font-weight: bold; /* Bold font for emphasis */
     margin-bottom: 5px; /* Spacing after user input */
 }
