@@ -42,29 +42,29 @@
 </div>
 
 <script>
-   /* document.getElementById("refresh-logs").addEventListener("click", fetchAndDisplayLogs);
-    document.getElementById("clear-logs").addEventListener("click", function () {
-        document.getElementById("logs").innerHTML = '';
-    });
+    /* document.getElementById("refresh-logs").addEventListener("click", fetchAndDisplayLogs);
+     document.getElementById("clear-logs").addEventListener("click", function () {
+         document.getElementById("logs").innerHTML = '';
+     });
 
-    document.getElementById("auto-scroll").addEventListener("change", function () {
-        autoScrollEnabled = this.checked;
-    });
+     document.getElementById("auto-scroll").addEventListener("change", function () {
+         autoScrollEnabled = this.checked;
+     });
 
-    function scrollToBottom() {
-        if (autoScrollEnabled) {
-            var logContainer = document.getElementById("logs");
-            logContainer.scrollTop = logContainer.scrollHeight;
-        }
-    }
+     function scrollToBottom() {
+         if (autoScrollEnabled) {
+             var logContainer = document.getElementById("logs");
+             logContainer.scrollTop = logContainer.scrollHeight;
+         }
+     }
 
-    document.getElementById("volume-control").addEventListener("input", function () {
-        var audioElements = document.querySelectorAll("audio");
-        audioElements.forEach(function (audio) {
-            audio.volume = this.value;
-        });
-    });
-    */
+     document.getElementById("volume-control").addEventListener("input", function () {
+         var audioElements = document.querySelectorAll("audio");
+         audioElements.forEach(function (audio) {
+             audio.volume = this.value;
+         });
+     });
+     */
     document.getElementById("search-logs").addEventListener("input", function () {
         var searchTerm = this.value.toLowerCase();
         var logs = document.querySelectorAll("#logs .log-entry");
@@ -179,9 +179,8 @@
 
     function scrollToBottom() {
         var logContainer = document.getElementById("logs");
-        logContainer.scrollTop = logContainer.scrollHeight;
+        logContainer.scrollTop = logContainer.scrollHeight - logContainer.clientHeight;
     }
-
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
