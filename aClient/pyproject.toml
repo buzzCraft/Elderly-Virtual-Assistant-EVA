@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 uuid = "^1.30"
 Flask = "^3.0.0"
+flask-cors = "^4.0.0"
 
 
 [build-system]
