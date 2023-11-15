@@ -60,7 +60,7 @@ body {
     align-items: center;
     margin-top: 10px;
     border: 3px solid #ddd; /* Frame around avatar */
-    border-radius: 50%; /* Circular frame */
+    /*border-radius: 50%; /* Circular frame */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
     background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Subtle gradient */
     overflow: hidden; /* Ensures the circular frame clips the content */
