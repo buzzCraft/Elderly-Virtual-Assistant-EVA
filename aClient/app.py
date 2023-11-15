@@ -4,9 +4,23 @@ import uuid
 import logging
 import os
 
+app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-app = Flask(__name__)
+
+def get_latest_file_path(directory):
+    latest_file = None
+    latest_mod_time = 0
+
+    for filename in os.listdir(directory):
+        if filename.endswith(".wav") and "response_" in filename:
+            file_path = os.path.join(directory, filename)
+            mod_time = os.path.getmtime(file_path)
+            if mod_time > latest_mod_time:
+                latest_mod_time = mod_time
+                latest_file = filename
+
+    return f"/static/{latest_file}" if latest_file else None
 
 
 @app.route("/")
@@ -16,11 +30,8 @@ def index():
 
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
-    logging.info(f"Files in request: {request.files}")
-
     unique_id = str(uuid.uuid4())
     feedback = None
-    file_path = None
 
     if "audio_data" in request.files:
         audio_file = request.files["audio_data"]
@@ -48,7 +59,10 @@ def process_audio():
         response_filename = f"response_{unique_id}.wav"
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
-        file_path = f"/static/{response_filename}"
+
+    # Get the latest file path from the static folder
+    file_path = get_latest_file_path(app.static_folder)
+
     response_data = {"feedback": feedback, "file_path": file_path}
     logging.info(f"Response data: {response_data}")
     return jsonify(response_data)
