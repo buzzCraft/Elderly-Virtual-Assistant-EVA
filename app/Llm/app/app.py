@@ -42,7 +42,9 @@ LOG_FILE_PATH = "/llm-app/chat_logs.txt"
 
 def store_log(log_message, log_type):
     # Determine the class based on log type
-    log_class = "user-input" if log_type == "user" else "chatbot-response"
+    log_class = "log-entry " + (
+        "user-input" if log_type == "user" else "chatbot-response"
+    )
 
     # Create an HTML string with the appropriate class
     html_log_message = f'<div class="{log_class}">{log_message}</div>'
@@ -58,7 +60,7 @@ def generate_response():
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
-        store_log(f"User Input: {user_input}", "user")  # Store user input log
+        store_log(f"User: {user_input}", "user")  # Store user input log
 
         # Check if the user input is empty
         if not user_input:
@@ -80,9 +82,7 @@ def generate_response():
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
         logging.info(f"Generated response: {chatbot_response}")
-        store_log(
-            f"Chatbot Response: {chatbot_response}", "chatbot"
-        )  # Store chatbot response log
+        store_log(f"EVA: {chatbot_response}", "chatbot")  # Store chatbot response log
 
         # Notify voiceGen of the response
         voice_response = requests.post(

@@ -104,7 +104,7 @@ button i {
     border-radius: 8px;
     padding: 15px;
     margin: 20px auto;
-    max-width: 800px;
+    max-width: 500px;
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
@@ -128,42 +128,49 @@ button i {
     flex-direction: column;
 }
 
+/* Base styles for log entries */
+.log-entry {
+    clear: both;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
 /* User Input Style */
 .user-input {
     color: royalblue;
     font-weight: bold;
-    margin-bottom: 5px;
-    align-self: flex-start; /* Align to the left */
-    background-color: #e7f3ff; /* Light blue background */
-    padding: 8px;
+    float: left;
+    clear: left;
+    background-color: #e6f2ff;
     border-radius: 10px;
-    max-width: 70%;
+    padding: 10px;
+    margin-right: 50%; /* Adjust as needed */
 }
 
 /* Chatbot Response Style */
 .chatbot-response {
     color: #4a4a4a;
-    margin-bottom: 15px;
-    align-self: flex-end; /* Align to the right */
-    background-color: #f0f0f0; /* Light grey background */
-    padding: 8px;
+    float: right;
+    clear: right;
+    background-color: #f2f2f2;
     border-radius: 10px;
-    max-width: 70%;
+    padding: 10px;
+    margin-left: 50%; /* Adjust as needed */
+}
+
+/* Clearfix */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    .log-container {
-        width: 100%;
-        padding: 10px;
-    }
-
-    #logs {
-        height: 300px;
-    }
-
     .user-input, .chatbot-response {
-        max-width: 100%;
+        float: none;
+        margin-right: 0;
+        margin-left: 0;
     }
 }
 
