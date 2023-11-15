@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-
+from flask_cors import CORS
 import requests
 import torch
 from dotenv import load_dotenv
@@ -29,6 +29,7 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
 # Initialize the Flask app
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/")
