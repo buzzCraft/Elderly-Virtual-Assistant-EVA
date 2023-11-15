@@ -87,16 +87,15 @@ def generate_response():
         # Generate the response
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
-        chatbot_response = re.sub(
-            r"^\w+EVA:\s*", "", chatbot_response
-        )  # Remove the EVA and AI prefix
+        chatbot_response = re.sub(r"^(EVA|AI)\s*:\s*", "", chatbot_response)
+        # Remove the EVA and AI prefix
         chatbot_response = re.sub(r"^\w+AI:\s*", "", chatbot_response)
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
         )  # Remove the *emphasis*
-        chatbot_response = re.sub(
-            r"[^A-Za-z .]", "", chatbot_response
-        )  # Remove all non-alphabetical characters
+        # chatbot_response = re.sub(
+        #     r"[^A-Za-z .]", "", chatbot_response
+        # )  # Remove all non-alphabetical characters
         chatbot_response = (
             chatbot_response.strip()
         )  # Remove leading and trailing whitespace
