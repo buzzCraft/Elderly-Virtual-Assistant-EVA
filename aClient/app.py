@@ -18,7 +18,7 @@ def index():
 def process_audio():
     unique_id = str(uuid.uuid4())
     feedback = None
-    file_path = None
+    # file_path = None
 
     if "audio_data" in request.files:
         audio_file = request.files["audio_data"]
@@ -40,16 +40,16 @@ def process_audio():
             return jsonify({"error": str(e)}), 500
 
         os.remove(audio_filename)  # Cleanup after successful transcription
-
-    if "response_file" in request.files:
-        response_file = request.files["response_file"]
+    response_file = request.files.get("response_file")
+    if response_file:
+        # response_file = request.files["response_file"]
         response_filename = f"response_{unique_id}.wav"
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
         file_path = f"/static/{response_filename}"
-    response_data = {"feedback": feedback, "file_path": file_path}
-    logging.info(f"Response data: {response_data}")
-    return jsonify(response_data)
+        response_data = {"feedback": feedback, "file_path": file_path}
+        logging.info(f"Response data: {response_data}")
+        return jsonify(response_data)
 
 
 if __name__ == "__main__":
