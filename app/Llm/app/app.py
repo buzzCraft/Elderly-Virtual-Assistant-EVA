@@ -7,6 +7,9 @@ import torch
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from model import initialize_model
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",

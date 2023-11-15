@@ -126,7 +126,7 @@ button i {
     font-size: 14px;
     line-height: 1.6;
     display: flex;
-    flex-direction: column-reverse; /* Newest messages at the bottom */
+    flex-direction: column; /* Newest messages at the bottom */
 }
 
 /* Base styles for log entries */

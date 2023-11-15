@@ -5,6 +5,9 @@ import requests
 import torchaudio
 from flask import Flask, jsonify, request
 import uuid
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
