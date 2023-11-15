@@ -40,6 +40,9 @@ body {
     width: 100%;
     border-radius: 20px;
     overflow: hidden;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .app-header {
@@ -68,9 +71,10 @@ body {
 
 
 #avatar {
-    width: 150%; /* Increase size */
+    max-width: 100%; /* Increase size */
     height: auto;
-    margin-bottom: 10px;
+    margin: 0 auto;
+    display: block;
     transition: transform 0.3s ease; /* Smooth transition for hover effects */
 }
 #avatar:hover {
@@ -128,7 +132,7 @@ button i {
     border-radius: 10px;
     padding: 20px;
     margin: 30px auto;
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -203,7 +207,7 @@ button i {
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .user-input, .chatbot-response {
         float: none;
         margin-right: 0;
@@ -298,7 +302,7 @@ button i {
     background: #555;
 }
 /* Responsive Design Adjustments */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .tablet {
         width: 90%; /* Adjust for smaller screens */
     }
