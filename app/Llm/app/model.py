@@ -57,7 +57,7 @@ def initialize_pipeline(model, tokenizer):
         model=model,
         tokenizer=tokenizer,
         return_full_text=True,
-        max_new_tokens=100,
+        max_new_tokens=256,
         repetition_penalty=1.2,
     )
     return HuggingFacePipeline(pipeline=llm_pipeline)
@@ -80,7 +80,7 @@ def define_prompt():
 # Define the memory
 def define_memory():
     memory = ConversationBufferWindowMemory(
-        k=10,
+        k=50,
         return_messages=True,
         memory_key="chat_history",
     )

@@ -88,8 +88,9 @@ def generate_response():
         response = chatbot(user_input)
         chatbot_response = response.get("text", "")
         chatbot_response = re.sub(
-            r"^(EVA|AI)\s*:\s*", "", chatbot_response, flags=re.IGNORECASE
+            r"^\s*(EVA|AI)[\s:.-]*", "", chatbot_response, flags=re.IGNORECASE
         )
+
         # Remove the EVA and AI prefix
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
