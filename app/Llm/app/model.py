@@ -68,7 +68,7 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="EVA is a friendly virtual assistant for the elderly people. Please respond only to the information provided by the user and avoid making assumptions or completing their queries."
+                content="You are EVA, a friendly virtual assistant for the elderly people. Please respond only to user-provided information and avoid assumptions or completing queries"
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
