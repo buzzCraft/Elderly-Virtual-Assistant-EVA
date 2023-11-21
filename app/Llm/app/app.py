@@ -110,10 +110,12 @@ def generate_response():
         chatbot_response = re.sub(
             r"\*.*?\*", "", chatbot_response
         )  # Remove the *emphasis*
-        response = chatbot_response.split(":")
-        # chatbot_response = response[1].strip()
-        processed_response = [resp.strip() for resp in response[1:]]
-        chatbot_response = " ".join(processed_response)
+        if ":" in chatbot_response:
+            response_parts = chatbot_response.split(":")
+            processed_response = [resp.strip() for resp in response_parts[1:]]
+            chatbot_response = " ".join(processed_response)
+        else:
+            chatbot_response = chatbot_response.strip()
 
         logging.info(f"Generated response: {chatbot_response}")
         store_log(f"{chatbot_response}", "Eva")  # Store chatbot response log
