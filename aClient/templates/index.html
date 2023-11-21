@@ -206,6 +206,9 @@
         var selectedLanguage = document.getElementById("language-select").value;
 
         console.log("Settings Saved:", userName, userHobbies, selectedLanguage);
+        document.getElementById("settings-toggle").classList.toggle("show");
+        settingsPanel.classList.toggle("hide");
+
 
     }
 
