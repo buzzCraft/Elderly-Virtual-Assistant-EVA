@@ -4,13 +4,22 @@ import requests
 import uuid
 import logging
 import os
+import atexit
 
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
+
+def delete_response_files(directory):
+    for filename in os.listdir(directory):
+        if filename.endswith(".wav") and filename.startswith("response_"):
+            os.remove(os.path.join(directory, filename))
+
+
 app = Flask(__name__)
 CORS(app)
 logging.basicConfig(level=logging.DEBUG)
+delete_response_files(app.static_folder)
 
 
 def get_latest_file_path(directory):
@@ -74,4 +83,5 @@ def process_audio():
 
 
 if __name__ == "__main__":
+    atexit.register(delete_response_files, app.static_folder)
     app.run(host="0.0.0.0", port=4999)
