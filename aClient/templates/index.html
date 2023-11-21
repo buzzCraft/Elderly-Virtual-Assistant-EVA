@@ -206,17 +206,16 @@
         var selectedLanguage = document.getElementById("language-select").value;
 
         console.log("Settings Saved:", userName, userHobbies, selectedLanguage);
-        document.getElementById("settings-toggle").classList.toggle("show");
-        settingsPanel.classList.toggle("hide");
-
-
+        var settingsPanel = document.getElementById("settings-panel");
+        settingsPanel.classList.remove("show");
+        document.getElementById("settings-toggle").classList.remove("hide");
     }
 
     // JavaScript for Settings Panel Toggle
     document.getElementById("settings-toggle").addEventListener("click", function() {
         var settingsPanel = document.getElementById("settings-panel");
         settingsPanel.classList.toggle("show");
-        document.getElementById("settings-toggle").classList.toggle("hide");
+        this.classList.add("hide");
 
     });
 
