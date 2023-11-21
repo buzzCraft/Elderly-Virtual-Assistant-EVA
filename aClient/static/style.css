@@ -509,6 +509,11 @@ input:checked + .slider:before {
     border-radius: 5px; /* Added border-radius for rounded edges */
     transition: opacity 0.3s ease-in-out;
 
+
+}
+.settings-toggle i {
+    font-size: 24px;
+    color: white;
 }
 
 .settings-panel.show {
