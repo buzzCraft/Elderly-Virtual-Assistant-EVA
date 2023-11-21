@@ -507,6 +507,8 @@ input:checked + .slider:before {
     font-size: 16px;
     z-index: 1001;
     border-radius: 5px; /* Added border-radius for rounded edges */
+    transition: opacity 0.3s ease-in-out;
+
 }
 
 .settings-panel.show {
@@ -537,4 +539,11 @@ input:checked + .slider:before {
 
 .settings-panel button:hover {
     background-color: #218838; /* Slightly darker green on hover */
+}
+.hide {
+    display: none;
+}
+.settings-toggle.hide {
+    opacity: 0;
+    pointer-events: none;
 }
