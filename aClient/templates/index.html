@@ -22,6 +22,19 @@
     </div>
     <div class="tablet-home-button"></div>
 </div>
+<button id="settings-toggle" class="settings-toggle">Settings</button>
+<div class="settings-panel" id="settings-panel">
+    <h3>Settings</h3>
+    <input type="text" id="user-name" placeholder="Your Name">
+    <input type="text" id="user-hobbies" placeholder="Your Hobbies">
+    <select id="language-select">
+        <option value="en">English</option>
+        <option value="es">Norwegian</option>
+        <!-- Add more languages as needed -->
+    </select>
+    <button id="save-settings" onclick="saveSettings()">Save Settings</button>
+</div>
+
 <audio id="audio-playback" controls hidden></audio>
 <audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
 <div class="log-container">
@@ -186,6 +199,20 @@
     window.onload = function () {
         fetchAndDisplayLogs(); // Fetch logs and then scroll to bottom
     };
+
+    function saveSettings() {
+        var userName = document.getElementById("user-name").value;
+        var userHobbies = document.getElementById("user-hobbies").value;
+        var selectedLanguage = document.getElementById("language-select").value;
+
+        console.log("Settings Saved:", userName, userHobbies, selectedLanguage);
+    }
+
+    // JavaScript for Settings Panel Toggle
+    document.getElementById("settings-toggle").addEventListener("click", function() {
+        var settingsPanel = document.getElementById("settings-panel");
+        settingsPanel.classList.toggle("show");
+    });
 
     function updateAvatarState(state) {
         const avatarImg = document.getElementById('avatar');
