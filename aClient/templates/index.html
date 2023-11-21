@@ -212,7 +212,7 @@
         // Sending an AJAX POST request to Flask
         $.ajax({
             type: "POST",
-            url: "/save_settings",  // Flask route
+            url: "http://record:5002/save_settings",  // Flask route
             contentType: "application/json",
             data: JSON.stringify({
                 userName: userName,
