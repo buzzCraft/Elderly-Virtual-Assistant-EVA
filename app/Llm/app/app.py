@@ -43,7 +43,7 @@ def test():
 
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
-MAX_LOG_ENTRIES: int = 1000
+MAX_LOG_ENTRIES: int = 100
 
 
 def should_clear_logs():

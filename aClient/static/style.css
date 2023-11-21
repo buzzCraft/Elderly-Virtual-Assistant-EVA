@@ -483,20 +483,21 @@ input:checked + .slider:before {
 
 .settings-panel {
     position: fixed;
-    right: 0;
+    left: 0; /* Changed from right to left */
     top: 0;
     width: 300px;
-    transform: translateY(-100%);
+    transform: translateX(-100%); /* Changed from translateY to translateX */
     transition: transform 0.3s ease-in-out;
     background-color: #f9f9f9;
-    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd; /* Changed from border-left to border-right */
     z-index: 1000;
     padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Added shadow for better visibility */
 }
 
 .settings-toggle {
     position: fixed;
-    right: 0;
+    left: 10px; /* Changed from right to left and adjusted position */
     top: 50px;
     cursor: pointer;
     background-color: #007bff;
@@ -505,8 +506,35 @@ input:checked + .slider:before {
     padding: 10px 20px;
     font-size: 16px;
     z-index: 1001;
+    border-radius: 5px; /* Added border-radius for rounded edges */
 }
 
 .settings-panel.show {
-    transform: translateY(0);
+    transform: translateX(0); /* Changed from translateY to translateX */
+}
+
+/* Style for input and select fields */
+.settings-panel input[type="text"],
+.settings-panel select {
+    width: calc(100% - 40px); /* Full width minus padding */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Rounded edges for inputs */
+    box-sizing: border-box; /* Better width management */
+}
+
+.settings-panel button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #28a745; /* Green color for the button */
+    color: white;
+    text-align: center;
+    border-radius: 4px; /* Rounded edges for button */
+    cursor: pointer;
+}
+
+.settings-panel button:hover {
+    background-color: #218838; /* Slightly darker green on hover */
 }
