@@ -5,7 +5,7 @@ from flask_cors import CORS
 import requests
 import torch
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 from model import initialize_model
 import warnings
 
@@ -34,6 +34,7 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
 # Initialize the Flask app
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Generates a random key
 CORS(app)
 
 
@@ -44,6 +45,9 @@ def test():
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
 MAX_LOG_ENTRIES: int = 100
+userName = None
+userHobbies = None
+selectedLanguage = None
 
 
 def should_clear_logs():
@@ -72,13 +76,29 @@ def store_log(log_message, log_type):
         file.write(html_log_message + "\n")
 
 
+@app.route("/save_settings", methods=["POST"])
+def save_settings():
+    data = request.json
+    session["userName"] = data.get("userName")
+    session["userHobbies"] = data.get("userHobbies")
+    session["selectedLanguage"] = data.get("selectedLanguage")
+
+    logging.info(
+        f"Received settings - Name: {session['userName']}, Hobbies: {session['userHobbies']}, Language: {session['selectedLanguage']}"
+    )
+
+    return jsonify({"status": "Settings saved successfully"})
+
+
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
+    user_name = session.get("userName", "Unknown")
+
     try:
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
-        store_log(f"{user_input}", "user")  # Store user input log
+        store_log(f"{user_input}", user_name)  # Store user input log
 
         # Check if the user input is empty
         if not user_input:

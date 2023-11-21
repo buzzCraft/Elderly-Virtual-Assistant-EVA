@@ -29,7 +29,7 @@
     <input type="text" id="user-hobbies" placeholder="Your Hobbies">
     <select id="language-select">
         <option value="en">English</option>
-        <option value="es">Norwegian</option>
+        <option value="nor">Norwegian</option>
         <!-- Add more languages as needed -->
     </select>
     <button id="save-settings" onclick="saveSettings()">Save Settings</button>
@@ -209,10 +209,28 @@
         var settingsPanel = document.getElementById("settings-panel");
         settingsPanel.classList.remove("show");
         document.getElementById("settings-toggle").classList.remove("hide");
+        // Sending an AJAX POST request to Flask
+        $.ajax({
+            type: "POST",
+            url: "/save_settings",  // Flask route
+            contentType: "application/json",
+            data: JSON.stringify({
+                userName: userName,
+                userHobbies: userHobbies,
+                selectedLanguage: selectedLanguage
+            }),
+            dataType: "json",
+            success: function (response) {
+                console.log("Settings saved successfully:", response);
+            },
+            error: function (error) {
+                console.error("Error saving settings:", error);
+            }
+        });
     }
 
     // JavaScript for Settings Panel Toggle
-    document.getElementById("settings-toggle").addEventListener("click", function() {
+    document.getElementById("settings-toggle").addEventListener("click", function () {
         var settingsPanel = document.getElementById("settings-panel");
         settingsPanel.classList.toggle("show");
         this.classList.add("hide");
