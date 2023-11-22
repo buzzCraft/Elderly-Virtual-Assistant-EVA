@@ -91,7 +91,16 @@ def save_settings():
 
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
-    # Get the user name from the session
+    data = request.json
+    # Update user settings if provided in the request
+    if all(k in data for k in ["userName", "userHobbies", "selectedLanguage"]):
+        session["userName"] = data["userName"]
+        session["userHobbies"] = data["userHobbies"]
+        session["selectedLanguage"] = data["selectedLanguage"]
+        logging.info(
+            f"Updated settings - Name: {session['userName']}, Hobbies: {session['userHobbies']}, Language: {session['selectedLanguage']}"
+        )
+
     user_name = session.get("userName", "User")
     logging.info(f"Received user name: {user_name}")
 
