@@ -37,7 +37,7 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
-app.config["SESSION_PERMANENT"] = False
+app.config["PERMANENT_SESSION_LIFETIME"] = 240  # Session Lifetime
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 CORS(app, supports_credentials=True)
@@ -49,7 +49,7 @@ def test():
 
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
-MAX_LOG_ENTRIES: int = 100
+MAX_LOG_ENTRIES: int = 50
 
 
 def should_clear_logs():
@@ -81,7 +81,6 @@ def store_log(log_message, log_type):
 @app.route("/save_settings", methods=["POST"])
 def save_settings():
     data = request.json
-    logging.info(f"Received settings: {data}")
     session["userName"] = data.get("userName")
     session["userHobbies"] = data.get("userHobbies")
     session["selectedLanguage"] = data.get("selectedLanguage")
