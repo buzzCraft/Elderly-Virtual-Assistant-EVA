@@ -84,7 +84,7 @@ def save_settings():
     session["userName"] = data.get("userName")
     session["userHobbies"] = data.get("userHobbies")
     session["selectedLanguage"] = data.get("selectedLanguage")
-
+    session.modified = True
     logging.info(
         f"Received settings - Name: {session['userName']}, Hobbies: {session['userHobbies']}, Language: {session['selectedLanguage']}"
     )
@@ -95,7 +95,6 @@ def save_settings():
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
     # Get the user name from the session
-    save_settings()
     user_name = session.get("userName", "User")
     logging.info(f"Received user name: {user_name}")
 
