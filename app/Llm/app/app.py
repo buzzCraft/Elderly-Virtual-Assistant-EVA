@@ -93,6 +93,7 @@ def save_settings():
 def generate_response():
     # Get the user name from the session
     user_name = session.get("userName", "User")
+    logging.info(f"Received user name: {user_name}")
 
     try:
         # Get the request data

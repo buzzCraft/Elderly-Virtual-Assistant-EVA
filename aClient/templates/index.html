@@ -220,6 +220,9 @@
                 selectedLanguage: selectedLanguage
             }),
             dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (response) {
                 console.log("Settings saved successfully:", response);
             },
