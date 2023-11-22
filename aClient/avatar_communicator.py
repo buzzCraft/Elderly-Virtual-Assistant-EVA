@@ -19,6 +19,8 @@ logging.basicConfig(
 
 load_dotenv(".env")
 
+print(os.urandom(24))
+
 # Constants
 FORMAT = pyaudio.paInt16
 CHANNELS = 2

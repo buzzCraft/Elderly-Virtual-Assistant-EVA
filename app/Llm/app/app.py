@@ -28,14 +28,15 @@ load_dotenv(".env")
 MODEL_NAME = "meta-llama/Llama-2-7b-chat-hf"
 SAVE_DIRECTORY = "/llm-app/llama_models/"
 HF_KEY = os.getenv("HF_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Initialize the chatbot
 chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 
 # Initialize the Flask app
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # Generates a random key
-CORS(app)
+app.secret_key = SECRET_KEY
+CORS(app, supports_credentials=True)
 
 
 @app.route("/")
