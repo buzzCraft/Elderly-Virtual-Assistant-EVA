@@ -91,7 +91,8 @@ def save_settings():
 
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
-    user_name = session["userName"] if "userName" in session else "User"
+    # Get the user name from the session
+    user_name = session.get("userName", "User")
 
     try:
         # Get the request data
