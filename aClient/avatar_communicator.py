@@ -20,7 +20,9 @@ logging.basicConfig(
 load_dotenv(".env")
 
 print(os.urandom(24))
-
+key = b"\x93iIz\x8d\x82\xcc\x14\x05]\x93\xef\x8b|'5\xb8\xee\x9eiL>\x19j"
+hex_key = key.hex()
+print(hex_key)
 # Constants
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
