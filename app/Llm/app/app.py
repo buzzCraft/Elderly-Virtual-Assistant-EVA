@@ -37,7 +37,7 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
-app.config["PERMANENT_SESSION_LIFETIME"] = 240  # Session Lifetime
+app.config["PERMANENT_SESSION_LIFETIME"] = 3600  # Session expires after 1 hour
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 CORS(app, supports_credentials=True)
