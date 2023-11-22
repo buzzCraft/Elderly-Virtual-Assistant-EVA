@@ -9,6 +9,8 @@ from flask import Flask, jsonify, request, session
 from model import initialize_model
 import warnings
 
+load_dotenv(".env")
+
 warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
@@ -21,8 +23,6 @@ logging.basicConfig(
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-load_dotenv(".env")
 
 # CONSTANTS
 MODEL_NAME = "meta-llama/Llama-2-7b-chat-hf"
@@ -46,9 +46,6 @@ def test():
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
 MAX_LOG_ENTRIES: int = 100
-userName = None
-userHobbies = None
-selectedLanguage = None
 
 
 def should_clear_logs():
