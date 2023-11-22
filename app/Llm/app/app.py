@@ -6,6 +6,7 @@ import requests
 import torch
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, session
+from flask_session import Session
 from model import initialize_model
 import warnings
 
@@ -36,6 +37,9 @@ chatbot = initialize_model(MODEL_NAME, HF_KEY, SAVE_DIRECTORY)
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 CORS(app, supports_credentials=True)
 
 
@@ -91,16 +95,7 @@ def save_settings():
 
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
-    data = request.json
-    # Update user settings if provided in the request
-    if all(k in data for k in ["userName", "userHobbies", "selectedLanguage"]):
-        session["userName"] = data["userName"]
-        session["userHobbies"] = data["userHobbies"]
-        session["selectedLanguage"] = data["selectedLanguage"]
-        logging.info(
-            f"Updated settings - Name: {session['userName']}, Hobbies: {session['userHobbies']}, Language: {session['selectedLanguage']}"
-        )
-
+    # Get the user name from the session
     user_name = session.get("userName", "User")
     logging.info(f"Received user name: {user_name}")
 

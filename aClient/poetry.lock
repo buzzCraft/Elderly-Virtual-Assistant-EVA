@@ -12,6 +12,17 @@ files = [
 ]
 
 [[package]]
+name = "cachelib"
+version = "0.10.2"
+description = "A collection of cache libraries in the same API interface."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "cachelib-0.10.2-py3-none-any.whl", hash = "sha256:42d49f2fad9310dd946d7be73d46776bcd4d5fde4f49ad210cfdd447fbdfc346"},
+    {file = "cachelib-0.10.2.tar.gz", hash = "sha256:593faeee62a7c037d50fc835617a01b887503f972fb52b188ae7e50e9cb69740"},
+]
+
+[[package]]
 name = "click"
 version = "8.1.7"
 description = "Composable command line interface toolkit"
@@ -71,6 +82,21 @@ files = [
 
 [package.dependencies]
 Flask = ">=0.9"
+
+[[package]]
+name = "flask-session"
+version = "0.5.0"
+description = "Server-side session support for Flask"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "Flask-Session-0.5.0.tar.gz", hash = "sha256:190875e6aebf2953c6803d42379ef3b934bc209ef8ef006f97aecb08f5aaeb86"},
+    {file = "flask_session-0.5.0-py3-none-any.whl", hash = "sha256:1619bcbc16f04f64e90f8e0b17145ba5c9700090bb1294e889956c1282d58631"},
+]
+
+[package.dependencies]
+cachelib = "*"
+flask = ">=2.2"
 
 [[package]]
 name = "itsdangerous"
@@ -199,4 +225,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1f6ce29fdaac0477333e2f5d044b70e31aacb66770b377ed563ab6d09f9fcaf5"
+content-hash = "0cc2430feec74825b219431d98f81ae417f13b6e747e4e779116173e60d23017"
