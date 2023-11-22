@@ -92,6 +92,9 @@ def save_settings():
     return jsonify({"status": "Settings saved successfully"})
 
 
+print(f'Session username: {session.get("userName")}')
+
+
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
     # Get the user name from the session
