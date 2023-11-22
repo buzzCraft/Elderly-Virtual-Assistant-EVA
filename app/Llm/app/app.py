@@ -80,6 +80,7 @@ def store_log(log_message, log_type):
 @app.route("/save_settings", methods=["POST"])
 def save_settings():
     data = request.json
+    logging.info(f"Received settings: {data}")
     session["userName"] = data.get("userName")
     session["userHobbies"] = data.get("userHobbies")
     session["selectedLanguage"] = data.get("selectedLanguage")
