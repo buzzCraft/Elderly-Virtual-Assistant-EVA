@@ -50,6 +50,7 @@ def test():
 
 LOG_FILE_PATH = "/llm-app/chat_logs.txt"
 MAX_LOG_ENTRIES: int = 50
+username = None
 
 
 def should_clear_logs():
@@ -80,7 +81,9 @@ def store_log(log_message, log_type):
 
 @app.route("/save_settings", methods=["POST"])
 def save_settings():
+    global username
     data = request.json
+    username = data.get("userName")
     session["userName"] = data.get("userName")
     session["userHobbies"] = data.get("userHobbies")
     session["selectedLanguage"] = data.get("selectedLanguage")
@@ -95,7 +98,8 @@ def save_settings():
 @app.route("/generate_response", methods=["POST"])
 def generate_response():
     # Get the user name from the session
-    user_name = session.get("userName", "User")
+    global username
+    user_name = username
     logging.info(f"Received user name: {user_name}")
 
     try:
