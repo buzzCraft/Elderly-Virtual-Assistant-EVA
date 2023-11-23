@@ -202,29 +202,13 @@
         });
     }
 
-    let lastLogCount = 0;
-
     function fetchAndDisplayLogs() {
         $.ajax({
             type: "GET",
             url: "http://localhost:7002/get_chat_logs",
             success: function (logs) {
-                const logsContainer = $('#logs');
-                const isScrolledToBottom = logsContainer[0].scrollHeight - logsContainer[0].scrollTop === logsContainer[0].clientHeight;
-
-                const newLogs = $(logs);
-                if (newLogs.length > lastLogCount) {
-                    for (let i = lastLogCount; i < newLogs.length; i++) {
-                        $(newLogs[i]).hide().appendTo(logsContainer).fadeIn(1000);
-                    }
-                }
-
-                lastLogCount = newLogs.length;
-
-                // Only scroll to bottom if user is already at the bottom
-                if (isScrolledToBottom) {
-                    logsContainer.scrollTop(logsContainer[0].scrollHeight);
-                }
+                $('#logs').html(logs); // Directly insert HTML logs
+                scrollToBottom();
             },
             error: function (error) {
                 console.error("Error fetching logs:", error);
@@ -233,7 +217,6 @@
     }
 
     setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
-
     function addLogEntry(logMessage, isUserInput) {
         var logContainer = document.getElementById("logs");
         var newLogEntry = document.createElement("div");
