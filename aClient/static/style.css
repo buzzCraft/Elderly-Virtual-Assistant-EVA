@@ -564,7 +564,20 @@ input:checked + .slider:before {
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     overflow: hidden;
 }
-
+#toggle-view {
+    position: fixed;
+    right: 10px; /* Positioned at the top right */
+    top: 10px;
+    background-color: #007bff; /* Consistent button color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1002; /* Ensure it's above other elements */
+    transition: background-color 0.3s ease;
+}
 #video-player {
     width: 100%;
     height: auto;
