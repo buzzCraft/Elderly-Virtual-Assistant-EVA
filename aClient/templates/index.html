@@ -12,7 +12,7 @@
 <div class="tablet" id="tablet-view">
     <div class="tablet-screen">
         <div class="app-header">EVA: Elderly Virtual Assistant</div>
-        <div class="avatar-container">
+        <div class="avatar-container" id="avatar-container">
             <img id="avatar" src="/static/welcome.gif" alt="Avatar">
             <div class="control-panel">
                 <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
@@ -20,17 +20,18 @@
                 <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
             </div>
         </div>
+        <div class="screen" id="screen-view" style="display: none;">
+            <div class="screen-content">
+                <video id="video-player" controls>
+                    <source src="/static/samplevideo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
     </div>
     <div class="tablet-home-button"></div>
 </div>
-<div class="screen" id="screen-view" style="display: none;">
-    <div class="screen-content">
-        <video id="video-player" controls>
-            <source src="/static/samplevideo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-</div>
+
 <button id="settings-toggle" class="settings-toggle"><i class="fas fa-cog"></i></button>
 <div class="settings-panel" id="settings-panel">
     <h3>Settings</h3>
@@ -139,18 +140,18 @@
     });
 
     function toggleView() {
-        var tabletView = document.getElementById("tablet-view");
+        var avatarContainer = document.getElementById("avatar-container");
         var screenView = document.getElementById("screen-view");
         var toggleButton = document.getElementById("toggle-view");
 
-        if (tabletView.style.display === "none") {
-            tabletView.style.display = "block";
+        if (avatarContainer.style.display === "none") {
+            avatarContainer.style.display = "block";
             screenView.style.display = "none";
             toggleButton.textContent = "Switch to Screen View";
         } else {
-            tabletView.style.display = "none";
+            avatarContainer.style.display = "none";
             screenView.style.display = "block";
-            toggleButton.textContent = "Switch to Tablet View";
+            toggleButton.textContent = "Switch to Avatar View";
         }
     }
 
