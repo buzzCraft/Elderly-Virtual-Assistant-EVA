@@ -559,52 +559,49 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
-    border: 3px solid #ddd; /* Consistent with avatar container */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Consistent shadow */
-    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Consistent gradient */
+    border: 3px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
     overflow: hidden;
 }
 
 #video-player {
-    width: 100%; /* Full width within the container */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 10px; /* Rounded corners for the video player */
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
 }
 
-/* Toggle View Button Styling */
-#toggle-view {
-    position: fixed;
-    right: 10px; /* Positioned at the top right */
-    top: 10px;
-    background-color: #007bff; /* Consistent button color */
+/* Styling for control buttons on the screen view */
+.screen .control-panel {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px; /* Space above the buttons */
+}
+
+/* Common styling for buttons in both views */
+.control-panel button {
+    background-color: #4CAF50;
     color: white;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
-    z-index: 1002; /* Ensure it's above other elements */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 20px;
 }
 
-#toggle-view:hover {
-    background-color: #0056b3; /* Slightly darker on hover */
+.control-panel button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
 }
 
-/* Adjustments for Tablet and Screen View */
-.tablet-screen {
-    min-height: 500px; /* Minimum height to accommodate video */
+.control-panel button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: default;
 }
 
-/* Responsive Design for Video Player */
-@media (max-width: 500px) {
-    .tablet {
-        width: 90%; /* Adjust for smaller screens */
-    }
-
-    .screen, .avatar-container {
-        width: 100%; /* Full width for smaller screens */
-    }
+.control-panel button i {
+    pointer-events: none;
 }
-
