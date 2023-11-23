@@ -62,7 +62,7 @@ def run_inference():
         # Send the video file to the client's receive_response endpoint
         try:
             with open(latest_video_path, "rb") as video_file:
-                files = {"response_file": video_file}
+                files = {"video_data": video_file}
                 response = requests.post(
                     CLIENT_RECEIVE_ENDPOINT, files=files, timeout=60
                 )
