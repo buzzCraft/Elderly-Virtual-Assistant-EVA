@@ -33,7 +33,6 @@ silero_model, _ = torch.hub.load(
 device = "cuda" if torch.cuda.is_available() else "cpu"
 silero_model.to(device)
 
-
 CLIENT_RECEIVE_ENDPOINT = "http://record:4999/process_audio"
 
 
@@ -70,16 +69,31 @@ def generate_audio():
     unique_output_filename = generate_unique_filename()
     output_path = os.path.join("/text-to-voice-app/", unique_output_filename)
     torchaudio.save(output_path, waveform.unsqueeze(0).cpu(), sample_rate)
-
-    # Send the audio file to the client's receive_response endpoint
-    try:
-        with open(output_path, "rb") as audio_file:
-            files = {"response_file": audio_file}
-            response = requests.post(CLIENT_RECEIVE_ENDPOINT, files=files, timeout=60)
-            response.raise_for_status()
-            logging.info(f"Sent {unique_output_filename} to client successfully.")
-    except requests.RequestException as e:
-        logging.error(f"Error occurred while sending audio to client: {e}")
+    video_generator = False
+    if video_generator:
+        # """
+        try:
+            with open(output_path, "rb") as f:
+                files = {"VoiceFile": (unique_output_filename, f)}
+                video_response = requests.post(
+                    "http://voicetovideo:5005/receive_voice", files=files
+                )
+                video_status = video_response.json().get("status", "")
+            logging.info(f"VideoGen status: {video_status}")
+        except Exception as e:
+            logging.error(f"Error occurred while sending audio to VideoGen: {e}")
+    # """
+    else:
+        try:
+            with open(output_path, "rb") as audio_file:
+                files = {"response_file": audio_file}
+                response = requests.post(
+                    CLIENT_RECEIVE_ENDPOINT, files=files, timeout=60
+                )
+                response.raise_for_status()
+                logging.info(f"Sent {unique_output_filename} to client successfully.")
+        except requests.RequestException as e:
+            logging.error(f"Error occurred while sending audio to client: {e}")
 
     return jsonify(
         {

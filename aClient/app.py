@@ -74,6 +74,11 @@ def process_audio():
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
 
+    if "video_data" in request.files:
+        video_file = request.files["video_data"]
+        video_filename = f"response_video_{unique_id}.mp4"
+        video_file.save(os.path.join(app.static_folder, video_filename))
+
     # Get the latest file path from the static folder
     file_path = get_latest_file_path(app.static_folder)
 

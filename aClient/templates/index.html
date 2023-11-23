@@ -165,9 +165,10 @@
     }
 
 
-    function sendAudioToServer(audioBlob) {
+    // Function to send media (audio/video) to the server
+    function sendAudioToServer(mediaBlob, mediaType) {
         const formData = new FormData();
-        formData.append("audio_data", audioBlob);
+        formData.append(mediaType === "video" ? "video_data" : "audio_data", mediaBlob);
 
         $.ajax({
             type: "POST",
@@ -176,11 +177,13 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log("Full AJAX response:", response);
-                if (response.file_path) {
+                if (mediaType === "video") {
+                    playVideo(response.file_path);
+                } else {
+                    // Handle audio-specific logic...
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
-                    console.log("File path:", response.file_path);
+                    console.log("Audio file path:", response.file_path);
 
                     // Change avatar to talking state and play the audio
                     updateAvatarState('talking');
@@ -191,16 +194,40 @@
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
-                } else {
-                    console.error("No file path in response");
                 }
             },
             error: function (error) {
-                console.error("Error in AJAX request:", error);
-                updateAvatarState('idle');
+                console.error("Error uploading media:", error);
             }
         });
     }
+
+    // Function to play video
+    function playVideo(videoPath) {
+        const videoPlayer = document.getElementById("video-player");
+        videoPlayer.src = videoPath;
+        videoPlayer.load();
+        videoPlayer.play();
+    }
+
+    // Function to check for new video
+    function checkForNewVideo() {
+        $.ajax({
+            type: "GET",
+            url: "/process_media",
+            success: function (response) {
+                if (response.file_path) {
+                    playVideo(response.file_path);
+                }
+            },
+            error: function (error) {
+                console.error("Error fetching new video:", error);
+            }
+        });
+    }
+
+    // Call checkForNewVideo periodically, e.g., every 10 seconds
+    setInterval(checkForNewVideo, 10000);
 
     function fetchAndDisplayLogs() {
         $.ajax({
