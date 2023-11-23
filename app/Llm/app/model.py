@@ -57,7 +57,7 @@ def initialize_pipeline(model, tokenizer):
         model=model,
         tokenizer=tokenizer,
         return_full_text=True,
-        max_new_tokens=256,
+        max_new_tokens=100,
         repetition_penalty=1.2,
     )
     return HuggingFacePipeline(pipeline=llm_pipeline)

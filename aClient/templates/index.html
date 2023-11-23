@@ -8,7 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div class="tablet">
+<button id="toggle-view" onclick="toggleView()">Switch to Screen View</button>
+<div class="tablet" id="tablet-view">
     <div class="tablet-screen">
         <div class="app-header">EVA: Elderly Virtual Assistant</div>
         <div class="avatar-container">
@@ -21,6 +22,14 @@
         </div>
     </div>
     <div class="tablet-home-button"></div>
+</div>
+<div class="screen" id="screen-view" style="display: none;">
+    <div class="screen-content">
+        <video id="video-player" controls>
+            <source src="/static/samplevideo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 </div>
 <button id="settings-toggle" class="settings-toggle"><i class="fas fa-cog"></i></button>
 <div class="settings-panel" id="settings-panel">
@@ -128,6 +137,23 @@
         document.getElementById("stop-recording").disabled = true;
         audioChunks = []; // Reset the audio chunks array
     });
+
+    function toggleView() {
+        var tabletView = document.getElementById("tablet-view");
+        var screenView = document.getElementById("screen-view");
+        var toggleButton = document.getElementById("toggle-view");
+
+        if (tabletView.style.display === "none") {
+            tabletView.style.display = "block";
+            screenView.style.display = "none";
+            toggleButton.textContent = "Switch to Screen View";
+        } else {
+            tabletView.style.display = "none";
+            screenView.style.display = "block";
+            toggleButton.textContent = "Switch to Tablet View";
+        }
+    }
+
 
     function sendAudioToServer(audioBlob) {
         const formData = new FormData();
