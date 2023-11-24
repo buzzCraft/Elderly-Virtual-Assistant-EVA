@@ -168,7 +168,14 @@
             screenView.style.display = "none";
             toggleButton.textContent = "Switch to Screen View";
             currentView = "avatar";
+            stopVideoPlayback(); // Stop any ongoing video playback when switching back to avatar view
         }
+    }
+
+    function stopVideoPlayback() {
+        const videoPlayer = document.getElementById("video-player");
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0; // Optional: Reset video to start
     }
 
 
@@ -223,18 +230,20 @@
 
     // Function to check for new video
     function checkForNewVideo() {
-        $.ajax({
-            type: "GET",
-            url: "/process_audio",
-            success: function (response) {
-                if (response.file_path) {
-                    playVideo(response.file_path);
+        if (currentView === "screen") { // Check for new video only when in screen view
+            $.ajax({
+                type: "GET",
+                url: "/latest_video", // Updated to use the new GET endpoint for fetching latest video
+                success: function (response) {
+                    if (response.file_path) {
+                        playVideo(response.file_path);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching new video:", error);
                 }
-            },
-            error: function (error) {
-                console.error("Error fetching new video:", error);
-            }
-        });
+            });
+        }
     }
 
     // Call checkForNewVideo periodically, e.g., every 10 seconds
