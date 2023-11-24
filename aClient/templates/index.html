@@ -224,24 +224,18 @@
         $.ajax({
             type: "GET",
             url: "http://localhost:7002/get_chat_logs",
-            success: function (data) {
-                const logContainer = document.getElementById("logs");
-                const newLogs = data.split("\n");
+            success: function (logs) {
+                const logContainer = $("#logs");
+                const newLogs = $(logs).filter(".log-entry");
+                const currentLogSize = newLogs.length;
 
-                if (newLogs.length > lastLogSize) {
-                    // Append only new log entries
-                    newLogs.slice(lastLogSize).forEach(logEntry => {
-                        if (logEntry.trim() !== "") {
-                            logContainer.insertAdjacentHTML('beforeend', logEntry);
-                        }
-                    });
+                if (currentLogSize > lastLogSize) {
+                    // Append only the new log entries
+                    newLogs.slice(lastLogSize).appendTo(logContainer);
+                    lastLogSize = currentLogSize;
 
-                    lastLogSize = newLogs.length; // Update the last log size
-
-                    // Scroll to bottom only if the user is already near the bottom
-                    if (logContainer.scrollHeight - logContainer.scrollTop - logContainer.clientHeight < 50) {
-                        logContainer.scrollTop = logContainer.scrollHeight;
-                    }
+                    // Scroll to bottom
+                    scrollToBottom();
                 }
             },
             error: function (error) {
@@ -252,6 +246,13 @@
 
     setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
 
+    function scrollToBottom() {
+        var logContainer = document.getElementById("logs");
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+
+    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
 
     function addLogEntry(logMessage, isUserInput) {
         var logContainer = document.getElementById("logs");
@@ -263,10 +264,6 @@
         scrollToBottom();
     }
 
-    function scrollToBottom() {
-        var logContainer = document.getElementById("logs");
-        logContainer.scrollTop = logContainer.scrollHeight;
-    }
 
     window.onload = function () {
         fetchAndDisplayLogs(); // Fetch logs and then scroll to bottom
