@@ -37,12 +37,27 @@ def get_latest_file_path(directory):
     return f"/static/{latest_file}" if latest_file else None
 
 
+def get_latest_video_path(directory):
+    latest_file = None
+    latest_mod_time = 0
+
+    for filename in os.listdir(directory):
+        if filename.endswith(".mp4") and "response_video_" in filename:
+            file_path = os.path.join(directory, filename)
+            mod_time = os.path.getmtime(file_path)
+            if mod_time > latest_mod_time:
+                latest_mod_time = mod_time
+                latest_file = filename
+
+    return f"/static/{latest_file}" if latest_file else None
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route("/process_audio", methods=["POST"])
+@app.route("/process_media", methods=["POST"])
 def process_audio():
     unique_id = str(uuid.uuid4())
     feedback = None
@@ -73,16 +88,21 @@ def process_audio():
         response_filename = f"response_{unique_id}.wav"
         save_path = os.path.join(app.static_folder, response_filename)
         response_file.save(save_path)
+    # Get the latest file path from the static folder
+    file_path = get_latest_file_path(app.static_folder)
 
     if "video_data" in request.files:
         video_file = request.files["video_data"]
         video_filename = f"response_video_{unique_id}.mp4"
         video_file.save(os.path.join(app.static_folder, video_filename))
 
-    # Get the latest file path from the static folder
-    file_path = get_latest_file_path(app.static_folder)
+    video_path = get_latest_video_path(app.static_folder)
 
-    response_data = {"feedback": feedback, "file_path": file_path}
+    response_data = {
+        "feedback": feedback,
+        "audio_path": file_path,
+        "video_path": video_path,
+    }
     logging.info(f"Response data: {response_data}")
     return jsonify(response_data)
 

@@ -19,7 +19,7 @@ app = Flask(__name__)
 IMG_PATH = "/SadTalker/photos/eva.png"
 RESULT_DIR = "/SadTalker/results"
 CLIENT_RECEIVE_ENDPOINT = (
-    "http://record:4999/process_audio"  # Endpoint to send the video
+    "http://record:4999/process_media"  # Endpoint to send the video
 )
 
 

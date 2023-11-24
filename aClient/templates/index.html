@@ -166,24 +166,22 @@
 
 
     // Function to send media (audio/video) to the server
-    function sendAudioToServer(mediaBlob, mediaType) {
+    function sendMediaToServer(mediaBlob, mediaType) {
         const formData = new FormData();
         formData.append(mediaType === "video" ? "video_data" : "audio_data", mediaBlob);
 
         $.ajax({
             type: "POST",
-            url: "/process_audio",
+            url: "/process_media",
             data: formData,
             processData: false,
             contentType: false,
             success: function (response) {
-                if (mediaType === "video") {
-                    playVideo(response.file_path);
-                } else {
+                if (response.audio_path) {
                     // Handle audio-specific logic...
                     const audioPlayback = document.getElementById("audio-playback");
-                    audioPlayback.src = response.file_path;
-                    console.log("Audio file path:", response.file_path);
+                    audioPlayback.src = response.audio_path;
+                    console.log("Audio file path:", response.audio_path);
 
                     // Change avatar to talking state and play the audio
                     updateAvatarState('talking');
@@ -194,6 +192,10 @@
                         updateAvatarState('idle');
                         document.getElementById("start-recording").disabled = false;
                     };
+                }
+                if (response.video_path) {
+                    // Handle video-specific logic...
+                    playVideo(response.video_path);
                 }
             },
             error: function (error) {
@@ -207,17 +209,17 @@
         const videoPlayer = document.getElementById("video-player");
         videoPlayer.src = videoPath;
         videoPlayer.load();
-        videoPlayer.play();
+        // videoPlayer.play();
     }
 
     // Function to check for new video
     function checkForNewVideo() {
         $.ajax({
-            type: "GET",
-            url: "/process_audio",
+            type: "POST",
+            url: "/process_media",
             success: function (response) {
-                if (response.file_path) {
-                    playVideo(response.file_path);
+                if (response.video_path) {
+                    playVideo(response.video_path);
                 }
             },
             error: function (error) {

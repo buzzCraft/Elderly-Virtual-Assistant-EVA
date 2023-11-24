@@ -33,7 +33,7 @@ silero_model, _ = torch.hub.load(
 device = "cuda" if torch.cuda.is_available() else "cpu"
 silero_model.to(device)
 
-CLIENT_RECEIVE_ENDPOINT = "http://record:4999/process_audio"
+CLIENT_RECEIVE_ENDPOINT = "http://record:4999/process_media"
 
 
 def _get_wave(text):
