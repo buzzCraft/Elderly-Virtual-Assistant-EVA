@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Improved typography */
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -21,6 +21,7 @@ body {
     align-items: center;
     margin: 0 auto;
     position: relative;
+
 }
 
 .tablet:before {
@@ -33,7 +34,7 @@ body {
     height: 5px;
     background-color: #333;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Speaker grille */
 }
 
 .tablet-screen {
@@ -60,21 +61,23 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-    border: 3px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(145deg, #ffffff, #e6e6e6);
-    overflow: hidden;
+    border: 3px solid #ddd; /* Frame around avatar */
+    /*border-radius: 50%; /* Circular frame */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Subtle gradient */
+    overflow: hidden; /* Ensures the circular frame clips the content */
 }
 
+
 #avatar {
-    width: 100%;
+    width: 100%; /* Increase size */
     height: auto;
     margin: 10px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; /* Smooth transition for hover effects */
 }
 
 #avatar:hover {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Slight zoom on hover */
 }
 
 .control-panel {
@@ -117,11 +120,12 @@ button i {
     margin-top: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     position: absolute;
-    bottom: -15px;
+    bottom: -15px; /* Adjust as needed */
     left: 50%;
     transform: translateX(-50%);
 }
 
+/* Log Container Styles */
 .log-container {
     background-color: #f0f0f0;
     border: 1px solid #d0d0d0;
@@ -131,6 +135,7 @@ button i {
     max-width: 500px;
     width: 100%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .log-container h3 {
@@ -140,6 +145,7 @@ button i {
     font-size: 24px;
 }
 
+/* Log Content Style */
 #logs {
     height: 450px;
     overflow-y: auto;
@@ -149,9 +155,10 @@ button i {
     font-size: 14px;
     line-height: 1.6;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Newest messages at the bottom */
 }
 
+/* Base styles for log entries */
 .log-entry {
     padding: 8px;
     margin-bottom: 12px;
@@ -159,51 +166,69 @@ button i {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.user-input, .chatbot-response {
-    position: relative;
-    display: block;
-    max-width: 70%;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    border-radius: 18px;
-    line-height: 1.4;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    animation: slideIn 0.5s ease-out;
-}
-
+/* User Input Style */
 .user-input {
-    background-color: #DCF8C6;
-    align-self: flex-end;
-    border-bottom-right-radius: 5px;
+    color: #003366; /* Darker blue for better readability */
+    background-color: #b8eedf;
+    background-image: linear-gradient(to left, #e6f2ff 50%, transparent 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    border-radius: 15px;
+    padding: 12px;
+    margin-right: 30%;
+    word-wrap: break-word; /* Ensure long texts are wrapped */
+    transition: all 0.5s ease;
+    justify-content: left;
 }
 
-.user-input::after {
-    right: -10px;
-    transform: rotate(45deg) translate(7px, 7px);
+.user-input:hover {
+    background-position: left bottom;
 }
 
+/* Chatbot Response Style */
 .chatbot-response {
-    background-color: #E5E5EA;
-    align-self: flex-start;
-    border-bottom-left-radius: 5px;
+    color: #4a4a4a;
+    background-color: #f7f7f7;
+    background-image: linear-gradient(to right, #f7f7f7 50%, transparent 50%);
+    background-size: 200% 100%;
+    background-position: left bottom;
+    border-radius: 15px;
+    padding: 12px;
+    margin-left: 10%;
+    word-wrap: break-word;
+    transition: all 0.5s ease;
 }
 
-.chatbot-response::after {
-    left: -10px;
-    transform: rotate(45deg) translate(-7px, 7px);
+.chatbot-response:hover {
+    background-position: right bottom;
 }
 
-/* ... (Other existing styles) ... */
+/* Clearfix */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
 
+/* Responsive Design */
 @media (max-width: 500px) {
     .user-input, .chatbot-response {
-        max-width: 90%;
+        float: none;
+        margin-right: 0;
+        margin-left: 0;
+        max-width: 100%;
     }
 }
 
-/* ... (Other existing styles) ... */
+.participant-name {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #007bff; /* A cool blue color */
+    font-size: 1.1em; /* Slightly larger font size */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
+}
 
+/* Animation for new messages */
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -215,8 +240,88 @@ button i {
     }
 }
 
-/* ... (Other existing styles) ... */
+.user-input, .chatbot-response {
+    animation: slideIn 0.5s ease-out;
+    display: block;
+    margin-top: 10px;
+}
 
+.log-entry:hover {
+    background-color: #f8f8f8; /* Slightly lighter on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.timestamp {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.user-input::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-bottom-color: #e6f2ff;
+    border-top: 0;
+    margin-left: -15px;
+    margin-bottom: -15px;
+}
+
+.chatbot-response::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 100%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-bottom-color: #f7f7f7;
+    border-top: 0;
+    margin-right: -15px;
+    margin-bottom: -15px;
+}
+
+#logs {
+    scroll-behavior: smooth;
+}
+
+#logs::-webkit-scrollbar {
+    width: 8px;
+}
+
+#logs::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#logs::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#logs::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#logs::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 500px) {
+    .tablet {
+        width: 90%; /* Adjust for smaller screens */
+    }
+
+    #avatar {
+        width: 100%; /* Adjust avatar size on smaller screens */
+    }
+}
 
 .control-button {
     background-color: #4CAF50; /* Green */
