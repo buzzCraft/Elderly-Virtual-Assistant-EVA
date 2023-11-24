@@ -204,43 +204,41 @@
         });
     }
 
-    let checkVideoInterval;
+    let isVideoPlaying = false; // Flag to track if the video is currently playing
+    let checkVideoInterval = setInterval(checkForNewVideo, 10000); // Start the interval immediately
 
     // Function to play video
     function playVideo(videoPath) {
         const videoPlayer = document.getElementById("video-player");
         videoPlayer.src = videoPath;
         videoPlayer.load();
-        // videoPlayer.play();
-        clearInterval(checkVideoInterval);
-    }
 
-    const videoPlayer = document.getElementById("video-player");
-    videoPlayer.addEventListener('ended', resumeVideoCheck);
-    videoPlayer.addEventListener('pause', resumeVideoCheck);
-
-    function resumeVideoCheck() {
-        checkVideoInterval = setInterval(checkForNewVideo, 10000);
+        // Add event listeners to update isVideoPlaying
+        videoPlayer.addEventListener('play', () => isVideoPlaying = true);
+        videoPlayer.addEventListener('ended', () => isVideoPlaying = false);
+        videoPlayer.addEventListener('pause', () => isVideoPlaying = false);
     }
 
     // Function to check for new video
     function checkForNewVideo() {
-        $.ajax({
-            type: "POST",
-            url: "/process_media",
-            success: function (response) {
-                if (response.video_path) {
-                    playVideo(response.video_path);
+        if (!isVideoPlaying) { // Only check for a new video if one is not currently playing
+            $.ajax({
+                type: "POST",
+                url: "/process_media",
+                success: function (response) {
+                    if (response.video_path) {
+                        playVideo(response.video_path);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching new video:", error);
                 }
-            },
-            error: function (error) {
-                console.error("Error fetching new video:", error);
-            }
-        });
+            });
+        }
     }
 
     // Call checkForNewVideo periodically, e.g., every 10 seconds
-    checkVideoInterval = setInterval(checkForNewVideo, 10000);
+    setInterval(checkForNewVideo, 10000);
 
     function fetchAndDisplayLogs() {
         $.ajax({
