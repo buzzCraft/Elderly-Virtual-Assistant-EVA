@@ -218,26 +218,30 @@
     // Call checkForNewVideo periodically, e.g., every 10 seconds
     setInterval(checkForNewVideo, 10000);
 
+    let lastLogSize = 0;
+
     function fetchAndDisplayLogs() {
         $.ajax({
             type: "GET",
             url: "http://localhost:7002/get_chat_logs",
-            success: function (newLogs) {
-                var logContainer = document.getElementById("logs");
-                var currentLogs = logContainer.innerHTML;
+            success: function (data) {
+                const logContainer = document.getElementById("logs");
+                const newLogs = data.split("\n");
 
-                // Assuming newLogs is a string or array of log messages
-                newLogs.forEach(function (log) {
-                    if (!currentLogs.includes(log)) {
-                        var newLogEntry = document.createElement("div");
-                        newLogEntry.textContent = log;
-                        logContainer.appendChild(newLogEntry);
+                if (newLogs.length > lastLogSize) {
+                    // Append only new log entries
+                    newLogs.slice(lastLogSize).forEach(logEntry => {
+                        if (logEntry.trim() !== "") {
+                            logContainer.insertAdjacentHTML('beforeend', logEntry);
+                        }
+                    });
+
+                    lastLogSize = newLogs.length; // Update the last log size
+
+                    // Scroll to bottom only if the user is already near the bottom
+                    if (logContainer.scrollHeight - logContainer.scrollTop - logContainer.clientHeight < 50) {
+                        logContainer.scrollTop = logContainer.scrollHeight;
                     }
-                });
-
-                // Scroll to bottom only if the user is already near the bottom
-                if (logContainer.scrollHeight - logContainer.scrollTop - logContainer.clientHeight < 50) {
-                    logContainer.scrollTop = logContainer.scrollHeight;
                 }
             },
             error: function (error) {
@@ -246,7 +250,7 @@
         });
     }
 
-    setInterval(fetchAndDisplayLogs, 5000); // Continue fetching logs every 5 seconds
+    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
 
 
     function addLogEntry(logMessage, isUserInput) {
