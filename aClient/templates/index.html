@@ -148,19 +148,26 @@
         audioChunks = []; // Reset the audio chunks array
     });
 
+    // Global variable to keep track of the current view
+    let currentView = "avatar"; // Possible values: "avatar", "screen"
+
+    // Function to toggle between avatar and screen view
     function toggleView() {
         var avatarContainer = document.getElementById("avatar-container");
         var screenView = document.getElementById("screen-view");
         var toggleButton = document.getElementById("toggle-view");
 
-        if (avatarContainer.style.display === "none") {
-            avatarContainer.style.display = "block";
-            screenView.style.display = "none";
-            toggleButton.textContent = "Switch to Screen View";
-        } else {
+        if (currentView === "avatar") {
             avatarContainer.style.display = "none";
             screenView.style.display = "block";
             toggleButton.textContent = "Switch to Avatar View";
+            currentView = "screen";
+            checkForNewVideo(); // Immediately check for new video when switching to screen view
+        } else {
+            avatarContainer.style.display = "block";
+            screenView.style.display = "none";
+            toggleButton.textContent = "Switch to Screen View";
+            currentView = "avatar";
         }
     }
 
@@ -184,10 +191,14 @@
                     const audioPlayback = document.getElementById("audio-playback");
                     audioPlayback.src = response.file_path;
                     console.log("Audio file path:", response.file_path);
-
+                    if (currentView === "screen" && mediaType === "video") {
+                        playVideo(response.file_path);
+                    } else if (currentView === "avatar" && mediaType === "audio") {
+                        updateAvatarState('talking');
+                        audioPlayback.play();
+                    }
                     // Change avatar to talking state and play the audio
-                    updateAvatarState('talking');
-                    audioPlayback.play();
+
 
                     // Listener for when audio ends
                     audioPlayback.onended = function () {
