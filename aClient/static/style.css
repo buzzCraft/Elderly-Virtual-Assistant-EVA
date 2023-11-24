@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Improved typography */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -34,7 +34,7 @@ body {
     height: 5px;
     background-color: #333;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Speaker grille */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tablet-screen {
@@ -61,23 +61,22 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-    border: 3px solid #ddd; /* Frame around avatar */
-    /*border-radius: 50%; /* Circular frame */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Subtle gradient */
-    overflow: hidden; /* Ensures the circular frame clips the content */
+    border: 3px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    overflow: hidden;
 }
 
 
 #avatar {
-    width: 100%; /* Increase size */
+    width: 100%;
     height: auto;
     margin: 10px;
-    transition: transform 0.3s ease; /* Smooth transition for hover effects */
+    transition: transform 0.3s ease;
 }
 
 #avatar:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
+    transform: scale(1.05);
 }
 
 .control-panel {
@@ -120,12 +119,11 @@ button i {
     margin-top: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     position: absolute;
-    bottom: -15px; /* Adjust as needed */
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Log Container Styles */
 .log-container {
     background-color: #f0f0f0;
     border: 1px solid #d0d0d0;
@@ -145,7 +143,6 @@ button i {
     font-size: 24px;
 }
 
-/* Log Content Style */
 #logs {
     height: 450px;
     overflow-y: auto;
@@ -155,10 +152,9 @@ button i {
     font-size: 14px;
     line-height: 1.6;
     display: flex;
-    flex-direction: column; /* Newest messages at the bottom */
+    flex-direction: column;
 }
 
-/* Base styles for log entries */
 .log-entry {
     padding: 8px;
     margin-bottom: 12px;
@@ -166,9 +162,8 @@ button i {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* User Input Style */
 .user-input {
-    color: #003366; /* Darker blue for better readability */
+    color: #003366;
     background-color: #b8eedf;
     background-image: linear-gradient(to left, #e6f2ff 50%, transparent 50%);
     background-size: 200% 100%;
@@ -176,7 +171,7 @@ button i {
     border-radius: 15px;
     padding: 12px;
     margin-right: 30%;
-    word-wrap: break-word; /* Ensure long texts are wrapped */
+    word-wrap: break-word;
     transition: all 0.5s ease;
     justify-content: left;
 }
@@ -185,7 +180,6 @@ button i {
     background-position: left bottom;
 }
 
-/* Chatbot Response Style */
 .chatbot-response {
     color: #4a4a4a;
     background-color: #f7f7f7;
@@ -203,14 +197,14 @@ button i {
     background-position: right bottom;
 }
 
-/* Clearfix */
+
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
 }
 
-/* Responsive Design */
+
 @media (max-width: 500px) {
     .user-input, .chatbot-response {
         float: none;
@@ -223,12 +217,12 @@ button i {
 .participant-name {
     font-weight: bold;
     margin-right: 5px;
-    color: #007bff; /* A cool blue color */
-    font-size: 1.1em; /* Slightly larger font size */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
+    color: #007bff;
+    font-size: 1.1em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Animation for new messages */
+
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -247,7 +241,7 @@ button i {
 }
 
 .log-entry:hover {
-    background-color: #f8f8f8; /* Slightly lighter on hover */
+    background-color: #f8f8f8;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -312,19 +306,18 @@ button i {
     background: #555;
 }
 
-/* Responsive Design Adjustments */
 @media (max-width: 500px) {
     .tablet {
-        width: 90%; /* Adjust for smaller screens */
+        width: 90%;
     }
 
     #avatar {
-        width: 100%; /* Adjust avatar size on smaller screens */
+        width: 100%;
     }
 }
 
 .control-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
     border: none;
     color: white;
     padding: 10px 15px;
@@ -342,7 +335,6 @@ button i {
 }
 
 
-/* The switch - the box around the slider */
 .switch {
     position: relative;
     display: inline-block;
@@ -350,14 +342,12 @@ button i {
     height: 34px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -396,7 +386,6 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
     border-radius: 34px;
 }
@@ -405,7 +394,6 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-/* The switch - the box around the slider */
 .switch {
     position: relative;
     display: inline-block;
@@ -413,14 +401,12 @@ input:checked + .slider:before {
     height: 34px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -459,7 +445,6 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
     border-radius: 34px;
 }
@@ -473,7 +458,7 @@ input:checked + .slider:before {
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: calc(100% - 22px); /* Adjust width as needed */
+    width: calc(100% - 22px);
 }
 
 #volume-control {
@@ -483,21 +468,21 @@ input:checked + .slider:before {
 
 .settings-panel {
     position: fixed;
-    left: 0; /* Changed from right to left */
+    left: 0;
     top: 0;
     width: 300px;
-    transform: translateX(-100%); /* Changed from translateY to translateX */
+    transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
     background-color: #f9f9f9;
-    border-right: 1px solid #ddd; /* Changed from border-left to border-right */
+    border-right: 1px solid #ddd;
     z-index: 1000;
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Added shadow for better visibility */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .settings-toggle {
     position: fixed;
-    left: 10px; /* Changed from right to left and adjusted position */
+    left: 10px;
     top: 50px;
     cursor: pointer;
     background-color: #007bff;
@@ -506,7 +491,7 @@ input:checked + .slider:before {
     padding: 10px 20px;
     font-size: 16px;
     z-index: 1001;
-    border-radius: 5px; /* Added border-radius for rounded edges */
+    border-radius: 5px;
     transition: opacity 0.3s ease-in-out;
 
 
@@ -517,33 +502,32 @@ input:checked + .slider:before {
 }
 
 .settings-panel.show {
-    transform: translateX(0); /* Changed from translateY to translateX */
+    transform: translateX(0);
 }
 
-/* Style for input and select fields */
 .settings-panel input[type="text"],
 .settings-panel select {
-    width: calc(100% - 40px); /* Full width minus padding */
+    width: calc(100% - 40px);
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
-    border-radius: 4px; /* Rounded edges for inputs */
-    box-sizing: border-box; /* Better width management */
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .settings-panel button {
     width: 100%;
     padding: 10px;
     border: none;
-    background-color: #28a745; /* Green color for the button */
+    background-color: #28a745;
     color: white;
     text-align: center;
-    border-radius: 4px; /* Rounded edges for button */
+    border-radius: 4px;
     cursor: pointer;
 }
 
 .settings-panel button:hover {
-    background-color: #218838; /* Slightly darker green on hover */
+    background-color: #218838;
 }
 .hide {
     display: none;
@@ -553,58 +537,53 @@ input:checked + .slider:before {
     pointer-events: none;
 }
 
-/* Screen View Styling */
 .screen {
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-    border: 3px solid #ddd; /* Consistent with avatar container */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Consistent shadow */
-    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Consistent gradient */
+    border: 3px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
     overflow: hidden;
 }
 
 #video-player {
-    width: 100%; /* Full width within the container */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 10px; /* Rounded corners for the video player */
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
 }
 
-/* Toggle View Button Styling */
 #toggle-view {
     position: fixed;
-    right: 10px; /* Positioned at the top right */
+    right: 10px;
     top: 10px;
-    background-color: #007bff; /* Consistent button color */
+    background-color: #007bff;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    z-index: 1002; /* Ensure it's above other elements */
+    z-index: 1002;
     transition: background-color 0.3s ease;
 }
 
 #toggle-view:hover {
-    background-color: #0056b3; /* Slightly darker on hover */
+    background-color: #0056b3;
 }
 
-/* Adjustments for Tablet and Screen View */
 .tablet-screen {
-    min-height: 500px; /* Minimum height to accommodate video */
-}
+    min-height: 500px;
 
-/* Responsive Design for Video Player */
-@media (max-width: 500px) {
-    .tablet {
-        width: 90%; /* Adjust for smaller screens */
+    @media (max-width: 500px) {
+        .tablet {
+            width: 90%;
+        }
+
+        .screen, .avatar-container {
+            width: 100%;
+        }
     }
-
-    .screen, .avatar-container {
-        width: 100%; /* Full width for smaller screens */
-    }
 }
-
