@@ -222,9 +222,23 @@
         $.ajax({
             type: "GET",
             url: "http://localhost:7002/get_chat_logs",
-            success: function (logs) {
-                $('#logs').html(logs); // Directly insert HTML logs
-                scrollToBottom();
+            success: function (newLogs) {
+                var logContainer = document.getElementById("logs");
+                var currentLogs = logContainer.innerHTML;
+
+                // Assuming newLogs is a string or array of log messages
+                newLogs.forEach(function (log) {
+                    if (!currentLogs.includes(log)) {
+                        var newLogEntry = document.createElement("div");
+                        newLogEntry.textContent = log;
+                        logContainer.appendChild(newLogEntry);
+                    }
+                });
+
+                // Scroll to bottom only if the user is already near the bottom
+                if (logContainer.scrollHeight - logContainer.scrollTop - logContainer.clientHeight < 50) {
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                }
             },
             error: function (error) {
                 console.error("Error fetching logs:", error);
@@ -232,7 +246,9 @@
         });
     }
 
-    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
+    setInterval(fetchAndDisplayLogs, 5000); // Continue fetching logs every 5 seconds
+
+
     function addLogEntry(logMessage, isUserInput) {
         var logContainer = document.getElementById("logs");
         var newLogEntry = document.createElement("div");
