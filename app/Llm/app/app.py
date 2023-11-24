@@ -124,6 +124,9 @@ def generate_response():
             chatbot_response = " ".join(processed_response)
         else:
             chatbot_response = chatbot_response.strip()
+        # check if chatbot response is empty
+        if not chatbot_response:
+            chatbot_response = "Sorry, I didn't understand that."
 
         logging.info(f"Generated response: {chatbot_response}")
         store_log(f"{chatbot_response}", "Eva")  # Store chatbot response log
