@@ -69,7 +69,7 @@ def generate_audio():
     unique_output_filename = generate_unique_filename()
     output_path = os.path.join("/text-to-voice-app/", unique_output_filename)
     torchaudio.save(output_path, waveform.unsqueeze(0).cpu(), sample_rate)
-    video_generator = True
+    video_generator = False
     if video_generator:
         # """
         try:
