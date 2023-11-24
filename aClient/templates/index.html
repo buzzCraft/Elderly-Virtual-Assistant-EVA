@@ -214,7 +214,7 @@
     function checkForNewVideo() {
         $.ajax({
             type: "GET",
-            url: "/process_media",
+            url: "/process_audio",
             success: function (response) {
                 if (response.file_path) {
                     playVideo(response.file_path);
