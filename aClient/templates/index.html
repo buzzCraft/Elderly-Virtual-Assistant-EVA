@@ -133,7 +133,7 @@
 
                 mediaRecorder.addEventListener("stop", () => {
                     const audioBlob = new Blob(audioChunks);
-                    sendAudioToServer(audioBlob);
+                    sendMediaToServer(audioBlob);
                     updateAvatarState('respond'); // Change avatar to responding state
                 });
                 document.getElementById("start-recording").disabled = true;
