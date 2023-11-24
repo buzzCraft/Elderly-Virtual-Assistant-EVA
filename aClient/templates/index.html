@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<button id="toggle-view" onclick="toggleView()">Switch to Screen View</button>
+<button id="toggle-view" onclick="toggleView()">Switch to Human View</button>
 <div class="tablet" id="tablet-view">
     <div class="tablet-screen">
         <div class="app-header">EVA: Elderly Virtual Assistant</div>
@@ -50,7 +50,6 @@
     <select id="language-select">
         <option value="en">English</option>
         <option value="nor">Norwegian</option>
-        <!-- Add more languages as needed -->
     </select>
     <button id="save-settings" onclick="saveSettings()">Save Settings</button>
 </div>
@@ -137,11 +136,11 @@
         if (avatarContainer.style.display === "none") {
             avatarContainer.style.display = "block";
             screenView.style.display = "none";
-            toggleButton.textContent = "Switch to Screen View";
+            toggleButton.textContent = "Switch to human View";
         } else {
             avatarContainer.style.display = "none";
             screenView.style.display = "block";
-            toggleButton.textContent = "Switch to Avatar View";
+            toggleButton.textContent = "Switch to anime View";
         }
     }
 
@@ -175,7 +174,6 @@
                     };
                 }
                 if (response.video_path) {
-                    // Handle video-specific logic...
                     playVideo(response.video_path);
                 }
             },
@@ -185,7 +183,7 @@
         });
     }
 
-    let isVideoPlaying = false; // Flag to track if the video is currently playing
+    let isVideoPlaying = false;
     let checkVideoInterval = setInterval(checkForNewVideo, 10000); // Start the interval immediately
 
     // Function to play video
@@ -200,7 +198,6 @@
         videoPlayer.addEventListener('pause', () => isVideoPlaying = false);
     }
 
-    // Function to check for new video
     function checkForNewVideo() {
         if (!isVideoPlaying) { // Only check for a new video if one is not currently playing
             $.ajax({

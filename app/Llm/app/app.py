@@ -106,9 +106,8 @@ def generate_response():
         # Get the request data
         user_input = request.json.get("user_input")
         logging.info(f"Received transcription: {user_input}")
-        store_log(f"{user_input}", user_name)  # Store user input log
+        store_log(f"{user_input}", user_name)
 
-        # Check if the user input is empty
         if not user_input:
             return jsonify({"error": "Empty user input"})
 
@@ -124,12 +123,11 @@ def generate_response():
             chatbot_response = " ".join(processed_response)
         else:
             chatbot_response = chatbot_response.strip()
-        # check if chatbot response is empty
         if not chatbot_response:
             chatbot_response = "Sorry, I didn't understand that."
 
         logging.info(f"Generated response: {chatbot_response}")
-        store_log(f"{chatbot_response}", "Eva")  # Store chatbot response log
+        store_log(f"{chatbot_response}", "Eva")
 
         # Notify voiceGen of the response
         voice_response = requests.post(
@@ -138,7 +136,6 @@ def generate_response():
         )
         voice_status = voice_response.json().get("status", "")
 
-        # Return the response
         return jsonify({"response": chatbot_response, "voice_status": voice_status})
     except Exception as e:
         return jsonify({"error": str(e)})

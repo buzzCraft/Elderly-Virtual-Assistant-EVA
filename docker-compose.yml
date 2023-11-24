@@ -63,13 +63,12 @@ services:
       dockerfile: Dockerfile
     command:
       - /bin/bash
-      - /text-to-voice-app/runapps.sh
+      - /text-to-voice-app/voiceGen.py
     volumes:
       - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
     ports:
         - "5003:5003"
-        #- "5004:5004"
     labels:
       "docker-compose_diagram.description": "Converts text to voice"
       "docker-compose_diagram.icon": "fas fa-volume-up"

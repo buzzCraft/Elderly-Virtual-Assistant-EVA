@@ -21,7 +21,6 @@ app = Flask(__name__)
 
 
 def model_exists(model_path, filename):
-    """Check if the model file exists at the specified path."""
     return os.path.exists(os.path.join(model_path, filename))
 
 
