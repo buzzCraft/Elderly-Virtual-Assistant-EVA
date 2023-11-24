@@ -204,12 +204,23 @@
         });
     }
 
+    let checkVideoInterval;
+
     // Function to play video
     function playVideo(videoPath) {
         const videoPlayer = document.getElementById("video-player");
         videoPlayer.src = videoPath;
         videoPlayer.load();
         // videoPlayer.play();
+        clearInterval(checkVideoInterval);
+    }
+
+    const videoPlayer = document.getElementById("video-player");
+    videoPlayer.addEventListener('ended', resumeVideoCheck);
+    videoPlayer.addEventListener('pause', resumeVideoCheck);
+
+    function resumeVideoCheck() {
+        checkVideoInterval = setInterval(checkForNewVideo, 10000);
     }
 
     // Function to check for new video
@@ -229,7 +240,7 @@
     }
 
     // Call checkForNewVideo periodically, e.g., every 10 seconds
-    setInterval(checkForNewVideo, 10000);
+    checkVideoInterval = setInterval(checkForNewVideo, 10000);
 
     function fetchAndDisplayLogs() {
         $.ajax({
