@@ -15,9 +15,10 @@
         <div class="avatar-container" id="avatar-container">
             <img id="avatar" src="/static/welcome.gif" alt="Avatar">
             <div class="control-panel">
-                <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
-                <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
-                <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
+                <button class="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                <button class="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i>
+                </button>
+                <button class="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
             </div>
         </div>
         <div class="screen" id="screen-view" style="display: none;">
@@ -28,9 +29,10 @@
                 </video>
                 <!-- Control panel for the screen view -->
                 <div class="control-panel">
-                    <button id="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
-                    <button id="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i></button>
-                    <button id="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i>
+                    <button class="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                    <button class="start-recording" disabled title="Start Recording"><i
+                            class="fas fa-microphone"></i></button>
+                    <button class="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i>
                     </button>
                 </div>
             </div>
@@ -112,40 +114,51 @@
     let mediaRecorder;
     let audioChunks = [];
 
-    document.getElementById("start-interaction").addEventListener("click", function () {
-        document.getElementById("welcome-audio").play();
-        // Optionally hide the start button after playing the audio
-        this.style.display = 'none';
-        document.getElementById("start-recording").disabled = false;
+    // Start Interaction Buttons
+    document.querySelectorAll(".start-interaction").forEach(button => {
+        button.addEventListener("click", function () {
+            document.getElementById("welcome-audio").play();
+            this.style.display = 'none';
+            document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = false);
+        });
     });
 
+    // Start Recording Buttons
+    document.querySelectorAll(".start-recording").forEach(button => {
+        button.addEventListener("click", function () {
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
 
-    document.getElementById("start-recording").addEventListener("click", function () {
-        navigator.mediaDevices.getUserMedia({audio: true})
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
 
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks);
+                        sendMediaToServer(audioBlob);
+                        updateAvatarState('respond');
+                    });
+
+                    document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = true);
+                    document.querySelectorAll(".stop-recording").forEach(btn => btn.disabled = false);
+
+                    updateAvatarState('listen');
                 });
-
-                mediaRecorder.addEventListener("stop", () => {
-                    const audioBlob = new Blob(audioChunks);
-                    sendMediaToServer(audioBlob);
-                    updateAvatarState('respond'); // Change avatar to responding state
-                });
-                document.getElementById("start-recording").disabled = true;
-                document.getElementById("stop-recording").disabled = false;
-                updateAvatarState('listen'); // Change avatar to listening state
-            });
+        });
     });
 
-    document.getElementById("stop-recording").addEventListener("click", function () {
-        mediaRecorder.stop();
-        document.getElementById("stop-recording").disabled = true;
-        audioChunks = []; // Reset the audio chunks array
+    // Stop Recording Buttons
+    document.querySelectorAll(".stop-recording").forEach(button => {
+        button.addEventListener("click", function () {
+            mediaRecorder.stop();
+            document.querySelectorAll(".stop-recording").forEach(btn => btn.disabled = true);
+            document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = false);
+            audioChunks = [];
+        });
     });
+
 
     function toggleView() {
         var avatarContainer = document.getElementById("avatar-container");
