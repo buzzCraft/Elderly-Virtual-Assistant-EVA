@@ -1,6 +1,5 @@
 #version: '3.8' # docker-compose version enable to print diagram
 services:
-  # Transcribe service
   record:
     build:
       context: ./aClient
@@ -9,9 +8,7 @@ services:
       - "4999:4999"
     volumes:
       - ./aClient:/app
-    labels:
-      "docker-compose_diagram.description": "Record voice"
-      "docker-compose_diagram.icon": "fas fa-microphone"
+
 
   transcribe:
     depends_on:
@@ -25,11 +22,8 @@ services:
       - ./app/VoiceToText/app/audio_asset:/app/audio_asset
     ports:
       - "5000:5000"
-    labels:
-      "docker-compose_diagram.description": "Transcribe in put voice to text"
-      "docker-compose_diagram.icon": "fas fa-microphone"
 
-    # LLM service
+
   llm:
     depends_on:
       - transcribe
@@ -48,12 +42,8 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
-    labels:
-      "docker-compose_diagram.description": "Processes transcribed Text"
-      "docker-compose_diagram.icon": "fas fa-processing"
 
 
-  # Text-to-voice service
   texttovoice:
     depends_on:
       - transcribe
@@ -62,16 +52,14 @@ services:
       context: ./app/TextToVoice
       dockerfile: Dockerfile
     command:
-      - /bin/bash
+      - python3
       - /text-to-voice-app/voiceGen.py
     volumes:
       - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
     ports:
         - "5003:5003"
-    labels:
-      "docker-compose_diagram.description": "Converts text to voice"
-      "docker-compose_diagram.icon": "fas fa-volume-up"
+
 
   voicetovideo:
     build:
@@ -85,6 +73,4 @@ services:
       - transcribe
       - llm
       - texttovoice
-    labels:
-      "docker-compose_diagram.description": "Converts voice to video"
-      "docker-compose_diagram.icon": "fas fa-video"
+
