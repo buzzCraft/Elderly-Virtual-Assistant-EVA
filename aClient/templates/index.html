@@ -62,42 +62,11 @@
     <div id="logs">
         <!-- Logs will be displayed here -->
     </div>
-    <!-- <button id="refresh-logs" title="Refresh Logs"><i class="fas fa-sync-alt"></i></button>
-     <button id="clear-logs" title="Clear Chat"><i class="fas fa-trash-alt"></i></button>
-     <label class="switch">
-         <input type="checkbox" id="auto-scroll" checked>
-         <span class="slider round"></span>
-     </label>
-     <input type="text" id="search-logs" placeholder="Search logs...">
-     <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1"> -->
     <input type="text" id="search-logs" placeholder="Search logs...">
 
 </div>
 
 <script>
-    /* document.getElementById("refresh-logs").addEventListener("click", fetchAndDisplayLogs);
-     document.getElementById("clear-logs").addEventListener("click", function () {
-         document.getElementById("logs").innerHTML = '';
-     });
-
-     document.getElementById("auto-scroll").addEventListener("change", function () {
-         autoScrollEnabled = this.checked;
-     });
-
-     function scrollToBottom() {
-         if (autoScrollEnabled) {
-             var logContainer = document.getElementById("logs");
-             logContainer.scrollTop = logContainer.scrollHeight;
-         }
-     }
-
-     document.getElementById("volume-control").addEventListener("input", function () {
-         var audioElements = document.querySelectorAll("audio");
-         audioElements.forEach(function (audio) {
-             audio.volume = this.value;
-         });
-     });
-     */
     document.getElementById("search-logs").addEventListener("input", function () {
         var searchTerm = this.value.toLowerCase();
         var logs = document.querySelectorAll("#logs .log-entry");

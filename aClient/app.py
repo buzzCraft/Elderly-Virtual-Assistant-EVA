@@ -103,7 +103,7 @@ def process_audio():
         "audio_path": file_path,
         "video_path": video_path,
     }
-    logging.info(f"Response data: {response_data}")
+    # logging.info(f"Response data: {response_data}")
     return jsonify(response_data)
 
 
