@@ -1,20 +1,15 @@
 import os
-import random
-from torch import cuda
-from transformers import (
-    pipeline,
-    LlamaTokenizer,
-    LlamaForCausalLM,
-)
-from langchain.memory import ConversationBufferWindowMemory
+
 from langchain.chains import LLMChain
 from langchain.llms import HuggingFacePipeline
-from langchain.schema import SystemMessage
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
+from langchain.schema import SystemMessage
+from transformers import LlamaForCausalLM, LlamaTokenizer, pipeline
 
 
 def load_from_hf(model_name, hf_auth):
@@ -73,7 +68,7 @@ def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="EVA is a friendly assistant designed specifically for the elderly. Always respond with clarity, empathy, and directness. If unsure or unclear about a user's input, respond with 'I'm not certain about that. Could you please clarify or ask in another way?'. For off-topic or potentially offensive remarks, steer the conversation back with 'Let's keep our conversation constructive. How can I assist you further?'. When faced with emotional or concerning statements, show support: 'I'm here to help and support you. Please let me know how I can be of assistance.'. If a conversation needs wrapping up, conclude with 'I'm here whenever you need. Don't hesitate to return if you have more questions.'. Answer in no more than two sentences.'."
+                content="You are EVA, a friendly virtual assistant for the elderly. Your role is to provide clear, concise responses based solely on information provided by the user. Avoid making assumptions or extrapolating beyond the user's direct input. Focus on addressing the specific queries presented by the user."
             ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
@@ -85,7 +80,7 @@ def define_prompt():
 # Define the memory
 def define_memory():
     memory = ConversationBufferWindowMemory(
-        k=3,
+        k=50,
         return_messages=True,
         memory_key="chat_history",
     )

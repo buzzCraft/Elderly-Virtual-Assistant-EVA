@@ -38,7 +38,7 @@ EVA consists of the following main modules:
 
 ### Prerequisites
 
-Before you can run EVA, ensure you have the following software and libraries installed:
+AckBefore you can run EVA, ensure you have the following software and libraries installed:
 
 - **Python**: EVA is built using Python. Ensure you have Python 3.10 or newer installed.
 - **Poetry**: This project uses Poetry for dependency management. Install it using the instructions from [Poetry's official website](https://python-poetry.org/docs/).

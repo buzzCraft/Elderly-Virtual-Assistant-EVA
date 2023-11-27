@@ -1,8 +1,18 @@
-#version: '2.21'
-
+#version: '3.8' # docker-compose version enable to print diagram
 services:
-  # Transcribe service
+  record:
+    build:
+      context: ./aClient
+      dockerfile: Dockerfile
+    ports:
+      - "4999:4999"
+    volumes:
+      - ./aClient:/app
+
+
   transcribe:
+    depends_on:
+      - record
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
@@ -13,7 +23,7 @@ services:
     ports:
       - "5000:5000"
 
-    # LLM service
+
   llm:
     depends_on:
       - transcribe
@@ -33,19 +43,34 @@ services:
               count: 1
               capabilities: [ gpu ]
 
-  # Text-to-voice service
+
   texttovoice:
     depends_on:
+      - transcribe
       - llm
     build:
       context: ./app/TextToVoice
       dockerfile: Dockerfile
     command:
-      - /bin/bash
-      - /text-to-voice-app/runapps.sh
+      - python3
+      - /text-to-voice-app/voiceGen.py
     volumes:
       - ./app/Llm/app:/llm-app
       - ./app/TextToVoice/app:/text-to-voice-app
     ports:
         - "5003:5003"
-        - "5004:5004"
+
+
+  voicetovideo:
+    build:
+      context: ./app/VoiceToVideo
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/VoiceToVideo/app:/SadTalker/results
+    ports:
+      - "5005:5005"
+    depends_on:
+      - transcribe
+      - llm
+      - texttovoice
+
