@@ -50,15 +50,15 @@ AckBefore you can run EVA, ensure you have the following software and libraries 
    Navigate to the `aClient` directory and create a `.env` file. Populate it with the following template:
 
    ```plaintext
-   SERVER_HOST_ENV=your_server_host  # e.g., sgpu1.cs.oslomet.no
-   SERVER_USERNAME_ENV=your_username  # e.g., s37xxxx
-   SERVER_PATH_ENV_UP=your_path_up  # e.g., ~/ACIT4040-AI-Project/app/VoiceToText/app/audio_asset
-   SERVER_PATH_ENV_DOWN=your_path_down  # e.g., ~/ACIT4040-AI-Project/app/TextToVoice/app
-   SSH_PRIVATE_KEY_PATH="your_ssh_key_path"  # e.g., "C:\\Users\\your_username\\.ssh\\id_ed25519"
+   SERVER_HOST_ENV=your_server_host  
+   SERVER_USERNAME_ENV=your_username  
+   SERVER_PATH_ENV_UP=your_path_up  
+   SERVER_PATH_ENV_DOWN=your_path_down 
+   SSH_PRIVATE_KEY_PATH="your_ssh_key_path" 
    
    
    
-   HF_KEY = wrong_key_hf_gKiYdfIXKCzeAWZOGytFv # Hugging Face API key, create.env in Llm/app, replace key with your own
+   HF_KEY = wrong_key_hf_gKiYdfI # Hugging Face API key, create.env in Llm/app, replace key with your own
    
 
    ```
@@ -67,8 +67,7 @@ AckBefore you can run EVA, ensure you have the following software and libraries 
    - We will remove this part in the final README.md file. This is just for testing purposes.
    
 
-2. **Manual Imports**:
-   For the `avatar_communicator.py` script, you might need to install some Python packages manually. Ensure you've installed all the required imports found in the script.
+2. 
    
 ### Installation
 
@@ -110,14 +109,15 @@ AckBefore you can run EVA, ensure you have the following software and libraries 
     Remember, the detailed logging has been provided to help you understand the inner workings of the 
     system and to assist in troubleshooting. Always refer to the logs if you encounter any unexpected 
     behavior. So watch the INFO in the output terminal when running the `docker-compose up --build` command 
-    and after running the `avatar_communicator.py` script.
+    and after running the `eva` script.
 ## Usage
 
 1. **Interacting with EVA**:
-   With the containers up and running, you can start the main communication script to interact with EVA:
+   With the containers up and running, you can start the main launcher script to interact with EVA, this script forwards ports so you can run the program locally.
+   The script has the command ssh -L 7000:localhost:4999 -L 7002:localhost:5002 username@server_address
 
    ```bash
-   python avatar_communicator.py
+   eva
    ```
 
    - Speak into your microphone to provide a voice input.
@@ -126,15 +126,14 @@ AckBefore you can run EVA, ensure you have the following software and libraries 
      - "Tell me a joke."
      - "What's the weather like today?"
      - "Play some music."
-    **Note** Keep an eye on the output logs when running the `avatar_communicator.py` script. 
    
-2. **Stopping the Service**:
+3. **Stopping the Service**:
    To stop the service and bring down the containers, you can use:
 
    ```bash
    docker-compose down
    ```
-
+  this can be done in a different commandline interface or interrup by ctl + C
 
 
 <details>
