@@ -27,6 +27,7 @@ services:
   llm:
     depends_on:
       - transcribe
+      - record
     build:
       context: ./app/Llm
       dockerfile: Dockerfile
