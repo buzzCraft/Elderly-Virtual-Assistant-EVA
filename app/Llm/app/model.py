@@ -1,20 +1,15 @@
 import os
-import torch
-from torch import cuda
-from transformers import (
-    pipeline,
-    LlamaTokenizer,
-    LlamaForCausalLM,
-)
-from langchain.memory import ConversationBufferWindowMemory
+
 from langchain.chains import LLMChain
 from langchain.llms import HuggingFacePipeline
-from langchain.schema import SystemMessage
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
+from langchain.schema import SystemMessage
+from transformers import LlamaForCausalLM, LlamaTokenizer, pipeline
 
 
 def load_from_hf(model_name, hf_auth):
@@ -22,7 +17,7 @@ def load_from_hf(model_name, hf_auth):
         model_name, use_auth_token=hf_auth, legacy=False, return_tensors="pt"
     )
     model = LlamaForCausalLM.from_pretrained(
-        model_name, use_auth_token=hf_auth, load_in_8bit=True
+        model_name, use_auth_token=hf_auth  # , load_in_8bit=True
     )
     return tokenizer, model
 
@@ -43,6 +38,8 @@ def load_from_local(save_dir):
 # Load the model
 def load_model(model_name, hf_auth, save_directory):
     if not os.path.exists(save_directory):
+        os.makedirs(save_directory, exist_ok=True)
+
         # Load model and tokenizer from Hugging Face and then save locally
         print("Downloading model from Hugging Face")
         tokenizer, model = load_from_hf(model_name, hf_auth)
@@ -70,7 +67,9 @@ def initialize_pipeline(model, tokenizer):
 def define_prompt():
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content="You are a assistant to an elderly person."),
+            SystemMessage(
+                content="You are EVA, a friendly virtual assistant for the elderly. Your role is to provide clear, concise responses based solely on information provided by the user. Avoid making assumptions or extrapolating beyond the user's direct input. Focus on addressing the specific queries presented by the user."
+            ),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{human_input}"),
         ]
@@ -81,7 +80,7 @@ def define_prompt():
 # Define the memory
 def define_memory():
     memory = ConversationBufferWindowMemory(
-        k=3,
+        k=50,
         return_messages=True,
         memory_key="chat_history",
     )

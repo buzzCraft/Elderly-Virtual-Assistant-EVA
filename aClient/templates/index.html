@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Avatar Interface</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<button id="toggle-view" onclick="toggleView()">Switch to Human View</button>
+<div class="tablet" id="tablet-view">
+    <div class="tablet-screen">
+        <div class="app-header">EVA: Elderly Virtual Assistant</div>
+        <div class="avatar-container" id="avatar-container">
+            <img id="avatar" src="/static/welcome.gif" alt="Avatar">
+            <div class="control-panel">
+                <button class="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                <button class="start-recording" disabled title="Start Recording"><i class="fas fa-microphone"></i>
+                </button>
+                <button class="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i></button>
+            </div>
+        </div>
+        <div class="screen" id="screen-view" style="display: none;">
+            <div class="screen-content">
+                <video id="video-player" controls>
+                    <source src="/static/samplevideo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <!-- Control panel for the screen view -->
+                <div class="control-panel">
+                    <button class="start-interaction" title="Start Interaction"><i class="fas fa-play"></i></button>
+                    <button class="start-recording" disabled title="Start Recording"><i
+                            class="fas fa-microphone"></i></button>
+                    <button class="stop-recording" disabled title="Stop Recording"><i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="tablet-home-button"></div>
+</div>
+
+<button id="settings-toggle" class="settings-toggle"><i class="fas fa-cog"></i></button>
+<div class="settings-panel" id="settings-panel">
+    <h3>Settings</h3>
+    <input type="text" id="user-name" placeholder="Your Name">
+    <input type="text" id="user-hobbies" placeholder="Your Hobbies">
+    <select id="language-select">
+        <option value="en">English</option>
+        <option value="nor">Norwegian</option>
+    </select>
+    <button id="save-settings" onclick="saveSettings()">Save Settings</button>
+</div>
+
+<audio id="audio-playback" controls hidden></audio>
+<audio id="welcome-audio" src="/static/welcome.wav" hidden></audio>
+<div class="log-container">
+    <h3>Conversation Logs</h3>
+    <div id="logs">
+        <!-- Logs will be displayed here -->
+    </div>
+    <input type="text" id="search-logs" placeholder="Search logs...">
+
+</div>
+
+<script>
+    document.getElementById("search-logs").addEventListener("input", function () {
+        var searchTerm = this.value.toLowerCase();
+        var logs = document.querySelectorAll("#logs .log-entry");
+        logs.forEach(function (log) {
+            if (log.textContent.toLowerCase().includes(searchTerm)) {
+                log.style.display = '';
+            } else {
+                log.style.display = 'none';
+            }
+        });
+    });
+
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    // Start Interaction Buttons
+    document.querySelectorAll(".start-interaction").forEach(button => {
+        button.addEventListener("click", function () {
+            document.getElementById("welcome-audio").play();
+            this.style.display = 'none';
+            document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = false);
+        });
+    });
+
+    // Start Recording Buttons
+    document.querySelectorAll(".start-recording").forEach(button => {
+        button.addEventListener("click", function () {
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
+
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks);
+                        sendMediaToServer(audioBlob);
+                        updateAvatarState('respond');
+                    });
+
+                    document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = true);
+                    document.querySelectorAll(".stop-recording").forEach(btn => btn.disabled = false);
+
+                    updateAvatarState('listen');
+                });
+        });
+    });
+
+    // Stop Recording Buttons
+    document.querySelectorAll(".stop-recording").forEach(button => {
+        button.addEventListener("click", function () {
+            mediaRecorder.stop();
+            document.querySelectorAll(".stop-recording").forEach(btn => btn.disabled = true);
+            document.querySelectorAll(".start-recording").forEach(btn => btn.disabled = false);
+            audioChunks = [];
+        });
+    });
+
+
+    function toggleView() {
+        var avatarContainer = document.getElementById("avatar-container");
+        var screenView = document.getElementById("screen-view");
+        var toggleButton = document.getElementById("toggle-view");
+
+        if (avatarContainer.style.display === "none") {
+            avatarContainer.style.display = "block";
+            screenView.style.display = "none";
+            toggleButton.textContent = "Switch to human View";
+        } else {
+            avatarContainer.style.display = "none";
+            screenView.style.display = "block";
+            toggleButton.textContent = "Switch to anime View";
+        }
+    }
+
+
+    // Function to send media (audio/video) to the server
+    function sendMediaToServer(mediaBlob, mediaType) {
+        const formData = new FormData();
+        formData.append(mediaType === "video" ? "video_data" : "audio_data", mediaBlob);
+
+        $.ajax({
+            type: "POST",
+            url: "/process_media",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.audio_path) {
+                    // Handle audio-specific logic...
+                    const audioPlayback = document.getElementById("audio-playback");
+                    audioPlayback.src = response.audio_path;
+                    console.log("Audio file path:", response.audio_path);
+
+                    // Change avatar to talking state and play the audio
+                    updateAvatarState('talking');
+                    audioPlayback.play();
+
+                    // Listener for when audio ends
+                    audioPlayback.onended = function () {
+                        updateAvatarState('idle');
+                        document.getElementById("start-recording").disabled = false;
+                    };
+                }
+                if (response.video_path) {
+                    playVideo(response.video_path);
+                }
+            },
+            error: function (error) {
+                console.error("Error uploading media:", error);
+            }
+        });
+    }
+
+    let isVideoPlaying = false;
+    let checkVideoInterval = setInterval(checkForNewVideo, 10000); // Start the interval immediately
+
+    // Function to play video
+    function playVideo(videoPath) {
+        const videoPlayer = document.getElementById("video-player");
+        videoPlayer.src = videoPath;
+        videoPlayer.load();
+
+        // Add event listeners to update isVideoPlaying
+        videoPlayer.addEventListener('play', () => isVideoPlaying = true);
+        videoPlayer.addEventListener('ended', () => isVideoPlaying = false);
+        videoPlayer.addEventListener('pause', () => isVideoPlaying = false);
+    }
+
+    function checkForNewVideo() {
+        if (!isVideoPlaying) { // Only check for a new video if one is not currently playing
+            $.ajax({
+                type: "POST",
+                url: "/process_media",
+                success: function (response) {
+                    if (response.video_path) {
+                        playVideo(response.video_path);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching new video:", error);
+                }
+            });
+        }
+    }
+
+    // Call checkForNewVideo periodically, e.g., every 10 seconds
+    setInterval(checkForNewVideo, 10000);
+
+    let lastLogSize = 0;
+
+    function fetchAndDisplayLogs() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:7002/get_chat_logs",
+            success: function (logs) {
+                const logContainer = $("#logs");
+                const newLogs = $(logs).filter(".log-entry");
+                const currentLogSize = newLogs.length;
+
+                if (currentLogSize > lastLogSize) {
+                    // Append only the new log entries
+                    newLogs.slice(lastLogSize).appendTo(logContainer);
+                    lastLogSize = currentLogSize;
+
+                    // Scroll to bottom
+                    scrollToBottom();
+                }
+            },
+            error: function (error) {
+                console.error("Error fetching logs:", error);
+            }
+        });
+    }
+
+    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
+
+    function scrollToBottom() {
+        var logContainer = document.getElementById("logs");
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+
+    setInterval(fetchAndDisplayLogs, 5000); // Fetch logs every 5 seconds
+
+    function addLogEntry(logMessage, isUserInput) {
+        var logContainer = document.getElementById("logs");
+        var newLogEntry = document.createElement("div");
+        newLogEntry.className = isUserInput ? "user-input" : "chatbot-response";
+        newLogEntry.textContent = logMessage;
+        logContainer.appendChild(newLogEntry);
+
+        scrollToBottom();
+    }
+
+
+    window.onload = function () {
+        fetchAndDisplayLogs(); // Fetch logs and then scroll to bottom
+    };
+
+    function saveSettings() {
+        var userName = document.getElementById("user-name").value;
+        var userHobbies = document.getElementById("user-hobbies").value;
+        var selectedLanguage = document.getElementById("language-select").value;
+
+        console.log("Settings Saved:", userName, userHobbies, selectedLanguage);
+        var settingsPanel = document.getElementById("settings-panel");
+        settingsPanel.classList.remove("show");
+        document.getElementById("settings-toggle").classList.remove("hide");
+        // Sending an AJAX POST request to Flask
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:7002/save_settings",  // Pointing to the tunneled port
+            contentType: "application/json",
+            data: JSON.stringify({
+                userName: userName,
+                userHobbies: userHobbies,
+                selectedLanguage: selectedLanguage
+            }),
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (response) {
+                console.log("Settings saved successfully:", response);
+            },
+            error: function (error) {
+                console.error("Error saving settings:", error);
+            }
+        });
+    }
+
+    // JavaScript for Settings Panel Toggle
+    document.getElementById("settings-toggle").addEventListener("click", function () {
+        var settingsPanel = document.getElementById("settings-panel");
+        settingsPanel.classList.toggle("show");
+        this.classList.add("hide");
+
+    });
+
+    function updateAvatarState(state) {
+        const avatarImg = document.getElementById('avatar');
+        switch (state) {
+            case 'welcome':
+                avatarImg.src = '/static/welcome.gif';
+                break;
+            case 'listen':
+                avatarImg.src = '/static/listening.gif';
+                break;
+            case 'respond':
+                avatarImg.src = '/static/reading.gif';
+                break;
+            case 'talking':
+                avatarImg.src = '/static/talking.gif';
+                break;
+            default:
+                avatarImg.src = '/static/idle.gif';
+        }
+    }
+</script>
+</body>
+</html>

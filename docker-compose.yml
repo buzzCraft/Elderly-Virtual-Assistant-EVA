@@ -1,37 +1,76 @@
-version: '3.8'
-
+#version: '3.8' # docker-compose version enable to print diagram
 services:
+  record:
+    build:
+      context: ./aClient
+      dockerfile: Dockerfile
+    ports:
+      - "4999:4999"
+    volumes:
+      - ./aClient:/app
+
+
   transcribe:
+    depends_on:
+      - record
     build:
       context: ./app/VoiceToText
       dockerfile: Dockerfile
-    command:
-      - python
-      - /app/transcribeMain.py
+    volumes:
+      - ./app/TextToVoice/app:/text-to-voice-app
+      - ./app/Llm/app:/llm-app
+      - ./app/VoiceToText/app/audio_asset:/app/audio_asset
+    ports:
+      - "5000:5000"
 
-#  llm:
-#    build:
-#      context: ./app/Llm
-#      dockerfile: Dockerfile
-#    command:
-#      - python
-##      Endpoint
-#      - /app/main.py
-#
-#  TextToVoice:
-#    build:
-#      context: ./app/TextToVoice
-#      dockerfile: Dockerfile
-#    command:
-#      - python
-#      #      Endpoint
-#      - /app/main.py
-#      -
-#  VoiceToVideo:
-#    build:
-#      context: ./app/VoiceToVideo
-#      dockerfile: Dockerfile
-#    command:
-#      - python
-#      #      Endpoint
-#      - /app/main.py
+
+  llm:
+    depends_on:
+      - transcribe
+    build:
+      context: ./app/Llm
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/Llm/app:/llm-app
+      - ./app/TextToVoice/app:/text-to-voice-app
+    ports:
+      - "5002:5002"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+
+
+  texttovoice:
+    depends_on:
+      - transcribe
+      - llm
+    build:
+      context: ./app/TextToVoice
+      dockerfile: Dockerfile
+    command:
+      - python3
+      - /text-to-voice-app/voiceGen.py
+    volumes:
+      - ./app/Llm/app:/llm-app
+      - ./app/TextToVoice/app:/text-to-voice-app
+    ports:
+        - "5003:5003"
+
+
+  voicetovideo:
+    build:
+      context: ./app/VoiceToVideo
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/VoiceToVideo/app:/SadTalker/results
+    ports:
+      - "5005:5005"
+    depends_on:
+      - transcribe
+      - llm
+      - texttovoice
+
