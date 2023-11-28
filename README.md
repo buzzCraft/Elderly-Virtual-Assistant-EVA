@@ -103,7 +103,8 @@ AckBefore you can run EVA, ensure you have the following software and libraries 
 To speed up inference, we choose to bypass the SadTalker model in our live demo as can be seen in the first video.
 The second video shows an example of the SadTalker model in action, where the timedelay is edited out (ADD THE TIME IT TOOK).
 
-VIDEO 1
+### VIDEO 1
+https://youtu.be/pWUAX6gv25U
 
 VIDEO 2
 
