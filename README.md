@@ -106,7 +106,7 @@ The second video shows an example of the SadTalker model in action, where the ti
 ### VIDEO 1
 https://youtu.be/pWUAX6gv25U
 
-VIDEO 2
+### VIDEO 2
 https://youtu.be/zPvUBSb7_p4
 
 ## Contributing
