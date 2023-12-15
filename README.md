@@ -125,5 +125,6 @@ This project is licensed under MIT License - see the [LICENSE.md](LICENSE) file 
 - Majdi Omar Alali
 - Alexander Theo Strand
 - Alexander Soudae
-- Majdi Alali
+- Mubariz Rai
+ 
 
