@@ -28,7 +28,7 @@ EVA consists of the following main modules:
 ## Process Flow
 
 1. The user interacts with the **Client Module** by providing a voice input.
-2. This voice input is transcribed into text by the **Transcription Model**.
+2. This voice input is transcribed into text by the **Transcription Model** using Whisper.
 3. The transcribed text is then processed by **LLama2** to craft a suitable response.
 4. This textual response is converted into audio via the **Text-to-Voice Generation** module.
 5. Finally, the **Avatar Visualization** module plays back the audio response, visually represented by our avatar, EVA.
